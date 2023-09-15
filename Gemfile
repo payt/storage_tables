@@ -5,8 +5,15 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in storage-tables.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
+gem "pg"
+gem "pry"
+gem "rake"
+gem "rubocop"
+gem "rubocop-minitest"
+gem "rubocop-packaging"
+gem "rubocop-performance"
+gem "rubocop-rails"
 
-gem "minitest", "~> 5.0"
-
-gem "rubocop", "~> 1.21"
+group :test do
+  gem "minitest", "~> 5.0"
+end
