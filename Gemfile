@@ -7,6 +7,7 @@ gemspec
 
 gem "pg"
 gem "pry"
+gem "rails", "~> 7.0.0"
 gem "rake"
 gem "rubocop"
 gem "rubocop-minitest"

@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module StorageTables
+  # Blob is a model that represents a file in the database.
   class Blob < ApplicationRecord
     self.table_name = "storage_tables_blobs"
 
