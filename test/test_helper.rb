@@ -7,3 +7,4 @@ require "minitest/autorun"
 
 require File.expand_path("../test/dummy/config/environment.rb", __dir__)
 ENV["RAILS_ROOT"] ||= "#{File.dirname(__FILE__)}../../../test/dummy"
+require "rails/test_help"

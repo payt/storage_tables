@@ -9,11 +9,13 @@ gem "pg"
 gem "pry"
 gem "rails", "~> 7.0.0"
 gem "rake"
+
 gem "rubocop"
 gem "rubocop-minitest"
 gem "rubocop-packaging"
 gem "rubocop-performance"
 gem "rubocop-rails"
+gem "rubocop-rake"
 
 group :test do
   gem "minitest", "~> 5.0"
