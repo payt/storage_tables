@@ -4,7 +4,7 @@ module StorageTables
   class Blob < ApplicationRecord
     before_create -> { self.partition_key = checksum[0] }
 
-    store :metadata, accessors: %i[analyzed identified uploaded], coder: ActiveRecord::Coders::JSON
+    store :metadata, accessors: %i[analyzed identified mtime filename], coder: ActiveRecord::Coders::JSON
 
     class_attribute :services, default: {}
     class_attribute :service, instance_accessor: false

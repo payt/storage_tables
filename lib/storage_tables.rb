@@ -13,6 +13,4 @@ module StorageTables
   extend ActiveSupport::Autoload
 
   autoload :Service
-
-  # Your code goes here...
 end

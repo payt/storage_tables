@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "storage_tables/service/registry"
+
 module StorageTables
   class Engine < ::Rails::Engine
     isolate_namespace StorageTables
