@@ -24,4 +24,11 @@ class ActiveSupport::TestCase
   teardown do
     ActiveStorage::Current.reset
   end
+
+  private
+
+  def create_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil, record: nil)
+    StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
+                                           content_type: content_type, metadata: metadata, record: record
+  end
 end

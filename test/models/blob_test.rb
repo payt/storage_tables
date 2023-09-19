@@ -11,9 +11,7 @@ module StorageTables
     end
 
     test "upload" do
-      file = fixture_file_upload("files/1x1.png", "image/png")
-
-      binding.pry
+      blob = create_blob
     end
   end
 end
