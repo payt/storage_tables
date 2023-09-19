@@ -65,6 +65,7 @@ CREATE TABLE public.storage_tables_blobs (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 )
 PARTITION BY LIST (partition_key);
@@ -83,6 +84,7 @@ CREATE TABLE public.storage_tables_blobs_partition_0 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_0 FOR VALUES IN ('A');
@@ -101,6 +103,7 @@ CREATE TABLE public.storage_tables_blobs_partition_1 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_1 FOR VALUES IN ('B');
@@ -119,6 +122,7 @@ CREATE TABLE public.storage_tables_blobs_partition_10 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_10 FOR VALUES IN ('K');
@@ -137,6 +141,7 @@ CREATE TABLE public.storage_tables_blobs_partition_11 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_11 FOR VALUES IN ('L');
@@ -155,6 +160,7 @@ CREATE TABLE public.storage_tables_blobs_partition_12 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_12 FOR VALUES IN ('M');
@@ -173,6 +179,7 @@ CREATE TABLE public.storage_tables_blobs_partition_13 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_13 FOR VALUES IN ('N');
@@ -191,6 +198,7 @@ CREATE TABLE public.storage_tables_blobs_partition_14 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_14 FOR VALUES IN ('O');
@@ -209,6 +217,7 @@ CREATE TABLE public.storage_tables_blobs_partition_15 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_15 FOR VALUES IN ('P');
@@ -227,6 +236,7 @@ CREATE TABLE public.storage_tables_blobs_partition_16 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_16 FOR VALUES IN ('Q');
@@ -245,6 +255,7 @@ CREATE TABLE public.storage_tables_blobs_partition_17 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_17 FOR VALUES IN ('R');
@@ -263,6 +274,7 @@ CREATE TABLE public.storage_tables_blobs_partition_18 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_18 FOR VALUES IN ('S');
@@ -281,6 +293,7 @@ CREATE TABLE public.storage_tables_blobs_partition_19 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_19 FOR VALUES IN ('T');
@@ -299,6 +312,7 @@ CREATE TABLE public.storage_tables_blobs_partition_2 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_2 FOR VALUES IN ('C');
@@ -317,6 +331,7 @@ CREATE TABLE public.storage_tables_blobs_partition_20 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_20 FOR VALUES IN ('U');
@@ -335,6 +350,7 @@ CREATE TABLE public.storage_tables_blobs_partition_21 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_21 FOR VALUES IN ('V');
@@ -353,6 +369,7 @@ CREATE TABLE public.storage_tables_blobs_partition_22 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_22 FOR VALUES IN ('W');
@@ -371,6 +388,7 @@ CREATE TABLE public.storage_tables_blobs_partition_23 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_23 FOR VALUES IN ('X');
@@ -389,6 +407,7 @@ CREATE TABLE public.storage_tables_blobs_partition_24 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_24 FOR VALUES IN ('Y');
@@ -407,6 +426,7 @@ CREATE TABLE public.storage_tables_blobs_partition_25 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_25 FOR VALUES IN ('Z');
@@ -425,6 +445,7 @@ CREATE TABLE public.storage_tables_blobs_partition_26 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_26 FOR VALUES IN ('a');
@@ -443,6 +464,7 @@ CREATE TABLE public.storage_tables_blobs_partition_27 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_27 FOR VALUES IN ('b');
@@ -461,6 +483,7 @@ CREATE TABLE public.storage_tables_blobs_partition_28 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_28 FOR VALUES IN ('c');
@@ -479,6 +502,7 @@ CREATE TABLE public.storage_tables_blobs_partition_29 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_29 FOR VALUES IN ('d');
@@ -497,6 +521,7 @@ CREATE TABLE public.storage_tables_blobs_partition_3 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_3 FOR VALUES IN ('D');
@@ -515,6 +540,7 @@ CREATE TABLE public.storage_tables_blobs_partition_30 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_30 FOR VALUES IN ('e');
@@ -533,6 +559,7 @@ CREATE TABLE public.storage_tables_blobs_partition_31 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_31 FOR VALUES IN ('f');
@@ -551,6 +578,7 @@ CREATE TABLE public.storage_tables_blobs_partition_32 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_32 FOR VALUES IN ('g');
@@ -569,6 +597,7 @@ CREATE TABLE public.storage_tables_blobs_partition_33 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_33 FOR VALUES IN ('h');
@@ -587,6 +616,7 @@ CREATE TABLE public.storage_tables_blobs_partition_34 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_34 FOR VALUES IN ('i');
@@ -605,6 +635,7 @@ CREATE TABLE public.storage_tables_blobs_partition_35 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_35 FOR VALUES IN ('j');
@@ -623,6 +654,7 @@ CREATE TABLE public.storage_tables_blobs_partition_36 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_36 FOR VALUES IN ('k');
@@ -641,6 +673,7 @@ CREATE TABLE public.storage_tables_blobs_partition_37 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_37 FOR VALUES IN ('l');
@@ -659,6 +692,7 @@ CREATE TABLE public.storage_tables_blobs_partition_38 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_38 FOR VALUES IN ('m');
@@ -677,6 +711,7 @@ CREATE TABLE public.storage_tables_blobs_partition_39 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_39 FOR VALUES IN ('n');
@@ -695,6 +730,7 @@ CREATE TABLE public.storage_tables_blobs_partition_4 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_4 FOR VALUES IN ('E');
@@ -713,6 +749,7 @@ CREATE TABLE public.storage_tables_blobs_partition_40 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_40 FOR VALUES IN ('o');
@@ -731,6 +768,7 @@ CREATE TABLE public.storage_tables_blobs_partition_41 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_41 FOR VALUES IN ('p');
@@ -749,6 +787,7 @@ CREATE TABLE public.storage_tables_blobs_partition_42 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_42 FOR VALUES IN ('q');
@@ -767,6 +806,7 @@ CREATE TABLE public.storage_tables_blobs_partition_43 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_43 FOR VALUES IN ('r');
@@ -785,6 +825,7 @@ CREATE TABLE public.storage_tables_blobs_partition_44 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_44 FOR VALUES IN ('s');
@@ -803,6 +844,7 @@ CREATE TABLE public.storage_tables_blobs_partition_45 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_45 FOR VALUES IN ('t');
@@ -821,6 +863,7 @@ CREATE TABLE public.storage_tables_blobs_partition_46 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_46 FOR VALUES IN ('u');
@@ -839,6 +882,7 @@ CREATE TABLE public.storage_tables_blobs_partition_47 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_47 FOR VALUES IN ('v');
@@ -857,6 +901,7 @@ CREATE TABLE public.storage_tables_blobs_partition_48 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_48 FOR VALUES IN ('w');
@@ -875,6 +920,7 @@ CREATE TABLE public.storage_tables_blobs_partition_49 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_49 FOR VALUES IN ('x');
@@ -893,6 +939,7 @@ CREATE TABLE public.storage_tables_blobs_partition_5 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_5 FOR VALUES IN ('F');
@@ -911,6 +958,7 @@ CREATE TABLE public.storage_tables_blobs_partition_50 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_50 FOR VALUES IN ('y');
@@ -929,6 +977,7 @@ CREATE TABLE public.storage_tables_blobs_partition_51 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_51 FOR VALUES IN ('z');
@@ -947,6 +996,7 @@ CREATE TABLE public.storage_tables_blobs_partition_52 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_52 FOR VALUES IN ('0');
@@ -965,6 +1015,7 @@ CREATE TABLE public.storage_tables_blobs_partition_53 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_53 FOR VALUES IN ('1');
@@ -983,6 +1034,7 @@ CREATE TABLE public.storage_tables_blobs_partition_54 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_54 FOR VALUES IN ('2');
@@ -1001,6 +1053,7 @@ CREATE TABLE public.storage_tables_blobs_partition_55 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_55 FOR VALUES IN ('3');
@@ -1019,6 +1072,7 @@ CREATE TABLE public.storage_tables_blobs_partition_56 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_56 FOR VALUES IN ('4');
@@ -1037,6 +1091,7 @@ CREATE TABLE public.storage_tables_blobs_partition_57 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_57 FOR VALUES IN ('5');
@@ -1055,6 +1110,7 @@ CREATE TABLE public.storage_tables_blobs_partition_58 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_58 FOR VALUES IN ('6');
@@ -1073,6 +1129,7 @@ CREATE TABLE public.storage_tables_blobs_partition_59 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_59 FOR VALUES IN ('7');
@@ -1091,6 +1148,7 @@ CREATE TABLE public.storage_tables_blobs_partition_6 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_6 FOR VALUES IN ('G');
@@ -1109,6 +1167,7 @@ CREATE TABLE public.storage_tables_blobs_partition_60 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_60 FOR VALUES IN ('8');
@@ -1127,6 +1186,7 @@ CREATE TABLE public.storage_tables_blobs_partition_61 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_61 FOR VALUES IN ('9');
@@ -1145,6 +1205,7 @@ CREATE TABLE public.storage_tables_blobs_partition_62 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_62 FOR VALUES IN ('+');
@@ -1163,6 +1224,7 @@ CREATE TABLE public.storage_tables_blobs_partition_63 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_63 FOR VALUES IN ('/');
@@ -1181,6 +1243,7 @@ CREATE TABLE public.storage_tables_blobs_partition_7 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_7 FOR VALUES IN ('H');
@@ -1199,6 +1262,7 @@ CREATE TABLE public.storage_tables_blobs_partition_8 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_8 FOR VALUES IN ('I');
@@ -1217,6 +1281,7 @@ CREATE TABLE public.storage_tables_blobs_partition_9 (
     partition_key character(1) NOT NULL,
     content_type character varying,
     metadata jsonb,
+    file_mtime timestamp(6) with time zone,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_9 FOR VALUES IN ('J');

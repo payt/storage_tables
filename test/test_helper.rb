@@ -16,6 +16,21 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.fixtures :all
 end
 
+SERVICE_CONFIGURATIONS = begin
+  ActiveSupport::ConfigurationFile.parse(File.expand_path("service/configurations.yml", __dir__)).deep_symbolize_keys
+rescue Errno::ENOENT
+  puts "Missing service configuration file in test/service/configurations.yml"
+  {}
+end
+
+require "tmpdir"
+
+Rails.configuration.active_storage.service_configurations = SERVICE_CONFIGURATIONS.merge(
+  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("active_storage_tests") }
+).deep_stringify_keys
+
+Rails.configuration.active_storage.service = "local"
+
 class ActiveSupport::TestCase
   setup do
     ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }

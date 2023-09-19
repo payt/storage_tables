@@ -8,8 +8,13 @@ module StorageTables
 
     class_attribute :services, default: {}
     class_attribute :service, instance_accessor: false
+    class_attribute :service_name
 
     validates :checksum, presence: true
+
+    after_initialize do
+      self.service_name ||= self.class.service.name
+    end
 
     class << self
       def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true, record: nil)
@@ -50,7 +55,7 @@ module StorageTables
     end
 
     def upload_without_unfurling(io)
-      service.upload key, io, checksum: checksum, **service_metadata
+      service.upload checksum, io, checksum: checksum, **service_metadata
     end
 
     # Returns an instance of service, which can be configured globally or per attachment
@@ -72,6 +77,32 @@ module StorageTables
 
     def extract_content_type(io)
       Marcel::MimeType.for io, name: filename.to_s, declared_type: content_type
+    end
+
+    def forcibly_serve_as_binary?
+      ActiveStorage.content_types_to_serve_as_binary.include?(content_type)
+    end
+
+    def allowed_inline?
+      ActiveStorage.content_types_allowed_inline.include?(content_type)
+    end
+
+    def web_image?
+      ActiveStorage.web_image_content_types.include?(content_type)
+    end
+
+    def service_metadata
+      if forcibly_serve_as_binary?
+        { content_type: ActiveStorage.binary_content_type, disposition: :attachment, filename: filename }
+      elsif !allowed_inline?
+        { content_type: content_type, disposition: :attachment, filename: filename }
+      else
+        { content_type: content_type }
+      end
+    end
+
+    def update_service_metadata
+      service.update_metadata key, **service_metadata if service_metadata.any?
     end
   end
 end

@@ -6,7 +6,6 @@ module StorageTables
 
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
-        binding.pry
         # Use the application's configured Active Storage service.
         configs = Rails.configuration.active_storage.service_configurations ||=
           begin
