@@ -6,6 +6,14 @@ module StorageTables
   class Engine < ::Rails::Engine
     isolate_namespace StorageTables
 
+    initializer "storage_tables.attached" do
+      require "storage_tables/attached"
+
+      ActiveSupport.on_load(:active_record) do
+        include StorageTables::Attached::Model
+      end
+    end
+
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.

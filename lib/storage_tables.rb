@@ -13,5 +13,6 @@ require "marcel"
 module StorageTables
   extend ActiveSupport::Autoload
 
+  autoload :Attached
   autoload :Service
 end

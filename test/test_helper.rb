@@ -47,3 +47,5 @@ class ActiveSupport::TestCase
                                            content_type: content_type, metadata: metadata, record: record
   end
 end
+
+require "support/models"
