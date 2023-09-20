@@ -12,6 +12,10 @@ module StorageTables
 
     test "upload" do
       blob = create_blob
+
+      assert_predicate(blob, :persisted?)
+      # Check that the blob was uploaded to the service.
+      assert blob.service.exist?(blob.checksum)
     end
   end
 end

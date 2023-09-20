@@ -2,6 +2,7 @@
 
 module StorageTables
   class Blob < ApplicationRecord
+    # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 
     store :metadata, accessors: %i[analyzed identified mtime filename], coder: ActiveRecord::Coders::JSON

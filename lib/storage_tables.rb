@@ -6,6 +6,7 @@ require "active_support/rails"
 
 require "storage_tables/version"
 require "storage_tables/engine"
+require "storage_tables/errors"
 
 require "marcel"
 

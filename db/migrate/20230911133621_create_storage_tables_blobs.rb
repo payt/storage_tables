@@ -10,7 +10,7 @@ class CreateStorageTablesBlobs < ActiveRecord::Migration[7.0]
         checksum character varying NOT NULL,
         partition_key character(1) NOT NULL,
         content_type character varying,
-        metadata jsonb,
+        metadata jsonb
         ) partition by LIST (partition_key);
     SQL
   end
