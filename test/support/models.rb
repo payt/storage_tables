@@ -3,3 +3,6 @@
 class Post < ApplicationRecord
   stored_one_attachment :image, class_name: "StorageTables::PostAttachment"
 end
+
+class StorageTables::PostAttachment < StorageTables::Attachment
+end

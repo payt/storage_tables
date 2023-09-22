@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require "storage_tables"
 require "storage_tables/service/registry"
+
+require "storage_tables/reflection"
 
 module StorageTables
   class Engine < ::Rails::Engine
@@ -31,6 +34,13 @@ module StorageTables
         if config_choice = Rails.configuration.active_storage.service
           StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
         end
+      end
+    end
+
+    initializer "active_storage.reflection" do
+      ActiveSupport.on_load(:active_record) do
+        include Reflection::ActiveRecordExtensions
+        ActiveRecord::Reflection.singleton_class.prepend(Reflection::ReflectionExtension)
       end
     end
   end

@@ -1,0 +1,41 @@
+# frozen_string_literal: true
+
+module StorageTables
+  module Reflection
+    include ActiveStorage::Reflection
+    # Holds all the metadata about a has_one_attached attachment as it was
+    # specified in the Active Record class.
+    class StoredOneAttachmentReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
+      def macro
+        :stored_one_attachment
+      end
+    end
+
+    # Holds all the metadata about a has_many_attached attachment as it was
+    # specified in the Active Record class.
+    class StoredManyAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
+      def macro
+        :stored_many_attachments
+      end
+    end
+
+    module ReflectionExtension # :nodoc:
+      def add_attachment_reflection(model, name, reflection)
+        model.attachment_reflections = model.attachment_reflections.merge(name.to_s => reflection)
+      end
+
+      private
+
+      def reflection_class_for(macro)
+        case macro
+        when :stored_one_attachment
+          StoredOneAttachmentReflection
+        when :stored_many_attachments
+          StoredManyAttachmentsReflection
+        else
+          super
+        end
+      end
+    end
+  end
+end
