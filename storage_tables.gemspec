@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "lib/storage_tables/version"
 
 Gem::Specification.new do |spec|
@@ -23,4 +25,5 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 7.0.8"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end
