@@ -1,25 +1,25 @@
 name: CI
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    services: 
+    services:
       postgres:
         image: postgres:12
         env:
           POSTGRES_PASSWORD: postgres
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
 
     steps:
       - uses: actions/checkout@v2
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1.80.0
         with:
-          ruby-version: 2.7.7      
+          ruby-version: 2.7.4
 
       - name: Install Dependencies
         run: |
