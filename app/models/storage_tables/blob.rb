@@ -5,7 +5,7 @@ module StorageTables
     # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 
-    store :metadata, accessors: %i[analyzed identified mtime filename], coder: ActiveRecord::Coders::JSON
+    store :metadata, accessors: [:analyzed, :identified, :mtime, :filename], coder: ActiveRecord::Coders::JSON
 
     class_attribute :services, default: {}
     class_attribute :service, instance_accessor: false
