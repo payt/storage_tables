@@ -22,7 +22,7 @@ Or install it yourself as:
 ```bash
 $ gem install storage_tables
 ```
-re=
+
 ## Contributing
 Contribution directions go here.
 
