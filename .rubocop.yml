@@ -12,6 +12,7 @@ AllCops:
   Exclude:
     - db/**/*
     - bin/**/*
+    - vendor/**/*
 
 Style/StringLiterals:
   Enabled: true
