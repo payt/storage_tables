@@ -40,8 +40,7 @@ jobs:
           WITH_COVERAGE: true
           DISABLE_SPRING: 1
         run: |
-          bundle exec rails db:prepare
-          bundle exec rake test
+          bundle exec rails db:schema:load
 
       - name: Build and test with minitest
         env:
