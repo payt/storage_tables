@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install -yqq libpq-dev
+          sudo apt install -yqq libpq-dev postgresql-client
           gem install bundler
 
       - name: Install Gems
