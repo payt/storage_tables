@@ -22,14 +22,14 @@ jobs:
           ruby-version: 2.7.4
           bundler-cache: true
 
-      - name: Install Dependencies
-        run: |
-          sudo apt install -yqq libpq-dev
-          gem install bundler
+      # - name: Install Dependencies
+      #   run: |
+      #     sudo apt install -yqq libpq-dev
+      #     gem install bundler
 
-      - name: Install Gems
-        run: |
-          bundle install
+      # - name: Install Gems
+      #   run: |
+      #     bundle install
 
       - name: Setup database
         env:
