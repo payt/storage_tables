@@ -1,4 +1,6 @@
 # StorageTables
+[![CI](https://github.com/payt/storage_tables/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/payt/storage_tables/actions/workflows/ci.yml)
+
 Short description and motivation.
 
 ## Usage

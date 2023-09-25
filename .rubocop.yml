@@ -3,10 +3,16 @@ require:
   - rubocop-rake
   - rubocop-rails
   - rubocop-performance
+  - rubocop-packaging
 
 AllCops:
   TargetRubyVersion: 2.7
+  TargetRailsVersion: 7.0
   NewCops: enable
+  Exclude:
+    - db/**/*
+    - bin/**/*
+    - vendor/**/*
 
 Style/StringLiterals:
   Enabled: true
