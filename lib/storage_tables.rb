@@ -10,6 +10,7 @@ require "storage_tables/errors"
 
 require "marcel"
 
+# This is the main module for the gem
 module StorageTables
   extend ActiveSupport::Autoload
 

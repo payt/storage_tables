@@ -6,6 +6,7 @@ require "storage_tables/service/registry"
 require "storage_tables/reflection"
 
 module StorageTables
+  # This class is used to hook into Rails
   class Engine < ::Rails::Engine
     isolate_namespace StorageTables
 
