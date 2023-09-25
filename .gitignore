@@ -10,4 +10,6 @@
 /test/dummy/tmp/
 
 /coverage/
-/.idea/
+
+.idea/
+Gemfile.lock

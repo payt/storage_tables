@@ -21,5 +21,4 @@ gem "rubocop-performance"
 gem "rubocop-rails"
 gem "rubocop-rake"
 
-# Start debugger with binding.b [https://github.com/ruby/debug]
-# gem "debug", ">= 1.0.0"
+gem "simplecov", require: false
