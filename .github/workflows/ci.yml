@@ -20,6 +20,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.4
+          bundler-cache: true
 
       - name: Install Dependencies
         run: |
@@ -33,7 +34,7 @@ jobs:
       - name: Setup database
         env:
           PG_DATABASE: postgres
-          PG_HOST: postgres
+          PG_HOST: localhost
           PG_USER: postgres
           PG_PASSWORD: postgres
           RAILS_ENV: test
