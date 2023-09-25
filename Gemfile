@@ -10,8 +10,6 @@ gem "puma"
 
 gem "pg"
 
-gem "sprockets-rails"
-
 gem "pry"
 
 gem "rubocop"
