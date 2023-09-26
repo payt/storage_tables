@@ -1174,526 +1174,6 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: storage_tables_blobs storage_tables_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs
-    ADD CONSTRAINT storage_tables_blobs_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_0 storage_tables_blobs_partition_0_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_0
-    ADD CONSTRAINT storage_tables_blobs_partition_0_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_10 storage_tables_blobs_partition_10_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_10
-    ADD CONSTRAINT storage_tables_blobs_partition_10_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_11 storage_tables_blobs_partition_11_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_11
-    ADD CONSTRAINT storage_tables_blobs_partition_11_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_12 storage_tables_blobs_partition_12_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_12
-    ADD CONSTRAINT storage_tables_blobs_partition_12_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_13 storage_tables_blobs_partition_13_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_13
-    ADD CONSTRAINT storage_tables_blobs_partition_13_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_14 storage_tables_blobs_partition_14_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_14
-    ADD CONSTRAINT storage_tables_blobs_partition_14_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_15 storage_tables_blobs_partition_15_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_15
-    ADD CONSTRAINT storage_tables_blobs_partition_15_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_16 storage_tables_blobs_partition_16_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_16
-    ADD CONSTRAINT storage_tables_blobs_partition_16_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_17 storage_tables_blobs_partition_17_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_17
-    ADD CONSTRAINT storage_tables_blobs_partition_17_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_18 storage_tables_blobs_partition_18_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_18
-    ADD CONSTRAINT storage_tables_blobs_partition_18_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_19 storage_tables_blobs_partition_19_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_19
-    ADD CONSTRAINT storage_tables_blobs_partition_19_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_1 storage_tables_blobs_partition_1_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_1
-    ADD CONSTRAINT storage_tables_blobs_partition_1_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_20 storage_tables_blobs_partition_20_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_20
-    ADD CONSTRAINT storage_tables_blobs_partition_20_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_21 storage_tables_blobs_partition_21_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_21
-    ADD CONSTRAINT storage_tables_blobs_partition_21_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_22 storage_tables_blobs_partition_22_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_22
-    ADD CONSTRAINT storage_tables_blobs_partition_22_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_23 storage_tables_blobs_partition_23_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_23
-    ADD CONSTRAINT storage_tables_blobs_partition_23_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_24 storage_tables_blobs_partition_24_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_24
-    ADD CONSTRAINT storage_tables_blobs_partition_24_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_25 storage_tables_blobs_partition_25_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_25
-    ADD CONSTRAINT storage_tables_blobs_partition_25_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_26 storage_tables_blobs_partition_26_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_26
-    ADD CONSTRAINT storage_tables_blobs_partition_26_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_27 storage_tables_blobs_partition_27_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_27
-    ADD CONSTRAINT storage_tables_blobs_partition_27_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_28 storage_tables_blobs_partition_28_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_28
-    ADD CONSTRAINT storage_tables_blobs_partition_28_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_29 storage_tables_blobs_partition_29_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_29
-    ADD CONSTRAINT storage_tables_blobs_partition_29_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_2 storage_tables_blobs_partition_2_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_2
-    ADD CONSTRAINT storage_tables_blobs_partition_2_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_30 storage_tables_blobs_partition_30_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_30
-    ADD CONSTRAINT storage_tables_blobs_partition_30_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_31 storage_tables_blobs_partition_31_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_31
-    ADD CONSTRAINT storage_tables_blobs_partition_31_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_32 storage_tables_blobs_partition_32_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_32
-    ADD CONSTRAINT storage_tables_blobs_partition_32_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_33 storage_tables_blobs_partition_33_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_33
-    ADD CONSTRAINT storage_tables_blobs_partition_33_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_34 storage_tables_blobs_partition_34_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_34
-    ADD CONSTRAINT storage_tables_blobs_partition_34_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_35 storage_tables_blobs_partition_35_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_35
-    ADD CONSTRAINT storage_tables_blobs_partition_35_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_36 storage_tables_blobs_partition_36_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_36
-    ADD CONSTRAINT storage_tables_blobs_partition_36_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_37 storage_tables_blobs_partition_37_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_37
-    ADD CONSTRAINT storage_tables_blobs_partition_37_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_38 storage_tables_blobs_partition_38_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_38
-    ADD CONSTRAINT storage_tables_blobs_partition_38_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_39 storage_tables_blobs_partition_39_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_39
-    ADD CONSTRAINT storage_tables_blobs_partition_39_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_3 storage_tables_blobs_partition_3_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_3
-    ADD CONSTRAINT storage_tables_blobs_partition_3_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_40 storage_tables_blobs_partition_40_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_40
-    ADD CONSTRAINT storage_tables_blobs_partition_40_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_41 storage_tables_blobs_partition_41_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_41
-    ADD CONSTRAINT storage_tables_blobs_partition_41_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_42 storage_tables_blobs_partition_42_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_42
-    ADD CONSTRAINT storage_tables_blobs_partition_42_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_43 storage_tables_blobs_partition_43_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_43
-    ADD CONSTRAINT storage_tables_blobs_partition_43_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_44 storage_tables_blobs_partition_44_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_44
-    ADD CONSTRAINT storage_tables_blobs_partition_44_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_45 storage_tables_blobs_partition_45_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_45
-    ADD CONSTRAINT storage_tables_blobs_partition_45_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_46 storage_tables_blobs_partition_46_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_46
-    ADD CONSTRAINT storage_tables_blobs_partition_46_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_47 storage_tables_blobs_partition_47_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_47
-    ADD CONSTRAINT storage_tables_blobs_partition_47_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_48 storage_tables_blobs_partition_48_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_48
-    ADD CONSTRAINT storage_tables_blobs_partition_48_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_49 storage_tables_blobs_partition_49_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_49
-    ADD CONSTRAINT storage_tables_blobs_partition_49_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_4 storage_tables_blobs_partition_4_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_4
-    ADD CONSTRAINT storage_tables_blobs_partition_4_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_50 storage_tables_blobs_partition_50_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_50
-    ADD CONSTRAINT storage_tables_blobs_partition_50_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_51 storage_tables_blobs_partition_51_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_51
-    ADD CONSTRAINT storage_tables_blobs_partition_51_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_52 storage_tables_blobs_partition_52_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_52
-    ADD CONSTRAINT storage_tables_blobs_partition_52_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_53 storage_tables_blobs_partition_53_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_53
-    ADD CONSTRAINT storage_tables_blobs_partition_53_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_54 storage_tables_blobs_partition_54_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_54
-    ADD CONSTRAINT storage_tables_blobs_partition_54_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_55 storage_tables_blobs_partition_55_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_55
-    ADD CONSTRAINT storage_tables_blobs_partition_55_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_56 storage_tables_blobs_partition_56_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_56
-    ADD CONSTRAINT storage_tables_blobs_partition_56_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_57 storage_tables_blobs_partition_57_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_57
-    ADD CONSTRAINT storage_tables_blobs_partition_57_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_58 storage_tables_blobs_partition_58_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_58
-    ADD CONSTRAINT storage_tables_blobs_partition_58_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_59 storage_tables_blobs_partition_59_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_59
-    ADD CONSTRAINT storage_tables_blobs_partition_59_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_5 storage_tables_blobs_partition_5_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_5
-    ADD CONSTRAINT storage_tables_blobs_partition_5_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_60 storage_tables_blobs_partition_60_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_60
-    ADD CONSTRAINT storage_tables_blobs_partition_60_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_61 storage_tables_blobs_partition_61_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_61
-    ADD CONSTRAINT storage_tables_blobs_partition_61_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_62 storage_tables_blobs_partition_62_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_62
-    ADD CONSTRAINT storage_tables_blobs_partition_62_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_63 storage_tables_blobs_partition_63_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_63
-    ADD CONSTRAINT storage_tables_blobs_partition_63_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_6 storage_tables_blobs_partition_6_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_6
-    ADD CONSTRAINT storage_tables_blobs_partition_6_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_7 storage_tables_blobs_partition_7_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_7
-    ADD CONSTRAINT storage_tables_blobs_partition_7_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_8 storage_tables_blobs_partition_8_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_8
-    ADD CONSTRAINT storage_tables_blobs_partition_8_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
--- Name: storage_tables_blobs_partition_9 storage_tables_blobs_partition_9_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.storage_tables_blobs_partition_9
-    ADD CONSTRAINT storage_tables_blobs_partition_9_pkey PRIMARY KEY (checksum, partition_key);
-
-
---
 -- Name: index_storage_tables_blobs_on_attachments_count; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2618,13 +2098,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_0_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_0_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_10_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2636,13 +2109,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_10_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_10_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_10_pkey;
 
 
 --
@@ -2660,13 +2126,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_11_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_11_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_12_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2678,13 +2137,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_12_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_12_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_12_pkey;
 
 
 --
@@ -2702,13 +2154,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_13_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_13_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_14_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2720,13 +2165,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_14_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_14_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_14_pkey;
 
 
 --
@@ -2744,13 +2182,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_15_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_16_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2762,13 +2193,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_16_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_16_pkey;
 
 
 --
@@ -2786,13 +2210,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_17_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_18_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2804,13 +2221,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_18_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_18_pkey;
 
 
 --
@@ -2828,13 +2238,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_19_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_1_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2846,13 +2249,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_1_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_1_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_1_pkey;
 
 
 --
@@ -2870,13 +2266,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_20_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_21_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2888,13 +2277,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_21_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_21_pkey;
 
 
 --
@@ -2912,13 +2294,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_22_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_23_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2930,13 +2305,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_23_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_23_pkey;
 
 
 --
@@ -2954,13 +2322,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_24_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_25_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -2972,13 +2333,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_25_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_25_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_25_pkey;
 
 
 --
@@ -2996,13 +2350,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_26_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_26_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_27_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3014,13 +2361,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_27_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_27_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_27_pkey;
 
 
 --
@@ -3038,13 +2378,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_28_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_28_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_29_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3056,13 +2389,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_29_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_29_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_29_pkey;
 
 
 --
@@ -3080,13 +2406,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_2_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_2_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_30_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3098,13 +2417,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_30_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_30_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_30_pkey;
 
 
 --
@@ -3122,13 +2434,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_31_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_31_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_32_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3140,13 +2445,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_32_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_32_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_32_pkey;
 
 
 --
@@ -3164,13 +2462,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_33_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_33_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_34_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3182,13 +2473,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_34_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_34_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_34_pkey;
 
 
 --
@@ -3206,13 +2490,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_35_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_35_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_36_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3224,13 +2501,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_36_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_36_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_36_pkey;
 
 
 --
@@ -3248,13 +2518,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_37_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_37_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_38_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3266,13 +2529,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_38_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_38_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_38_pkey;
 
 
 --
@@ -3290,13 +2546,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_39_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_39_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_3_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3308,13 +2557,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_3_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_3_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_3_pkey;
 
 
 --
@@ -3332,13 +2574,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_40_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_40_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_41_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3350,13 +2585,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_41_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_41_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_41_pkey;
 
 
 --
@@ -3374,13 +2602,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_42_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_42_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_43_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3392,13 +2613,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_43_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_43_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_43_pkey;
 
 
 --
@@ -3416,13 +2630,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_44_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_44_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_45_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3434,13 +2641,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_45_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_45_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_45_pkey;
 
 
 --
@@ -3458,13 +2658,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_46_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_46_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_47_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3476,13 +2669,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_47_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_47_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_47_pkey;
 
 
 --
@@ -3500,13 +2686,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_48_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_48_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_49_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3518,13 +2697,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_49_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_49_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_49_pkey;
 
 
 --
@@ -3542,13 +2714,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_4_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_4_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_50_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3560,13 +2725,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_50_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_50_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_50_pkey;
 
 
 --
@@ -3584,13 +2742,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_51_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_51_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_52_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3602,13 +2753,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_52_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_52_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_52_pkey;
 
 
 --
@@ -3626,13 +2770,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_53_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_53_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_54_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3644,13 +2781,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_54_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_54_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_54_pkey;
 
 
 --
@@ -3668,13 +2798,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_55_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_55_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_56_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3686,13 +2809,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_56_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_56_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_56_pkey;
 
 
 --
@@ -3710,13 +2826,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_57_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_57_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_58_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3728,13 +2837,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_58_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_58_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_58_pkey;
 
 
 --
@@ -3752,13 +2854,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_59_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_59_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_5_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3770,13 +2865,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_5_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_5_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_5_pkey;
 
 
 --
@@ -3794,13 +2882,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_60_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_60_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_61_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3812,13 +2893,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_61_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_61_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_61_pkey;
 
 
 --
@@ -3836,13 +2910,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_62_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_62_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_63_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3854,13 +2921,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_63_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_63_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_63_pkey;
 
 
 --
@@ -3878,13 +2938,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_6_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_6_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_7_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3896,13 +2949,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_7_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_7_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_7_pkey;
 
 
 --
@@ -3920,13 +2966,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTA
 
 
 --
--- Name: storage_tables_blobs_partition_8_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_8_pkey;
-
-
---
 -- Name: storage_tables_blobs_partition_9_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
@@ -3938,13 +2977,6 @@ ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTIT
 --
 
 ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_9_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_9_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_9_pkey;
 
 
 --

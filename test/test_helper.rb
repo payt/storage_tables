@@ -33,20 +33,22 @@ Rails.configuration.active_storage.service_configurations = SERVICE_CONFIGURATIO
 
 Rails.configuration.active_storage.service = "local"
 
-class ActiveSupport::TestCase
-  setup do
-    ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
-  end
+module ActiveSupport
+  class TestCase
+    setup do
+      ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
+    end
 
-  teardown do
-    ActiveStorage::Current.reset
-  end
+    teardown do
+      ActiveStorage::Current.reset
+    end
 
-  private
+    private
 
-  def create_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil, record: nil)
-    StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
-                                           content_type: content_type, metadata: metadata, record: record
+    def create_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil, record: nil)
+      StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
+                                             content_type: content_type, metadata: metadata, record: record
+    end
   end
 end
 

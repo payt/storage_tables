@@ -32,7 +32,7 @@ module StorageTables
 
         StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
-        if config_choice = Rails.configuration.active_storage.service
+        if (config_choice = Rails.configuration.active_storage.service)
           StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
         end
       end

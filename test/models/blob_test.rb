@@ -18,5 +18,35 @@ module StorageTables
       # Check that the blob was uploaded to the service.
       assert blob.service.exist?(blob.checksum)
     end
+
+    # test "create_and_upload does not permit a conflicting blob key to overwrite an existing object" do
+    #   data = "First file"
+    #   blob = create_blob data: data
+
+    #   assert_raises ActiveRecord::RecordNotUnique do
+    #     ActiveStorage::Blob.stub :generate_unique_secure_token, blob.key do
+    #       create_blob data: "This would overwrite"
+    #     end
+    #   end
+
+    #   assert_equal data, blob.download
+    # end
+
+    test "create_after_upload! has the same effect as create_and_upload!" do
+      data = "Some other, even more funky file"
+      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
+
+      assert_predicate blob, :persisted?
+      assert_equal data, blob.download
+    end
+
+    test "create_and_upload sets byte size and checksum" do
+      data = "Hello world!"
+      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
+
+      assert_equal data, blob.download
+      assert_equal data.length, blob.byte_size
+      assert_equal OpenSSL::Digest.new("SHA3-512").base64digest(data), blob.checksum
+    end
   end
 end

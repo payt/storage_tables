@@ -59,6 +59,12 @@ module StorageTables
       service.upload checksum, io, checksum: checksum, **service_metadata
     end
 
+    # Downloads the file associated with this blob. If no block is given, the entire file is read into memory and returned.
+    # That'll use a lot of RAM for very large files. If a block is given, then the download is streamed and yielded in chunks.
+    def download(&block)
+      service.download checksum, &block
+    end
+
     # Returns an instance of service, which can be configured globally or per attachment
     def service
       services.fetch(service_name)
@@ -68,7 +74,7 @@ module StorageTables
 
     def compute_checksum_in_chunks(io)
       OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-        while chunk = io.read(5.megabytes)
+        while (chunk = io.read(5.megabytes))
           checksum << chunk
         end
 
