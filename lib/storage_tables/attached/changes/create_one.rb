@@ -11,6 +11,7 @@ module StorageTables
       private
 
       def build_attachment
+        binding.pry
         attachment_service_name.constantize.new(record: record, name: name, blob: blob, filename: blob.filename.to_s,
                                                 blob_key: blob.partition_key)
       end
@@ -34,7 +35,10 @@ module StorageTables
             io: attachable.open,
             filename: attachable.original_filename,
             content_type: attachable.content_type,
-            record: record
+            record: record,
+            metadata: {
+              filename: attachable.original_filename
+            }
           )
         when Hash
           StorageTables::Blob.build_after_unfurling(

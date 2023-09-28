@@ -4,8 +4,6 @@ module StorageTables
   class Blob < ApplicationRecord
     include ActiveStorage::Blob::Identifiable
 
-    default_scope { order(:partition_key, :checksum) }
-
     # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 
@@ -74,9 +72,8 @@ module StorageTables
       services.fetch(service_name)
     end
 
-    # Returns the key pointing to this blob in the right partition.
     def partition_key
-      self[:partition_key] || checksum[0]
+      self
     end
 
     private
