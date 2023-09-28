@@ -23,3 +23,4 @@ module StorageTables
 end
 
 require "storage_tables/attached/model"
+require "storage_tables/attached/changes"

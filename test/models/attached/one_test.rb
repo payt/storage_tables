@@ -17,7 +17,7 @@ class StorageTables::OneAttachedTest < ActiveSupport::TestCase
   end
 
   test "creating a record with a File as attachable attribute" do
-    @user = Post.create!(name: "Dorian", image: file_fixture("racecar.jpg").open)
+    @user = Post.create!(name: "Dorian", image: fixture_file_upload("racecar.jpg"))
 
     assert_equal "image.gif", @user.avatar.filename.to_s
     assert_not_nil @user.avatar_attachment

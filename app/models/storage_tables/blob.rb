@@ -2,6 +2,8 @@
 
 module StorageTables
   class Blob < ApplicationRecord
+    include ActiveStorage::Blob::Identifiable
+
     # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 

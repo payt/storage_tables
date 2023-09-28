@@ -49,6 +49,10 @@ module ActiveSupport
       StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
                                              content_type: content_type, metadata: metadata, record: record
     end
+
+    def fixture_file_upload(filename)
+      Rack::Test::UploadedFile.new file_fixture(filename).to_s
+    end
   end
 end
 

@@ -12,27 +12,28 @@ module StorageTables
         end
 
         define_method("#{name}=") do |attachable|
-          attachment_changes["#{name}"] =
+          attachment_changes[name.to_s] =
             if attachable.nil? || attachable == ""
-              ActiveStorage::Attached::Changes::DeleteOne.new("#{name}", self)
+              ActiveStorage::Attached::Changes::DeleteOne.new(name.to_s, self)
             else
-              ActiveStorage::Attached::Changes::CreateOne.new("#{name}", self, attachable)
+              StorageTables::Attached::Changes::CreateOne.new(name.to_s, self, attachable)
             end
         end
 
         has_one :"#{name}_storage_attachment", lambda {
                                                  where(name: name)
-                                               }, class_name: class_name, as: :record, inverse_of: :record, dependent: :destroy
+                                               }, class_name: class_name.to_s, as: :record, inverse_of: :record,
+                                                  dependent: :destroy
         has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                          source: :blob
 
         scope :"with_stored_#{name}", lambda {
-          includes("#{name}_attachment": :blob)
+          includes("#{name}_storage_attachment": "#{name}_storage_blob")
         }
 
         after_save { attachment_changes[name.to_s]&.save }
 
-        after_commit(on: %i[create update]) { attachment_changes.delete(name.to_s).try(:upload) }
+        after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s).try(:upload) }
 
         reflection = ActiveRecord::Reflection.create(
           :stored_one_attachment,
