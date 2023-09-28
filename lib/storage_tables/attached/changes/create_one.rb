@@ -3,8 +3,16 @@
 module StorageTables
   module Attached::Changes
     class CreateOne < ActiveStorage::Attached::Changes::CreateOne
+      def save
+        record.public_send("#{name}_storage_attachment=", attachment)
+        record.public_send("#{name}_storage_blob=", blob)
+      end
+
+      private
+
       def build_attachment
-        binding.pry
+        attachment_service_name.constantize.new(record: record, name: name, blob: blob, filename: blob.filename.to_s,
+                                                blob_key: blob.partition_key)
       end
 
       def attachment_service_name
@@ -12,7 +20,6 @@ module StorageTables
       end
 
       def find_attachment
-        binding.pry
         return unless record.public_send("#{name}_storage_blob") == blob
 
         record.public_send("#{name}_storage_attachment")

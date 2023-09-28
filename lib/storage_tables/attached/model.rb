@@ -8,7 +8,7 @@ module StorageTables
       def stored_one_attachment(name, class_name:)
         define_method(name) do
           @storage_tables_attached ||= {}
-          @storage_tables_attached[name.to_sym] ||= ActiveStorage::Attached::One.new(name.to_s, self)
+          @storage_tables_attached[name.to_sym] ||= StorageTables::Attached::One.new(name.to_s, self)
         end
 
         define_method("#{name}=") do |attachable|
@@ -22,8 +22,8 @@ module StorageTables
 
         has_one :"#{name}_storage_attachment", lambda {
                                                  where(name: name)
-                                               }, class_name: class_name.to_s, as: :record, inverse_of: :record,
-                                                  dependent: :destroy
+                                               }, class_name: class_name.to_s, inverse_of: :record,
+                                                  dependent: :destroy, foreign_key: :record_id
         has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                          source: :blob
 

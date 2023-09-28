@@ -8,5 +8,6 @@ end
 
 module StorageTables
   class PostAttachment < StorageTables::Attachment
+    belongs_to :record, class_name: "Post", inverse_of: :image_storage_attachment
   end
 end
