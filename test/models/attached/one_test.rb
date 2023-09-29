@@ -12,10 +12,6 @@ class StorageTables::OneAttachedTest < ActiveSupport::TestCase
     @user = Post.create!(name: "My Post")
   end
 
-  teardown do
-    StorageTables::Blob.find_each(&:delete)
-  end
-
   test "creating a record with a File as attachable attribute" do
     @post = Post.create!(name: "My Post", image: fixture_file_upload("racecar.jpg"))
 

@@ -33,13 +33,17 @@ Rails.configuration.active_storage.service_configurations = SERVICE_CONFIGURATIO
 
 Rails.configuration.active_storage.service = "local"
 
+DatabaseCleaner.strategy = :transaction
+
 module ActiveSupport
   class TestCase
     setup do
+      DatabaseCleaner.start
       ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
     end
 
     teardown do
+      DatabaseCleaner.clean
       ActiveStorage::Current.reset
     end
 

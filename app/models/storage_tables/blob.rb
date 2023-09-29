@@ -4,6 +4,10 @@ module StorageTables
   class Blob < ApplicationRecord
     include ActiveStorage::Blob::Identifiable
 
+    # Need to set a primary key because active_record want to order by the primary key, although there is none
+    # We can consider checksum as a primary key, but its uniqueness is guaranteed.
+    self.primary_key = :checksum
+
     # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 
@@ -52,6 +56,7 @@ module StorageTables
 
     def unfurl(io, identify: true)
       self.checksum = compute_checksum_in_chunks(io)
+      self.partition_key = checksum[0]
       self.content_type = extract_content_type(io) if content_type.nil? || identify
       self.byte_size    = io.size
       self.identified   = true

@@ -8,6 +8,7 @@ gemspec
 
 gem "puma"
 
+gem "database_cleaner-active_record"
 gem "pg"
 
 gem "sprockets-rails"
