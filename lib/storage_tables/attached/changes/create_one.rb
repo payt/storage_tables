@@ -34,19 +34,16 @@ module StorageTables
             io: attachable.open,
             filename: attachable.original_filename,
             content_type: attachable.content_type,
-            record: record,
             metadata: {
               filename: attachable.original_filename
             }
           )
         when Hash
           StorageTables::Blob.build_after_unfurling(
-            **attachable.reverse_merge(
-              record: record
-            ).symbolize_keys
+            **attachable.symbolize_keys
           )
         when String
-          StorageTables::Blob.find_signed!(attachable, record: record)
+          StorageTables::Blob.find_signed!(attachable)
         else
           raise ArgumentError, "Could not find or build blob: expected attachable, got #{attachable.inspect}"
         end

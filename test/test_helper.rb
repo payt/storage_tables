@@ -9,6 +9,7 @@ require_relative "../test/dummy/config/environment"
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../test/dummy/db/migrate", __dir__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __dir__)
 require "rails/test_help"
+require "database_cleaner/active_record"
 
 # Load fixtures from the engine
 if ActiveSupport::TestCase.respond_to?(:fixture_path=)
@@ -33,23 +34,24 @@ Rails.configuration.active_storage.service_configurations = SERVICE_CONFIGURATIO
 
 Rails.configuration.active_storage.service = "local"
 
-DatabaseCleaner.strategy = :transaction
-
 module ActiveSupport
   class TestCase
     setup do
-      DatabaseCleaner.start
       ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
     end
 
     teardown do
-      DatabaseCleaner.clean
       ActiveStorage::Current.reset
     end
 
     private
 
-    def create_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
+    def create_blob(data: "hello world", filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
+      StorageTables::Blob.create_and_upload! io: StringIO.new(data), filename: filename,
+                                             content_type: content_type, metadata: metadata
+    end
+
+    def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
       StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
                                              content_type: content_type, metadata: metadata
     end

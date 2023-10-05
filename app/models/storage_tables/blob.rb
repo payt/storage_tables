@@ -24,17 +24,13 @@ module StorageTables
     end
 
     class << self
-      def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true, record: nil)
-        return existing_blob(io) if existing_blob(io)
-
+      def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true)
         new(filename: filename, content_type: content_type, metadata: metadata).tap do |blob|
           blob.unfurl(io, identify: identify)
         end
       end
 
-      def create_after_unfurling!(io:, filename:, content_type: nil, metadata: nil, identify: true,
-                                  record: nil)
-
+      def create_after_unfurling!(io:, filename:, content_type: nil, metadata: nil, identify: true)
         build_after_unfurling(io: io, filename: filename, content_type: content_type, metadata: metadata,
                               identify: identify).tap(&:save!)
       end
@@ -45,7 +41,7 @@ module StorageTables
       # When providing a content type, pass <tt>identify: false</tt> to bypass
       # automatic content type inference.
       def create_and_upload!(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        return existing_blob(io) if existing_blob(io)
+        return existing_blob(io) if existing_blob(io).present?
 
         create_after_unfurling!(io: io, filename: filename, content_type: content_type, metadata: metadata,
                                 identify: identify).tap do |blob|
@@ -54,11 +50,11 @@ module StorageTables
       end
 
       def existing_blob(io)
-        @existing_blob ||= find_by(partition_key: computed_checksum(io)[0], checksum: computed_checksum(io))
+        find_by(partition_key: computed_checksum(io)[0], checksum: computed_checksum(io))
       end
 
       def computed_checksum(io)
-        @computed_checksum ||= compute_checksum_in_chunks(io)
+        compute_checksum_in_chunks(io)
       end
 
       def compute_checksum_in_chunks(io)
@@ -98,14 +94,6 @@ module StorageTables
     # Returns an instance of service, which can be configured globally or per attachment
     def service
       services.fetch(service_name)
-    end
-
-    def partition_key
-      self
-    end
-
-    def existing_blob(io)
-      @existing_blob ||= find_by(partition_key: computed_checksum(io)[0], checksum: computed_checksum(io))
     end
 
     private
@@ -148,10 +136,6 @@ module StorageTables
       else
         { content_type: content_type }
       end
-    end
-
-    def update_service_metadata
-      service.update_metadata key, **service_metadata if service_metadata.any?
     end
   end
 end

@@ -7,6 +7,15 @@ module StorageTables
     class DiskService < ActiveStorage::Service::DiskService
       private
 
+      def path_for(key) # :nodoc:
+        # Replace the forward slash with an underscore
+        key = key.tr("/", "_")
+        # Replace the plus sign with a minus sign
+        key = key.tr("+", "-")
+
+        File.join root, folder_for(key), key
+      end
+
       def folder_for(key)
         [key[0], key[1..2], key[3..4]].join("/")
       end

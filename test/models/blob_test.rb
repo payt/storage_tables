@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "database/setup"
 
 module StorageTables
   class BlobTest < ActiveSupport::TestCase
+    teardown do
+      StorageTables::Blob.delete_all
+    end
+
     test "setup" do
       blob = StorageTables::Blob.new
 
@@ -19,6 +22,12 @@ module StorageTables
       assert blob.service.exist?(blob.checksum)
     end
 
+    test "create_and_upload extracts content type from data" do
+      blob = create_file_blob content_type: "application/octet-stream"
+
+      assert_equal "image/jpeg", blob.content_type
+    end
+
     test "create_after_upload! has the same effect as create_and_upload!" do
       data = "Some other, even more funky file"
       blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
@@ -31,9 +40,17 @@ module StorageTables
       data = "Hello world!"
       blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
 
+      assert_predicate blob, :persisted?
       assert_equal data, blob.download
       assert_equal data.length, blob.byte_size
       assert_equal OpenSSL::Digest.new("SHA3-512").base64digest(data), blob.checksum
+    end
+
+    test "create_and_upload! the same file twice" do
+      blob = create_file_blob
+      blob2 = create_file_blob
+
+      assert_equal blob, blob2
     end
   end
 end
