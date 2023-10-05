@@ -8,10 +8,17 @@ ENV["RAILS_ENV"] = "test"
 require_relative "../test/dummy/config/environment"
 require "rails/test_help"
 
+require "active_support"
+require "active_support/test_case"
+require "active_support/core_ext/object/try"
+require "active_support/testing/autorun"
+require "active_support/configuration_file"
+require "active_storage/service/mirror_service"
+
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../test/dummy/db/migrate", __dir__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __dir__)
 
-# Load fixtures from the engine
+# # Load fixtures from the engine
 if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.fixture_path = File.expand_path("fixtures", __dir__)
   ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
