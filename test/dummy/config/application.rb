@@ -19,6 +19,7 @@ module Dummy
   class Application < Rails::Application
     config.load_defaults 7.0
 
+    config.active_record.schema_format = :sql
     config.active_storage.service = :local
   end
 end
