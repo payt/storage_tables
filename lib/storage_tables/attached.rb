@@ -22,6 +22,6 @@ module StorageTables
   end
 end
 
-require "storage_tables/attached/model"
-require "storage_tables/attached/one"
-require "storage_tables/attached/changes"
+require "storage_tables/attachable/model"
+require "storage_tables/attachable/one"
+require "storage_tables/attachable/changes"

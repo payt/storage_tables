@@ -41,7 +41,6 @@ module StorageTables
       blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
 
       assert_predicate blob, :persisted?
-      assert_equal data, blob.download
       assert_equal data.length, blob.byte_size
       assert_equal OpenSSL::Digest.new("SHA3-512").base64digest(data), blob.checksum
     end

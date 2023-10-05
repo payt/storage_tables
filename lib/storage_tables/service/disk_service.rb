@@ -4,6 +4,7 @@ require "active_storage/service/disk_service"
 
 module StorageTables
   module Service
+    # Local disk storage service.
     class DiskService < ActiveStorage::Service::DiskService
       private
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module StorageTables
+  # Storage Tables reflection extensions for Active Record.
   module Reflection
     include ActiveStorage::Reflection
     # Holds all the metadata about a has_one_attached attachment as it was

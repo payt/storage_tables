@@ -2,6 +2,7 @@
 
 module StorageTables
   module Service
+    # Set the storage service to be used by Storage Tables.
     class Configurator < ActiveStorage::Service::Configurator
       private
 

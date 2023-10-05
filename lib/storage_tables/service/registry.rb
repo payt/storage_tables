@@ -4,7 +4,7 @@ require "storage_tables/service/configurator"
 
 module StorageTables
   module Service
-    class Registry < ActiveStorage::Service::Registry
+    class Registry < ActiveStorage::Service::Registry # :nodoc:
       private
 
       def configurator

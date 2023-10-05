@@ -14,7 +14,7 @@ module StorageTables
       require "storage_tables/attached"
 
       ActiveSupport.on_load(:active_record) do
-        include StorageTables::Attached::Model
+        include StorageTables::Attachable::Model
       end
     end
 

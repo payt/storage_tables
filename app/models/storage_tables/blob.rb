@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module StorageTables
+  # Representation of a file with the location of the file stored in a database table.
   class Blob < ApplicationRecord
     include ActiveStorage::Blob::Identifiable
 
@@ -85,8 +86,10 @@ module StorageTables
       service.upload checksum, io, checksum: checksum, **service_metadata
     end
 
-    # Downloads the file associated with this blob. If no block is given, the entire file is read into memory and returned.
-    # That'll use a lot of RAM for very large files. If a block is given, then the download is streamed and yielded in chunks.
+    # Downloads the file associated with this blob. If no block is given,
+    # the entire file is read into memory and returned.
+    # That'll use a lot of RAM for very large files. If a block is given,
+    # then the download is streamed and yielded in chunks.
     def download(&block)
       service.download checksum, &block
     end

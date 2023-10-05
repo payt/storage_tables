@@ -52,7 +52,7 @@ module ActiveSupport
     end
 
     def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload! io: file_fixture(filename).open, filename: filename,
+      StorageTables::Blob.create_and_upload! io: fixture_file_upload(filename).open, filename: filename,
                                              content_type: content_type, metadata: metadata
     end
 

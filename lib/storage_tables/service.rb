@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module StorageTables
+  # Loads and configures the Storage service to be used to store files.
   class Service
     extend ActiveSupport::Autoload
     autoload StorageTables::Service::Configuraator
