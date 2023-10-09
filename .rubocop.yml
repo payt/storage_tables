@@ -13,6 +13,7 @@ AllCops:
     - db/**/*
     - bin/**/*
     - vendor/**/*
+    - test/dummy/**/*
 
 Style/StringLiterals:
   Enabled: true

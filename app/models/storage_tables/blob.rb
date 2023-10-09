@@ -18,7 +18,8 @@ module StorageTables
     class_attribute :service, instance_accessor: false
     class_attribute :service_name
 
-    has_many :attachments, class_name: "StorageTables::Attachment", foreign_key: :checksum, primary_key: :checksum
+    has_many :attachments, class_name: "StorageTables::Attachment", foreign_key: :checksum, primary_key: :checksum,
+                           dependent: :restrict_with_exception, inverse_of: :blob
 
     validates :checksum, presence: true
 
