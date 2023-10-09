@@ -9,7 +9,11 @@ module StorageTables
       # You don't have to call this method to access the attachment's methods as
       # they are all available at the model level.
       def attachment
-        change.present? ? change.attachment : record.public_send("#{name}_storage_attachment")
+        if change.present?
+          change.attachment
+        else
+          record.public_send("#{name}_storage_attachment")
+        end
       end
 
       private

@@ -10,6 +10,8 @@ module StorageTables
   class Engine < ::Rails::Engine
     isolate_namespace StorageTables
 
+    config.storage_tables = ActiveSupport::OrderedOptions.new
+
     initializer "storage_tables.attached" do
       require "storage_tables/attached"
 
@@ -21,20 +23,11 @@ module StorageTables
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
-        configs = Rails.configuration.active_storage.service_configurations ||=
-          begin
-            config_file = Rails.root.join("config/storage/#{Rails.env}.yml")
-            config_file = Rails.root.join("config/storage.yml") unless config_file.exist?
-            raise("Couldn't find Active Storage configuration in #{config_file}") unless config_file.exist?
-
-            ActiveSupport::ConfigurationFile.parse(config_file)
-          end
-
+        configs = Rails.configuration.active_storage.service_configurations
         StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
-        if (config_choice = Rails.configuration.active_storage.service)
-          StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
-        end
+        config_choice = Rails.configuration.storage_tables.service
+        StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
       end
     end
 

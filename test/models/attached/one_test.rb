@@ -10,7 +10,7 @@ module StorageTables
     include ActiveSupport::Testing::MethodCallAssertions
 
     setup do
-      @user = Post.create!(name: "My Post")
+      @pre_post = Post.create!(name: "My Post")
     end
 
     test "creating a record with a File as attachable attribute" do
@@ -31,6 +31,24 @@ module StorageTables
       end
 
       # assert_equal @post.image_storage_blob, @post2.image_storage_blob
+    end
+
+    test "creating a record with an existing blob attached" do
+      post = Post.create!(name: "New Post", image: create_blob(filename: "funky.jpg"))
+
+      assert_predicate post.image, :attached?
+    end
+
+    test "creating a record with an existing blob from a signed ID attached" do
+      post = Post.create!(name: "New Post", image: create_blob(filename: "funky.jpg").signed_id)
+
+      assert_predicate post.image, :attached?
+    end
+
+    test "creating a record with an unexpected object attached" do
+      error = assert_raises(ArgumentError) { Post.create!(name: "Jason", image: :foo) }
+
+      assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
     end
   end
 end

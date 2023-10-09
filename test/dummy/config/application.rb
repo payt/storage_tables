@@ -21,5 +21,7 @@ module Dummy
 
     config.active_record.schema_format = :sql
     config.active_storage.service = :local
+
+    config.storage_tables.service = :local
   end
 end

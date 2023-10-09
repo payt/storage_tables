@@ -44,8 +44,6 @@ module StorageTables
       # When providing a content type, pass <tt>identify: false</tt> to bypass
       # automatic content type inference.
       def create_and_upload!(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        return existing_blob(io) if existing_blob(io).present?
-
         create_after_unfurling!(io: io, filename: filename, content_type: content_type, metadata: metadata,
                                 identify: identify).tap do |blob|
           blob.upload_without_unfurling(io)
@@ -55,25 +53,6 @@ module StorageTables
       def existing_blob(io)
         find_by(partition_key: computed_checksum(io)[0], checksum: computed_checksum(io))
       end
-
-      def computed_checksum(io)
-        compute_checksum_in_chunks(io)
-      end
-
-      def compute_checksum_in_chunks(io)
-        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-          while (chunk = io.read(5.megabytes))
-            checksum << chunk
-          end
-
-          io.rewind
-        end.base64digest
-      end
-    end
-
-    def upload(io, identify: true)
-      unfurl io, identify: identify
-      upload_without_unfurling io
     end
 
     def unfurl(io, identify: true)
