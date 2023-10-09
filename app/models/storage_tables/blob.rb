@@ -29,9 +29,14 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        new(filename: filename, content_type: content_type, metadata: metadata).tap do |blob|
+        new_blob = new(filename: filename, content_type: content_type, metadata: metadata).tap do |blob|
           blob.unfurl(io, identify: identify)
         end
+
+        existing_blob = existing_blob(new_blob.checksum)
+        return new_blob unless existing_blob
+
+        existing_blob
       end
 
       def create_after_unfurling!(io:, filename:, content_type: nil, metadata: nil, identify: true)
@@ -51,8 +56,8 @@ module StorageTables
         end
       end
 
-      def existing_blob(io)
-        find_by(partition_key: computed_checksum(io)[0], checksum: computed_checksum(io))
+      def existing_blob(checksum)
+        find_by(partition_key: checksum[0], checksum: checksum)
       end
     end
 
