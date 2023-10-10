@@ -21,16 +21,11 @@ module StorageTables
       assert_not_nil @post.image_storage_blob
     end
 
-    ## TODO: Make it possible to create a record with an existing blob
-    # See: https://github.com/payt/storage_tables/issues/12
     test "creating a record with an attachment where already one exists" do
       @post = Post.create!(name: "My Post", image: fixture_file_upload("racecar.jpg"))
+      @post2 = Post.create!(name: "My Post", image: fixture_file_upload("racecar.jpg"))
 
-      assert_raises(ActiveRecord::RecordNotUnique) do
-        @post2 = Post.create!(name: "My Post", image: fixture_file_upload("racecar.jpg"))
-      end
-
-      # assert_equal @post.image_storage_blob, @post2.image_storage_blob
+      assert_equal @post.image_storage_blob, @post2.image_storage_blob
     end
 
     test "creating a record with an existing blob attached" do
