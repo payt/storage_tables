@@ -14,7 +14,6 @@ gem "sprockets-rails"
 
 gem "pry"
 
-gem "database_cleaner-active_record"
 gem "rubocop"
 gem "rubocop-minitest"
 gem "rubocop-packaging"

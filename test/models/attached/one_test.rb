@@ -48,6 +48,19 @@ module StorageTables
       assert_not_nil @user.avatar_storage_blob
     end
 
+    test "attaching ActionDispatch::Http::UploadedFile attachable to an existing record" do
+      upload = ActionDispatch::Http::UploadedFile.new({
+        filename: "avatar.jpeg",
+        type: "image/jpeg",
+        tempfile: fixture_file_upload("racecar.jpg")
+      })
+
+      @user.avatar.attach upload
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_not_nil @user.avatar_storage_blob
+    end
+
     test "creating a record with a Pathname as attachable attribute" do
       @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg"))
 

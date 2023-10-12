@@ -22,14 +22,6 @@ module StorageTables
             blob.upload_without_unfurling(attachable.fetch(:io))
           when File
             blob.upload_without_unfurling(attachable)
-          when StorageTables::Blob, String
-            nil
-          else
-            raise(
-              ArgumentError,
-              "Could not upload: expected attachable, " \
-              "got #{attachable.inspect}"
-            )
           end
         end
 
