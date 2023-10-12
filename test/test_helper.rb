@@ -68,7 +68,7 @@ module ActiveSupport
                                                 content_type: content_type, identify: identify
     end
 
-    def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", record: nil)
+    def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg")
       file = file_fixture(filename)
       byte_size = file.size
       checksum = OpenSSL::Digest.new("SHA3-512").file(file).base64digest
