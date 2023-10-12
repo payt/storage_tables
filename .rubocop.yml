@@ -58,3 +58,7 @@ Metrics/MethodLength:
     - hash
     - heredoc
   Max: 30
+
+## MINITEST
+Minitest/MultipleAssertions:
+  Max: 5

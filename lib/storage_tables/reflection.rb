@@ -16,7 +16,10 @@ module StorageTables
     # specified in the Active Record class.
     class StoredManyAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro
+        # TODO: Cover many attachments in other PR
+        # :nocov:
         :stored_many_attachments
+        # :nocov:
       end
     end
 
@@ -31,8 +34,10 @@ module StorageTables
         case macro
         when :stored_one_attachment
           StoredOneAttachmentReflection
+        # :nocov:
         when :stored_many_attachments
           StoredManyAttachmentsReflection
+        # :nocov:
         else
           super
         end

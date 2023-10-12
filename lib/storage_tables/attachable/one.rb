@@ -15,12 +15,6 @@ module StorageTables
           record.public_send("#{name}_storage_attachment")
         end
       end
-
-      private
-
-      def write_attachment(attachment)
-        record.public_send("#{name}_storage_attachment=", attachment)
-      end
     end
   end
 end

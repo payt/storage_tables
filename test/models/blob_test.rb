@@ -22,10 +22,26 @@ module StorageTables
       assert blob.service.exist?(blob.checksum)
     end
 
+    test "created with custom metadata" do
+      blob = create_blob metadata: { "author" => "DHH" }
+
+      assert_predicate(blob, :persisted?)
+      # Check that the blob was uploaded to the service.
+      assert blob.service.exist?(blob.checksum)
+    end
+
     test "create_and_upload extracts content type from data" do
       blob = create_file_blob content_type: "application/octet-stream"
 
       assert_equal "image/jpeg", blob.content_type
+    end
+
+    test "create_after_unfurling! without identify also works" do
+      data = "Some other, even more funky file"
+      blob = StorageTables::Blob.create_after_unfurling!(io: StringIO.new(data), filename: "funky.bin",
+                                                         content_type: "text/plain", identify: false)
+
+      assert_predicate blob, :persisted?
     end
 
     test "create_after_upload! has the same effect as create_and_upload!" do
@@ -50,6 +66,26 @@ module StorageTables
       blob2 = create_file_blob
 
       assert_equal blob, blob2
+    end
+
+    test "download yields chunks" do
+      blob   = create_blob data: "a" * 5.0625.megabytes
+      chunks = []
+
+      blob.download do |chunk|
+        chunks << chunk
+      end
+
+      assert_equal 2, chunks.size
+      assert_equal "a" * 5.megabytes, chunks.first
+      assert_equal "a" * 64.kilobytes, chunks.second
+    end
+
+    test "Can also upload binary files" do
+      blob = create_blob(content_type: "text/html")
+
+      assert_predicate blob, :persisted?
+      assert blob.service.exist?(blob.checksum)
     end
   end
 end

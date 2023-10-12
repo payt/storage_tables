@@ -115,10 +115,6 @@ module StorageTables
       ActiveStorage.content_types_allowed_inline.include?(content_type)
     end
 
-    def web_image?
-      ActiveStorage.web_image_content_types.include?(content_type)
-    end
-
     def service_metadata
       if forcibly_serve_as_binary?
         { content_type: ActiveStorage.binary_content_type, disposition: :attachment, filename: filename }

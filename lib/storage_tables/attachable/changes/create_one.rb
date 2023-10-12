@@ -12,9 +12,7 @@ module StorageTables
 
         def upload
           case attachable
-          when ActionDispatch::Http::UploadedFile
-            blob.upload_without_unfurling(attachable.open)
-          when Pathname
+          when ActionDispatch::Http::UploadedFile, Pathname
             blob.upload_without_unfurling(attachable.open)
           when Rack::Test::UploadedFile
             blob.upload_without_unfurling(
@@ -24,8 +22,8 @@ module StorageTables
             blob.upload_without_unfurling(attachable.fetch(:io))
           when File
             blob.upload_without_unfurling(attachable)
-          when StorageTables::Blob
-          when String
+          when StorageTables::Blob, String
+            nil
           else
             raise(
               ArgumentError,

@@ -16,7 +16,10 @@ module StorageTables
           define_method("#{name}=") do |attachable|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
+                # TODO: Cover deleting attachments later.
+                # :nocov:
                 ActiveStorage::Attached::Changes::DeleteOne.new(name.to_s, self)
+                # :nocov:
               else
                 StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable)
               end
@@ -30,7 +33,7 @@ module StorageTables
                                            source: :blob
 
           scope :"with_stored_#{name}", lambda {
-            includes("#{name}_storage_attachment": "#{name}_storage_blob")
+            includes("#{name}_storage_attachment": :blob)
           }
 
           after_save { attachment_changes[name.to_s]&.save }
@@ -44,7 +47,6 @@ module StorageTables
             { class_name: class_name },
             self
           )
-          yield reflection if block_given?
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
       end

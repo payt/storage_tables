@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
-# frozen_literal_string: true
+class User < ApplicationRecord
+  stored_one_attachment :avatar, class_name: "StorageTables::UserAttachment"
 
-class Post < ApplicationRecord
-  stored_one_attachment :image, class_name: "StorageTables::PostAttachment"
+  validates :name, presence: true
+end
+
+class Group < ApplicationRecord
+  stored_one_attachment :image, class_name: "StorageTables::GroupAttachment"
 end
 
 module StorageTables
-  class PostAttachment < StorageTables::Attachment
-    belongs_to :record, class_name: "Post", inverse_of: :image_storage_attachment
+  class UserAttachment < StorageTables::Attachment
+    belongs_to :record, class_name: "User", inverse_of: :avatar_storage_attachment
   end
 end

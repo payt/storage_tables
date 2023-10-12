@@ -17,7 +17,6 @@ module StorageTables
     end
 
     def download
-      binding.pry
       service.download(checksum)
     end
 
