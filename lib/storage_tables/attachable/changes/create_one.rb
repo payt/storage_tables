@@ -10,6 +10,31 @@ module StorageTables
           record.public_send("#{name}_storage_blob=", blob)
         end
 
+        def upload
+          case attachable
+          when ActionDispatch::Http::UploadedFile
+            blob.upload_without_unfurling(attachable.open)
+          when Pathname
+            blob.upload_without_unfurling(attachable.open)
+          when Rack::Test::UploadedFile
+            blob.upload_without_unfurling(
+              attachable.respond_to?(:open) ? attachable.open : attachable
+            )
+          when Hash
+            blob.upload_without_unfurling(attachable.fetch(:io))
+          when File
+            blob.upload_without_unfurling(attachable)
+          when StorageTables::Blob
+          when String
+          else
+            raise(
+              ArgumentError,
+              "Could not upload: expected attachable, " \
+              "got #{attachable.inspect}"
+            )
+          end
+        end
+
         private
 
         def build_attachment
@@ -31,23 +56,38 @@ module StorageTables
           case attachable
           when StorageTables::Blob
             attachable
-          when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
+          when ActionDispatch::Http::UploadedFile
             StorageTables::Blob.build_after_unfurling(
               io: attachable.open,
               filename: attachable.original_filename,
-              content_type: attachable.content_type,
-              metadata: {
-                filename: attachable.original_filename
-              }
+              content_type: attachable.content_type
+            )
+          when Rack::Test::UploadedFile
+            StorageTables::Blob.build_after_unfurling(
+              io: attachable.respond_to?(:open) ? attachable.open : attachable,
+              filename: attachable.original_filename,
+              content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.build_after_unfurling(
-              **attachable.symbolize_keys
-            )
+            StorageTables::Blob.build_after_unfurling(**attachable)
           when String
             StorageTables::Blob.find_signed!(attachable)
+          when File
+            StorageTables::Blob.build_after_unfurling(
+              io: attachable,
+              filename: File.basename(attachable)
+            )
+          when Pathname
+            StorageTables::Blob.build_after_unfurling(
+              io: attachable.open,
+              filename: File.basename(attachable)
+            )
           else
-            raise ArgumentError, "Could not find or build blob: expected attachable, got #{attachable.inspect}"
+            raise(
+              ArgumentError,
+              "Could not find or build blob: expected attachable, " \
+              "got #{attachable.inspect}"
+            )
           end
         end
       end

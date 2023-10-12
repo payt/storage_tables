@@ -29,7 +29,8 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        new_blob = new(filename: filename, content_type: content_type, metadata: metadata).tap do |blob|
+        new_blob = new(content_type: content_type,
+                       metadata: metadata ? metadata.merge(filename: filename) : { filename: filename }).tap do |blob|
           blob.unfurl(io, identify: identify)
         end
 
