@@ -1,0 +1,29 @@
+# frozen_string_literal: true
+
+# Creates the `<%= @singular_table_name %>_versions` table
+class Create<%= @model %>Versions < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+    create_table :<%= @singular_table_name %>_versions, id: false do |t|
+      t.string :name,         null: false
+      t.string :filename, null: false
+      t.<%= @versioned_model_primary_key_type %> :object_id, null: false, index: true
+      t.references :actor, type: :string, foreign_key: { to_table: :audit_logs_actors, on_delete: :restrict },
+                   index: false, default: -> { "current_setting('var.actor_id')" }
+
+      t.string :source, null: false, default: -> { "current_setting('var.actor_source')" }
+      t.string :event, null: false
+      t.jsonb :object_changes
+      t.string :transaction_identifier, null: false, default: -> { "txid_current()" }
+
+      t.timestamptz :created_at, null: false, default: -> { "CURRENT_TIMESTAMP" }
+      t.index [:created_at, :object_id], where: "event = 'DELETE'"
+    end
+
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      ALTER TABLE storage_tables_user_attachments
+      ADD CONSTRAINT fk_rails_1d0e0e0e7a
+      FOREIGN KEY (checksum, blob_key)
+      REFERENCES storage_tables_blobs (checksum, partition_key);
+    SQL
+  end
+end

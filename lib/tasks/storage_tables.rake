@@ -5,7 +5,7 @@ namespace :storage_tables do
   Rake::Task["install:migrations"].clear_comments
 
   desc "Install storage tables"
-  task :install do
+  task environment: :install do
     # Task goes here
   end
 end
