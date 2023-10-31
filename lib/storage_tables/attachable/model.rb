@@ -28,7 +28,7 @@ module StorageTables
           has_one :"#{name}_storage_attachment", lambda {
                                                    where(name: name)
                                                  }, class_name: class_name.to_s, inverse_of: :record,
-                                                    dependent: :destroy, foreign_key: :record_id
+                                                    foreign_key: :record_id
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
