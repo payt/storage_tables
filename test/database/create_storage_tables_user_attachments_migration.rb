@@ -19,5 +19,12 @@ class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.0]
       FOREIGN KEY (checksum, blob_key)
       REFERENCES storage_tables_blobs (checksum, partition_key);
     SQL
+
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      CREATE TRIGGER storage_tables_user_attachments_created AFTER INSERT ON storage_tables_user_attachments FOR EACH ROW EXECUTE FUNCTION increment_attachment_counter()
+    SQL
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      CREATE TRIGGER storage_tables_user_attachments_deleted AFTER INSERT ON storage_tables_user_attachments FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
+    SQL
   end
 end
