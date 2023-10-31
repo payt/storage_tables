@@ -3,12 +3,12 @@
 class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.0]
   def change
     create_table :storage_tables_user_attachments, force: true do |t|
+      t.string :blob_key, null: false, length: 1
       t.string :name,         null: false
-      t.string     :filename, null: false
       t.belongs_to :record,   null: false, foreign_key: { to_table: :users }
       t.string :checksum, null: false, foreign_key: false
-      t.string :blob_key, null: false
       t.datetime :created_at, null: false
+      t.string :filename, null: false
 
       t.index [:record_id, :checksum], unique: true
     end

@@ -62,3 +62,10 @@ Metrics/MethodLength:
 ## MINITEST
 Minitest/MultipleAssertions:
   Max: 5
+
+## RAILS
+
+Rails/InverseOf:
+  Enabled: true
+  Exclude:
+    - app/models/storage_tables/attachment.rb

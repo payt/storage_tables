@@ -7,7 +7,7 @@ module StorageTables
 
     class_attribute :service_name
 
-    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, primary_key: :checksum, # rubocop:disable Rails/InverseOf
+    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, primary_key: :checksum,
                       foreign_key: :checksum
 
     delegate :signed_id, to: :blob
