@@ -5,11 +5,8 @@ module StorageTables
   class Blob < ApplicationRecord
     include ActiveStorage::Blob::Identifiable
 
-    # Need to set a primary key because active_record want to order by the primary key, although there is none
-    # We can consider checksum as a primary key, but its uniqueness is guaranteed.
     self.primary_key = :checksum
 
-    # Use this method because triggers are not supported in PostgreSQL until version 13
     before_create -> { self.partition_key = checksum[0] }
 
     store :metadata, accessors: [:analyzed, :identified, :mtime, :filename], coder: ActiveRecord::Coders::JSON
@@ -17,9 +14,6 @@ module StorageTables
     class_attribute :services, default: {}
     class_attribute :service, instance_accessor: false
     class_attribute :service_name
-
-    has_many :attachments, class_name: "StorageTables::Attachment", foreign_key: :checksum, primary_key: :checksum,
-                           dependent: :restrict_with_exception, inverse_of: :blob
 
     validates :checksum, presence: true
     alias_attribute :key, :checksum
@@ -31,14 +25,10 @@ module StorageTables
     class << self
       def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true)
         new_blob = new(content_type: content_type,
-                       metadata: metadata ? metadata.merge(filename: filename) : { filename: filename }).tap do |blob|
-          blob.unfurl(io, identify: identify)
-        end
+                       metadata: metadata ? (metadata[:filename] = filename) : { filename: filename })
+        new_blob.unfurl(io, identify: identify)
 
-        existing_blob = existing_blob(new_blob.checksum)
-        return new_blob unless existing_blob
-
-        existing_blob
+        existing_blob(new_blob.checksum) || new_blob
       end
 
       def create_after_unfurling!(...)
