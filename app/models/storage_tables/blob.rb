@@ -41,9 +41,8 @@ module StorageTables
         existing_blob
       end
 
-      def create_after_unfurling!(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        build_after_unfurling(io: io, filename: filename, content_type: content_type, metadata: metadata,
-                              identify: identify).tap(&:save!)
+      def create_after_unfurling!(...)
+        build_after_unfurling(...).tap(&:save!)
       end
 
       # Creates a new blob instance and then uploads the contents of

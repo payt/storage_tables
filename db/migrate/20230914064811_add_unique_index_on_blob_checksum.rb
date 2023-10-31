@@ -2,8 +2,7 @@
 
 class AddUniqueIndexOnBlobChecksum < ActiveRecord::Migration[7.0]
   def change
-    add_index :storage_tables_blobs, %i[partition_key checksum], unique: true
-    add_index :storage_tables_blobs, :attachments_count, where: "attachments_count = 0"
+    add_index :storage_tables_blobs, :checksum, where: "attachments_count = 0"
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
       CREATE OR REPLACE FUNCTION public.increment_attachment_counter() RETURNS trigger
