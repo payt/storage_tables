@@ -5,7 +5,7 @@ module StorageTables
   class Blob < ApplicationRecord
     include ActiveStorage::Blob::Identifiable
 
-    self.primary_key = :checksum
+    self.primary_key = [:checksum, :partition_key]
 
     before_create -> { self.partition_key = checksum[0] }
 

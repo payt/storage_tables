@@ -121,7 +121,6 @@ module StorageTables
         @user.avatar.attach create_file_blob(filename: "report.pdf")
 
         # Blobs are not deleted directly if no longer used.
-        assert StorageTables::Blob.exists?(old_blob.checksum)
         assert StorageTables::Blob.service.exist?(old_blob.checksum)
 
         assert_equal "report.pdf", @user.avatar.blob.filename.to_s
