@@ -24,9 +24,8 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        new_blob = new(content_type: content_type,
-                       metadata: metadata ? (metadata[:filename] = filename) : { filename: filename })
-        new_blob.unfurl(io, identify: identify)
+        new_blob = new(content_type:, metadata: metadata ? (metadata[:filename] = filename) : { filename: })
+        new_blob.unfurl(io, identify:)
 
         existing_blob(new_blob.checksum) || new_blob
       end
@@ -41,8 +40,7 @@ module StorageTables
       # When providing a content type, pass <tt>identify: false</tt> to bypass
       # automatic content type inference.
       def create_and_upload!(io:, filename:, content_type: nil, metadata: nil, identify: true)
-        create_after_unfurling!(io: io, filename: filename, content_type: content_type, metadata: metadata,
-                                identify: identify).tap do |blob|
+        create_after_unfurling!(io:, filename:, content_type:, metadata:, identify:).tap do |blob|
           blob.upload_without_unfurling(io)
         end
       end
@@ -53,12 +51,11 @@ module StorageTables
       # Once the form using the direct upload is submitted, the blob can be associated with the right record using
       # the signed ID.
       def create_before_direct_upload!(filename:, byte_size:, checksum:, content_type: nil, metadata: nil)
-        create! filename: filename, byte_size: byte_size, checksum: checksum, content_type: content_type,
-                metadata: metadata
+        create! filename:, byte_size:, checksum:, content_type:, metadata:
       end
 
       def existing_blob(checksum)
-        find_by(partition_key: checksum[0], checksum: checksum)
+        find_by(partition_key: checksum[0], checksum:)
       end
     end
 
@@ -71,15 +68,15 @@ module StorageTables
     end
 
     def upload_without_unfurling(io)
-      service.upload checksum, io, checksum: checksum, **service_metadata
+      service.upload checksum, io, checksum:, **service_metadata
     end
 
     # Downloads the file associated with this blob. If no block is given,
     # the entire file is read into memory and returned.
     # That'll use a lot of RAM for very large files. If a block is given,
     # then the download is streamed and yielded in chunks.
-    def download(&block)
-      service.download checksum, &block
+    def download(&)
+      service.download(checksum, &)
     end
 
     # Returns an instance of service, which can be configured globally or per attachment
@@ -113,11 +110,11 @@ module StorageTables
 
     def service_metadata
       if forcibly_serve_as_binary?
-        { content_type: ActiveStorage.binary_content_type, disposition: :attachment, filename: filename }
+        { content_type: ActiveStorage.binary_content_type, disposition: :attachment, filename: }
       elsif !allowed_inline?
-        { content_type: content_type, disposition: :attachment, filename: filename }
+        { content_type:, disposition: :attachment, filename: }
       else
-        { content_type: content_type }
+        { content_type: }
       end
     end
   end

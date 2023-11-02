@@ -47,25 +47,22 @@ module ActiveSupport
     private
 
     def create_blob(data: "hello world", filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload! io: StringIO.new(data), filename: filename,
-                                             content_type: content_type, metadata: metadata
+      StorageTables::Blob.create_and_upload! io: StringIO.new(data), filename:, content_type:, metadata:
     end
 
     def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload! io: fixture_file_upload(filename).open, filename: filename,
-                                             content_type: content_type, metadata: metadata
+      StorageTables::Blob.create_and_upload! io: fixture_file_upload(filename).open, filename:,
+                                             content_type:, metadata:
     end
 
     def create_blob_before_direct_upload(byte_size:, checksum:,
                                          filename: "hello.txt", content_type: "text/plain")
-      StorageTables::Blob.create_before_direct_upload! filename: filename, byte_size: byte_size,
-                                                       checksum: checksum, content_type: content_type
+      StorageTables::Blob.create_before_direct_upload! filename:, byte_size:, checksum:, content_type:
     end
 
     def build_blob_after_unfurling(data: "Hello world!", filename: "hello.txt", content_type: "text/plain",
                                    identify: true)
-      StorageTables::Blob.build_after_unfurling io: StringIO.new(data), filename: filename,
-                                                content_type: content_type, identify: identify
+      StorageTables::Blob.build_after_unfurling io: StringIO.new(data), filename:, content_type:, identify:
     end
 
     def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg")
@@ -73,8 +70,7 @@ module ActiveSupport
       byte_size = file.size
       checksum = OpenSSL::Digest.new("SHA3-512").file(file).base64digest
 
-      create_blob_before_direct_upload(filename: filename, byte_size: byte_size, checksum: checksum,
-                                       content_type: content_type).tap do |blob|
+      create_blob_before_direct_upload(filename:, byte_size:, checksum:, content_type:).tap do |blob|
         service = StorageTables::Blob.service.try(:primary) || StorageTables::Blob.service
         service.upload(blob.checksum, file.open)
       end

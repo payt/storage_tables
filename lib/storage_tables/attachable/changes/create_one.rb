@@ -28,7 +28,7 @@ module StorageTables
         private
 
         def build_attachment
-          attachment_service_name.constantize.new(record: record, name: name, blob: blob, filename: blob.filename.to_s,
+          attachment_service_name.constantize.new(record:, name:, blob:, filename: blob.filename.to_s,
                                                   blob_key: blob[:partition_key])
         end
 

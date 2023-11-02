@@ -84,7 +84,7 @@ module StorageTables
       assert_equal content_type, blob.reload.content_type
     end
 
-    def assert_blob_identified_outside_transaction(blob, &block)
+    def assert_blob_identified_outside_transaction(blob, &)
       baseline_transaction_depth = ActiveRecord::Base.connection.open_transactions
       max_transaction_depth = -1
 
@@ -92,7 +92,7 @@ module StorageTables
         max_transaction_depth = [ActiveRecord::Base.connection.open_transactions, max_transaction_depth].max
       end
 
-      blob.stub(:identify_without_saving, track_transaction_depth, &block)
+      blob.stub(:identify_without_saving, track_transaction_depth, &)
 
       assert_equal 0, (max_transaction_depth - baseline_transaction_depth)
     end
