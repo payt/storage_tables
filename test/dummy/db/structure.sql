@@ -32,73 +32,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: action_mailbox_inbound_emails; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.action_mailbox_inbound_emails (
-    id bigint NOT NULL,
-    status integer DEFAULT 0 NOT NULL,
-    message_id character varying NOT NULL,
-    message_checksum character varying NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: action_mailbox_inbound_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.action_mailbox_inbound_emails_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: action_mailbox_inbound_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.action_mailbox_inbound_emails_id_seq OWNED BY public.action_mailbox_inbound_emails.id;
-
-
---
--- Name: action_text_rich_texts; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.action_text_rich_texts (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    body text,
-    record_type character varying NOT NULL,
-    record_id bigint NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: action_text_rich_texts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.action_text_rich_texts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: action_text_rich_texts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.action_text_rich_texts_id_seq OWNED BY public.action_text_rich_texts.id;
-
-
---
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1324,20 +1257,6 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 
 
 --
--- Name: action_mailbox_inbound_emails id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.action_mailbox_inbound_emails ALTER COLUMN id SET DEFAULT nextval('public.action_mailbox_inbound_emails_id_seq'::regclass);
-
-
---
--- Name: action_text_rich_texts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN id SET DEFAULT nextval('public.action_text_rich_texts_id_seq'::regclass);
-
-
---
 -- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1356,22 +1275,6 @@ ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAULT nextval('public.active_storage_variant_records_id_seq'::regclass);
-
-
---
--- Name: action_mailbox_inbound_emails action_mailbox_inbound_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.action_mailbox_inbound_emails
-    ADD CONSTRAINT action_mailbox_inbound_emails_pkey PRIMARY KEY (id);
-
-
---
--- Name: action_text_rich_texts action_text_rich_texts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.action_text_rich_texts
-    ADD CONSTRAINT action_text_rich_texts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1415,17 +1318,523 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: index_action_mailbox_inbound_emails_uniqueness; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs storage_tables_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_action_mailbox_inbound_emails_uniqueness ON public.action_mailbox_inbound_emails USING btree (message_id, message_checksum);
+ALTER TABLE ONLY public.storage_tables_blobs
+    ADD CONSTRAINT storage_tables_blobs_pkey PRIMARY KEY (checksum, partition_key);
 
 
 --
--- Name: index_action_text_rich_texts_uniqueness; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_0 storage_tables_blobs_partition_0_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_action_text_rich_texts_uniqueness ON public.action_text_rich_texts USING btree (record_type, record_id, name);
+ALTER TABLE ONLY public.storage_tables_blobs_partition_0
+    ADD CONSTRAINT storage_tables_blobs_partition_0_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_10 storage_tables_blobs_partition_10_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_10
+    ADD CONSTRAINT storage_tables_blobs_partition_10_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_11 storage_tables_blobs_partition_11_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_11
+    ADD CONSTRAINT storage_tables_blobs_partition_11_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_12 storage_tables_blobs_partition_12_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_12
+    ADD CONSTRAINT storage_tables_blobs_partition_12_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_13 storage_tables_blobs_partition_13_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_13
+    ADD CONSTRAINT storage_tables_blobs_partition_13_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_14 storage_tables_blobs_partition_14_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_14
+    ADD CONSTRAINT storage_tables_blobs_partition_14_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_15 storage_tables_blobs_partition_15_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_15
+    ADD CONSTRAINT storage_tables_blobs_partition_15_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_16 storage_tables_blobs_partition_16_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_16
+    ADD CONSTRAINT storage_tables_blobs_partition_16_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_17 storage_tables_blobs_partition_17_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_17
+    ADD CONSTRAINT storage_tables_blobs_partition_17_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_18 storage_tables_blobs_partition_18_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_18
+    ADD CONSTRAINT storage_tables_blobs_partition_18_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_19 storage_tables_blobs_partition_19_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_19
+    ADD CONSTRAINT storage_tables_blobs_partition_19_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_1 storage_tables_blobs_partition_1_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_1
+    ADD CONSTRAINT storage_tables_blobs_partition_1_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_20 storage_tables_blobs_partition_20_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_20
+    ADD CONSTRAINT storage_tables_blobs_partition_20_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_21 storage_tables_blobs_partition_21_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_21
+    ADD CONSTRAINT storage_tables_blobs_partition_21_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_22 storage_tables_blobs_partition_22_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_22
+    ADD CONSTRAINT storage_tables_blobs_partition_22_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_23 storage_tables_blobs_partition_23_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_23
+    ADD CONSTRAINT storage_tables_blobs_partition_23_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_24 storage_tables_blobs_partition_24_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_24
+    ADD CONSTRAINT storage_tables_blobs_partition_24_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_25 storage_tables_blobs_partition_25_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_25
+    ADD CONSTRAINT storage_tables_blobs_partition_25_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_26 storage_tables_blobs_partition_26_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_26
+    ADD CONSTRAINT storage_tables_blobs_partition_26_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_27 storage_tables_blobs_partition_27_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_27
+    ADD CONSTRAINT storage_tables_blobs_partition_27_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_28 storage_tables_blobs_partition_28_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_28
+    ADD CONSTRAINT storage_tables_blobs_partition_28_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_29 storage_tables_blobs_partition_29_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_29
+    ADD CONSTRAINT storage_tables_blobs_partition_29_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_2 storage_tables_blobs_partition_2_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_2
+    ADD CONSTRAINT storage_tables_blobs_partition_2_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_30 storage_tables_blobs_partition_30_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_30
+    ADD CONSTRAINT storage_tables_blobs_partition_30_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_31 storage_tables_blobs_partition_31_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_31
+    ADD CONSTRAINT storage_tables_blobs_partition_31_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_32 storage_tables_blobs_partition_32_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_32
+    ADD CONSTRAINT storage_tables_blobs_partition_32_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_33 storage_tables_blobs_partition_33_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_33
+    ADD CONSTRAINT storage_tables_blobs_partition_33_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_34 storage_tables_blobs_partition_34_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_34
+    ADD CONSTRAINT storage_tables_blobs_partition_34_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_35 storage_tables_blobs_partition_35_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_35
+    ADD CONSTRAINT storage_tables_blobs_partition_35_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_36 storage_tables_blobs_partition_36_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_36
+    ADD CONSTRAINT storage_tables_blobs_partition_36_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_37 storage_tables_blobs_partition_37_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_37
+    ADD CONSTRAINT storage_tables_blobs_partition_37_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_38 storage_tables_blobs_partition_38_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_38
+    ADD CONSTRAINT storage_tables_blobs_partition_38_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_39 storage_tables_blobs_partition_39_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_39
+    ADD CONSTRAINT storage_tables_blobs_partition_39_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_3 storage_tables_blobs_partition_3_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_3
+    ADD CONSTRAINT storage_tables_blobs_partition_3_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_40 storage_tables_blobs_partition_40_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_40
+    ADD CONSTRAINT storage_tables_blobs_partition_40_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_41 storage_tables_blobs_partition_41_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_41
+    ADD CONSTRAINT storage_tables_blobs_partition_41_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_42 storage_tables_blobs_partition_42_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_42
+    ADD CONSTRAINT storage_tables_blobs_partition_42_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_43 storage_tables_blobs_partition_43_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_43
+    ADD CONSTRAINT storage_tables_blobs_partition_43_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_44 storage_tables_blobs_partition_44_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_44
+    ADD CONSTRAINT storage_tables_blobs_partition_44_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_45 storage_tables_blobs_partition_45_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_45
+    ADD CONSTRAINT storage_tables_blobs_partition_45_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_46 storage_tables_blobs_partition_46_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_46
+    ADD CONSTRAINT storage_tables_blobs_partition_46_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_47 storage_tables_blobs_partition_47_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_47
+    ADD CONSTRAINT storage_tables_blobs_partition_47_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_48 storage_tables_blobs_partition_48_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_48
+    ADD CONSTRAINT storage_tables_blobs_partition_48_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_49 storage_tables_blobs_partition_49_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_49
+    ADD CONSTRAINT storage_tables_blobs_partition_49_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_4 storage_tables_blobs_partition_4_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_4
+    ADD CONSTRAINT storage_tables_blobs_partition_4_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_50 storage_tables_blobs_partition_50_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_50
+    ADD CONSTRAINT storage_tables_blobs_partition_50_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_51 storage_tables_blobs_partition_51_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_51
+    ADD CONSTRAINT storage_tables_blobs_partition_51_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_52 storage_tables_blobs_partition_52_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_52
+    ADD CONSTRAINT storage_tables_blobs_partition_52_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_53 storage_tables_blobs_partition_53_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_53
+    ADD CONSTRAINT storage_tables_blobs_partition_53_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_54 storage_tables_blobs_partition_54_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_54
+    ADD CONSTRAINT storage_tables_blobs_partition_54_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_55 storage_tables_blobs_partition_55_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_55
+    ADD CONSTRAINT storage_tables_blobs_partition_55_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_56 storage_tables_blobs_partition_56_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_56
+    ADD CONSTRAINT storage_tables_blobs_partition_56_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_57 storage_tables_blobs_partition_57_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_57
+    ADD CONSTRAINT storage_tables_blobs_partition_57_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_58 storage_tables_blobs_partition_58_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_58
+    ADD CONSTRAINT storage_tables_blobs_partition_58_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_59 storage_tables_blobs_partition_59_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_59
+    ADD CONSTRAINT storage_tables_blobs_partition_59_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_5 storage_tables_blobs_partition_5_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_5
+    ADD CONSTRAINT storage_tables_blobs_partition_5_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_60 storage_tables_blobs_partition_60_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_60
+    ADD CONSTRAINT storage_tables_blobs_partition_60_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_61 storage_tables_blobs_partition_61_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_61
+    ADD CONSTRAINT storage_tables_blobs_partition_61_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_62 storage_tables_blobs_partition_62_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_62
+    ADD CONSTRAINT storage_tables_blobs_partition_62_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_63 storage_tables_blobs_partition_63_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_63
+    ADD CONSTRAINT storage_tables_blobs_partition_63_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_6 storage_tables_blobs_partition_6_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_6
+    ADD CONSTRAINT storage_tables_blobs_partition_6_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_7 storage_tables_blobs_partition_7_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_7
+    ADD CONSTRAINT storage_tables_blobs_partition_7_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_8 storage_tables_blobs_partition_8_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_8
+    ADD CONSTRAINT storage_tables_blobs_partition_8_pkey PRIMARY KEY (checksum, partition_key);
+
+
+--
+-- Name: storage_tables_blobs_partition_9 storage_tables_blobs_partition_9_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs_partition_9
+    ADD CONSTRAINT storage_tables_blobs_partition_9_pkey PRIMARY KEY (checksum, partition_key);
 
 
 --
@@ -1457,1809 +1866,1354 @@ CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.ac
 
 
 --
--- Name: index_storage_tables_blobs_on_attachments_count; Type: INDEX; Schema: public; Owner: -
+-- Name: index_storage_tables_blobs_on_checksum; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_storage_tables_blobs_on_attachments_count ON ONLY public.storage_tables_blobs USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX index_storage_tables_blobs_on_checksum ON ONLY public.storage_tables_blobs USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: index_storage_tables_blobs_on_partition_key_and_checksum; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_0_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_storage_tables_blobs_on_partition_key_and_checksum ON ONLY public.storage_tables_blobs USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_0_checksum_idx ON public.storage_tables_blobs_partition_0 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_0_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_10_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_0_attachments_count_idx ON public.storage_tables_blobs_partition_0 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_10_checksum_idx ON public.storage_tables_blobs_partition_10 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_0_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_11_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_0_partition_key_checksum_idx ON public.storage_tables_blobs_partition_0 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_11_checksum_idx ON public.storage_tables_blobs_partition_11 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_10_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_12_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_10_attachments_count_idx ON public.storage_tables_blobs_partition_10 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_12_checksum_idx ON public.storage_tables_blobs_partition_12 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_10_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_13_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_10_partition_key_checksum_idx ON public.storage_tables_blobs_partition_10 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_13_checksum_idx ON public.storage_tables_blobs_partition_13 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_11_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_14_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_11_attachments_count_idx ON public.storage_tables_blobs_partition_11 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_14_checksum_idx ON public.storage_tables_blobs_partition_14 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_11_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_15_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_11_partition_key_checksum_idx ON public.storage_tables_blobs_partition_11 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_15_checksum_idx ON public.storage_tables_blobs_partition_15 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_12_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_16_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_12_attachments_count_idx ON public.storage_tables_blobs_partition_12 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_16_checksum_idx ON public.storage_tables_blobs_partition_16 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_12_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_17_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_12_partition_key_checksum_idx ON public.storage_tables_blobs_partition_12 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_17_checksum_idx ON public.storage_tables_blobs_partition_17 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_13_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_18_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_13_attachments_count_idx ON public.storage_tables_blobs_partition_13 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_18_checksum_idx ON public.storage_tables_blobs_partition_18 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_13_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_19_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_13_partition_key_checksum_idx ON public.storage_tables_blobs_partition_13 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_19_checksum_idx ON public.storage_tables_blobs_partition_19 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_14_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_1_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_14_attachments_count_idx ON public.storage_tables_blobs_partition_14 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_1_checksum_idx ON public.storage_tables_blobs_partition_1 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_14_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_20_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_14_partition_key_checksum_idx ON public.storage_tables_blobs_partition_14 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_20_checksum_idx ON public.storage_tables_blobs_partition_20 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_15_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_21_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_15_attachments_count_idx ON public.storage_tables_blobs_partition_15 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_21_checksum_idx ON public.storage_tables_blobs_partition_21 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_15_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_22_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_15_partition_key_checksum_idx ON public.storage_tables_blobs_partition_15 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_22_checksum_idx ON public.storage_tables_blobs_partition_22 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_16_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_23_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_16_attachments_count_idx ON public.storage_tables_blobs_partition_16 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_23_checksum_idx ON public.storage_tables_blobs_partition_23 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_16_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_24_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_16_partition_key_checksum_idx ON public.storage_tables_blobs_partition_16 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_24_checksum_idx ON public.storage_tables_blobs_partition_24 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_17_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_25_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_17_attachments_count_idx ON public.storage_tables_blobs_partition_17 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_25_checksum_idx ON public.storage_tables_blobs_partition_25 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_17_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_26_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_17_partition_key_checksum_idx ON public.storage_tables_blobs_partition_17 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_26_checksum_idx ON public.storage_tables_blobs_partition_26 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_18_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_27_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_18_attachments_count_idx ON public.storage_tables_blobs_partition_18 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_27_checksum_idx ON public.storage_tables_blobs_partition_27 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_18_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_28_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_18_partition_key_checksum_idx ON public.storage_tables_blobs_partition_18 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_28_checksum_idx ON public.storage_tables_blobs_partition_28 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_19_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_29_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_19_attachments_count_idx ON public.storage_tables_blobs_partition_19 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_29_checksum_idx ON public.storage_tables_blobs_partition_29 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_19_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_2_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_19_partition_key_checksum_idx ON public.storage_tables_blobs_partition_19 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_2_checksum_idx ON public.storage_tables_blobs_partition_2 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_1_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_30_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_1_attachments_count_idx ON public.storage_tables_blobs_partition_1 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_30_checksum_idx ON public.storage_tables_blobs_partition_30 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_1_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_31_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_1_partition_key_checksum_idx ON public.storage_tables_blobs_partition_1 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_31_checksum_idx ON public.storage_tables_blobs_partition_31 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_20_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_32_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_20_attachments_count_idx ON public.storage_tables_blobs_partition_20 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_32_checksum_idx ON public.storage_tables_blobs_partition_32 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_20_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_33_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_20_partition_key_checksum_idx ON public.storage_tables_blobs_partition_20 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_33_checksum_idx ON public.storage_tables_blobs_partition_33 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_21_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_34_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_21_attachments_count_idx ON public.storage_tables_blobs_partition_21 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_34_checksum_idx ON public.storage_tables_blobs_partition_34 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_21_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_35_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_21_partition_key_checksum_idx ON public.storage_tables_blobs_partition_21 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_35_checksum_idx ON public.storage_tables_blobs_partition_35 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_22_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_36_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_22_attachments_count_idx ON public.storage_tables_blobs_partition_22 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_36_checksum_idx ON public.storage_tables_blobs_partition_36 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_22_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_37_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_22_partition_key_checksum_idx ON public.storage_tables_blobs_partition_22 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_37_checksum_idx ON public.storage_tables_blobs_partition_37 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_23_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_38_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_23_attachments_count_idx ON public.storage_tables_blobs_partition_23 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_38_checksum_idx ON public.storage_tables_blobs_partition_38 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_23_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_39_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_23_partition_key_checksum_idx ON public.storage_tables_blobs_partition_23 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_39_checksum_idx ON public.storage_tables_blobs_partition_39 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_24_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_3_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_24_attachments_count_idx ON public.storage_tables_blobs_partition_24 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_3_checksum_idx ON public.storage_tables_blobs_partition_3 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_24_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_40_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_24_partition_key_checksum_idx ON public.storage_tables_blobs_partition_24 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_40_checksum_idx ON public.storage_tables_blobs_partition_40 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_25_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_41_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_25_attachments_count_idx ON public.storage_tables_blobs_partition_25 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_41_checksum_idx ON public.storage_tables_blobs_partition_41 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_25_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_42_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_25_partition_key_checksum_idx ON public.storage_tables_blobs_partition_25 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_42_checksum_idx ON public.storage_tables_blobs_partition_42 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_26_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_43_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_26_attachments_count_idx ON public.storage_tables_blobs_partition_26 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_43_checksum_idx ON public.storage_tables_blobs_partition_43 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_26_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_44_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_26_partition_key_checksum_idx ON public.storage_tables_blobs_partition_26 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_44_checksum_idx ON public.storage_tables_blobs_partition_44 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_27_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_45_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_27_attachments_count_idx ON public.storage_tables_blobs_partition_27 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_45_checksum_idx ON public.storage_tables_blobs_partition_45 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_27_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_46_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_27_partition_key_checksum_idx ON public.storage_tables_blobs_partition_27 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_46_checksum_idx ON public.storage_tables_blobs_partition_46 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_28_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_47_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_28_attachments_count_idx ON public.storage_tables_blobs_partition_28 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_47_checksum_idx ON public.storage_tables_blobs_partition_47 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_28_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_48_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_28_partition_key_checksum_idx ON public.storage_tables_blobs_partition_28 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_48_checksum_idx ON public.storage_tables_blobs_partition_48 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_29_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_49_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_29_attachments_count_idx ON public.storage_tables_blobs_partition_29 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_49_checksum_idx ON public.storage_tables_blobs_partition_49 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_29_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_4_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_29_partition_key_checksum_idx ON public.storage_tables_blobs_partition_29 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_4_checksum_idx ON public.storage_tables_blobs_partition_4 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_2_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_50_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_2_attachments_count_idx ON public.storage_tables_blobs_partition_2 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_50_checksum_idx ON public.storage_tables_blobs_partition_50 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_2_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_51_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_2_partition_key_checksum_idx ON public.storage_tables_blobs_partition_2 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_51_checksum_idx ON public.storage_tables_blobs_partition_51 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_30_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_52_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_30_attachments_count_idx ON public.storage_tables_blobs_partition_30 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_52_checksum_idx ON public.storage_tables_blobs_partition_52 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_30_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_53_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_30_partition_key_checksum_idx ON public.storage_tables_blobs_partition_30 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_53_checksum_idx ON public.storage_tables_blobs_partition_53 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_31_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_54_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_31_attachments_count_idx ON public.storage_tables_blobs_partition_31 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_54_checksum_idx ON public.storage_tables_blobs_partition_54 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_31_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_55_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_31_partition_key_checksum_idx ON public.storage_tables_blobs_partition_31 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_55_checksum_idx ON public.storage_tables_blobs_partition_55 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_32_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_56_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_32_attachments_count_idx ON public.storage_tables_blobs_partition_32 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_56_checksum_idx ON public.storage_tables_blobs_partition_56 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_32_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_57_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_32_partition_key_checksum_idx ON public.storage_tables_blobs_partition_32 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_57_checksum_idx ON public.storage_tables_blobs_partition_57 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_33_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_58_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_33_attachments_count_idx ON public.storage_tables_blobs_partition_33 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_58_checksum_idx ON public.storage_tables_blobs_partition_58 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_33_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_59_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_33_partition_key_checksum_idx ON public.storage_tables_blobs_partition_33 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_59_checksum_idx ON public.storage_tables_blobs_partition_59 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_34_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_5_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_34_attachments_count_idx ON public.storage_tables_blobs_partition_34 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_5_checksum_idx ON public.storage_tables_blobs_partition_5 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_34_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_60_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_34_partition_key_checksum_idx ON public.storage_tables_blobs_partition_34 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_60_checksum_idx ON public.storage_tables_blobs_partition_60 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_35_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_61_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_35_attachments_count_idx ON public.storage_tables_blobs_partition_35 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_61_checksum_idx ON public.storage_tables_blobs_partition_61 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_35_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_62_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_35_partition_key_checksum_idx ON public.storage_tables_blobs_partition_35 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_62_checksum_idx ON public.storage_tables_blobs_partition_62 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_36_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_63_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_36_attachments_count_idx ON public.storage_tables_blobs_partition_36 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_63_checksum_idx ON public.storage_tables_blobs_partition_63 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_36_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_6_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_36_partition_key_checksum_idx ON public.storage_tables_blobs_partition_36 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_6_checksum_idx ON public.storage_tables_blobs_partition_6 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_37_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_7_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_37_attachments_count_idx ON public.storage_tables_blobs_partition_37 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_7_checksum_idx ON public.storage_tables_blobs_partition_7 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_37_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_8_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_37_partition_key_checksum_idx ON public.storage_tables_blobs_partition_37 USING btree (partition_key, checksum);
+CREATE INDEX storage_tables_blobs_partition_8_checksum_idx ON public.storage_tables_blobs_partition_8 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_38_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_9_checksum_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_38_attachments_count_idx ON public.storage_tables_blobs_partition_38 USING btree (attachments_count) WHERE (attachments_count = 0);
+CREATE INDEX storage_tables_blobs_partition_9_checksum_idx ON public.storage_tables_blobs_partition_9 USING btree (checksum) WHERE (attachments_count = 0);
 
 
 --
--- Name: storage_tables_blobs_partition_38_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_0_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_38_partition_key_checksum_idx ON public.storage_tables_blobs_partition_38 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_0_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_39_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_0_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_39_attachments_count_idx ON public.storage_tables_blobs_partition_39 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_0_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_39_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_10_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_39_partition_key_checksum_idx ON public.storage_tables_blobs_partition_39 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_10_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_3_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_10_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_3_attachments_count_idx ON public.storage_tables_blobs_partition_3 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_10_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_3_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_11_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_3_partition_key_checksum_idx ON public.storage_tables_blobs_partition_3 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_11_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_40_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_11_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_40_attachments_count_idx ON public.storage_tables_blobs_partition_40 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_11_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_40_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_12_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_40_partition_key_checksum_idx ON public.storage_tables_blobs_partition_40 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_12_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_41_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_12_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_41_attachments_count_idx ON public.storage_tables_blobs_partition_41 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_12_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_41_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_13_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_41_partition_key_checksum_idx ON public.storage_tables_blobs_partition_41 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_13_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_42_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_13_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_42_attachments_count_idx ON public.storage_tables_blobs_partition_42 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_13_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_42_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_14_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_42_partition_key_checksum_idx ON public.storage_tables_blobs_partition_42 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_14_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_43_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_14_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_43_attachments_count_idx ON public.storage_tables_blobs_partition_43 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_14_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_43_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_15_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_43_partition_key_checksum_idx ON public.storage_tables_blobs_partition_43 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_15_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_44_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_15_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_44_attachments_count_idx ON public.storage_tables_blobs_partition_44 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_15_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_44_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_16_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_44_partition_key_checksum_idx ON public.storage_tables_blobs_partition_44 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_16_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_45_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_16_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_45_attachments_count_idx ON public.storage_tables_blobs_partition_45 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_16_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_45_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_17_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_45_partition_key_checksum_idx ON public.storage_tables_blobs_partition_45 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_17_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_46_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_17_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_46_attachments_count_idx ON public.storage_tables_blobs_partition_46 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_17_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_46_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_18_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_46_partition_key_checksum_idx ON public.storage_tables_blobs_partition_46 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_18_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_47_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_18_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_47_attachments_count_idx ON public.storage_tables_blobs_partition_47 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_18_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_47_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_19_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_47_partition_key_checksum_idx ON public.storage_tables_blobs_partition_47 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_19_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_48_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_19_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_48_attachments_count_idx ON public.storage_tables_blobs_partition_48 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_19_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_48_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_1_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_48_partition_key_checksum_idx ON public.storage_tables_blobs_partition_48 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_1_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_49_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_1_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_49_attachments_count_idx ON public.storage_tables_blobs_partition_49 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_1_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_49_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_20_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_49_partition_key_checksum_idx ON public.storage_tables_blobs_partition_49 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_20_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_4_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_20_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_4_attachments_count_idx ON public.storage_tables_blobs_partition_4 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_20_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_4_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_21_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_4_partition_key_checksum_idx ON public.storage_tables_blobs_partition_4 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_21_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_50_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_21_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_50_attachments_count_idx ON public.storage_tables_blobs_partition_50 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_21_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_50_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_22_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_50_partition_key_checksum_idx ON public.storage_tables_blobs_partition_50 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_22_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_51_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_22_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_51_attachments_count_idx ON public.storage_tables_blobs_partition_51 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_22_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_51_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_23_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_51_partition_key_checksum_idx ON public.storage_tables_blobs_partition_51 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_23_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_52_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_23_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_52_attachments_count_idx ON public.storage_tables_blobs_partition_52 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_23_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_52_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_24_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_52_partition_key_checksum_idx ON public.storage_tables_blobs_partition_52 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_24_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_53_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_24_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_53_attachments_count_idx ON public.storage_tables_blobs_partition_53 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_24_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_53_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_25_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_53_partition_key_checksum_idx ON public.storage_tables_blobs_partition_53 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_25_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_54_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_25_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_54_attachments_count_idx ON public.storage_tables_blobs_partition_54 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_25_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_54_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_26_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_54_partition_key_checksum_idx ON public.storage_tables_blobs_partition_54 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_26_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_55_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_26_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_55_attachments_count_idx ON public.storage_tables_blobs_partition_55 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_26_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_55_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_27_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_55_partition_key_checksum_idx ON public.storage_tables_blobs_partition_55 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_27_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_56_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_27_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_56_attachments_count_idx ON public.storage_tables_blobs_partition_56 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_27_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_56_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_28_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_56_partition_key_checksum_idx ON public.storage_tables_blobs_partition_56 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_28_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_57_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_28_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_57_attachments_count_idx ON public.storage_tables_blobs_partition_57 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_28_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_57_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_29_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_57_partition_key_checksum_idx ON public.storage_tables_blobs_partition_57 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_29_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_58_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_29_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_58_attachments_count_idx ON public.storage_tables_blobs_partition_58 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_29_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_58_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_2_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_58_partition_key_checksum_idx ON public.storage_tables_blobs_partition_58 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_2_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_59_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_2_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_59_attachments_count_idx ON public.storage_tables_blobs_partition_59 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_2_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_59_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_30_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_59_partition_key_checksum_idx ON public.storage_tables_blobs_partition_59 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_30_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_5_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_30_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_5_attachments_count_idx ON public.storage_tables_blobs_partition_5 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_30_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_5_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_31_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_5_partition_key_checksum_idx ON public.storage_tables_blobs_partition_5 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_31_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_60_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_31_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_60_attachments_count_idx ON public.storage_tables_blobs_partition_60 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_31_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_60_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_32_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_60_partition_key_checksum_idx ON public.storage_tables_blobs_partition_60 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_32_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_61_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_32_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_61_attachments_count_idx ON public.storage_tables_blobs_partition_61 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_32_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_61_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_33_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_61_partition_key_checksum_idx ON public.storage_tables_blobs_partition_61 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_33_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_62_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_33_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_62_attachments_count_idx ON public.storage_tables_blobs_partition_62 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_33_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_62_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_34_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_62_partition_key_checksum_idx ON public.storage_tables_blobs_partition_62 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_34_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_63_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_34_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_63_attachments_count_idx ON public.storage_tables_blobs_partition_63 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_34_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_63_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_35_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_63_partition_key_checksum_idx ON public.storage_tables_blobs_partition_63 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_35_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_6_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_35_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_6_attachments_count_idx ON public.storage_tables_blobs_partition_6 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_35_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_6_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_36_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_6_partition_key_checksum_idx ON public.storage_tables_blobs_partition_6 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_36_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_7_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_36_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_7_attachments_count_idx ON public.storage_tables_blobs_partition_7 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_36_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_7_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_37_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_7_partition_key_checksum_idx ON public.storage_tables_blobs_partition_7 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_37_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_8_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_37_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_8_attachments_count_idx ON public.storage_tables_blobs_partition_8 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_37_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_8_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_38_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_8_partition_key_checksum_idx ON public.storage_tables_blobs_partition_8 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_38_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_9_attachments_count_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_38_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE INDEX storage_tables_blobs_partition_9_attachments_count_idx ON public.storage_tables_blobs_partition_9 USING btree (attachments_count) WHERE (attachments_count = 0);
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_38_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_9_partition_key_checksum_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_39_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX storage_tables_blobs_partition_9_partition_key_checksum_idx ON public.storage_tables_blobs_partition_9 USING btree (partition_key, checksum);
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_39_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_0_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_39_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_0_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_39_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_0_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_3_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_0_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_3_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_10_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_3_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_10_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_3_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_10_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_40_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_10_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_40_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_11_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_40_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_11_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_40_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_11_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_41_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_11_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_41_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_12_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_41_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_12_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_41_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_12_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_42_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_12_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_42_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_13_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_42_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_13_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_42_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_13_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_43_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_13_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_43_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_14_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_43_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_14_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_43_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_14_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_44_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_14_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_44_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_15_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_44_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_15_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_44_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_15_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_45_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_15_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_45_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_16_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_45_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_16_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_45_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_16_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_46_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_16_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_46_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_17_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_46_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_17_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_46_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_17_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_47_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_17_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_47_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_18_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_47_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_18_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_47_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_18_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_48_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_18_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_48_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_19_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_48_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_19_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_48_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_19_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_49_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_19_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_49_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_1_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_49_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_1_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_49_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_1_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_4_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_1_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_4_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_20_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_4_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_20_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_4_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_20_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_50_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_20_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_50_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_21_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_50_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_21_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_50_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_21_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_51_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_21_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_51_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_22_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_51_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_22_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_51_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_22_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_52_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_22_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_52_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_23_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_52_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_23_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_52_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_23_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_53_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_23_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_53_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_24_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_53_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_24_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_53_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_24_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_54_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_24_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_54_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_25_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_54_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_25_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_54_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_25_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_55_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_25_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_55_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_26_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_55_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_26_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_55_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_26_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_56_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_26_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_56_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_27_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_56_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_27_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_56_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_27_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_57_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_27_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_57_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_28_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_57_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_28_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_57_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_28_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_58_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_28_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_58_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_29_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_58_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_29_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_58_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_29_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_59_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_29_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_59_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_2_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_59_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_2_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_59_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_2_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_5_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_2_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_5_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_30_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_5_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_30_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_5_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_30_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_60_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_30_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_60_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_31_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_60_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_31_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_60_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_31_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_61_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_31_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_61_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_32_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_61_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_32_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_61_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_32_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_62_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_32_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_62_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_33_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_62_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_33_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_62_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_33_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_63_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_33_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_63_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_34_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_63_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_34_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_63_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_34_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_6_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_34_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_6_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_35_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_6_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_35_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_6_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_35_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_7_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_35_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_7_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_36_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_7_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_36_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_7_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_36_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_8_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_36_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_8_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_37_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_8_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_37_attachments_count_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_8_pkey;
 
 
 --
--- Name: storage_tables_blobs_partition_37_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_9_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_37_partition_key_checksum_idx;
+ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION public.storage_tables_blobs_partition_9_checksum_idx;
 
 
 --
--- Name: storage_tables_blobs_partition_38_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+-- Name: storage_tables_blobs_partition_9_pkey; Type: INDEX ATTACH; Schema: public; Owner: -
 --
 
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_38_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_38_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_38_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_39_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_39_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_39_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_39_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_3_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_3_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_3_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_3_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_40_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_40_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_40_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_40_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_41_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_41_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_41_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_41_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_42_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_42_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_42_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_42_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_43_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_43_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_43_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_43_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_44_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_44_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_44_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_44_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_45_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_45_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_45_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_45_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_46_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_46_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_46_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_46_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_47_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_47_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_47_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_47_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_48_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_48_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_48_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_48_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_49_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_49_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_49_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_49_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_4_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_4_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_4_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_4_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_50_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_50_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_50_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_50_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_51_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_51_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_51_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_51_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_52_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_52_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_52_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_52_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_53_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_53_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_53_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_53_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_54_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_54_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_54_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_54_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_55_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_55_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_55_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_55_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_56_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_56_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_56_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_56_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_57_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_57_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_57_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_57_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_58_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_58_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_58_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_58_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_59_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_59_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_59_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_59_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_5_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_5_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_5_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_5_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_60_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_60_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_60_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_60_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_61_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_61_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_61_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_61_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_62_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_62_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_62_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_62_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_63_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_63_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_63_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_63_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_6_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_6_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_6_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_6_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_7_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_7_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_7_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_7_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_8_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_8_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_8_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_8_partition_key_checksum_idx;
-
-
---
--- Name: storage_tables_blobs_partition_9_attachments_count_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_attachments_count ATTACH PARTITION public.storage_tables_blobs_partition_9_attachments_count_idx;
-
-
---
--- Name: storage_tables_blobs_partition_9_partition_key_checksum_idx; Type: INDEX ATTACH; Schema: public; Owner: -
---
-
-ALTER INDEX public.index_storage_tables_blobs_on_partition_key_and_checksum ATTACH PARTITION public.storage_tables_blobs_partition_9_partition_key_checksum_idx;
+ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_9_pkey;
 
 
 --
@@ -3289,8 +3243,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230914064811'),
 ('20230914080339'),
 ('20230914102244'),
-('20231005134835'),
-('20231005140337'),
-('20231005140345');
+('20231005134835');
 
 

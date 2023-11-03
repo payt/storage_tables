@@ -7,21 +7,12 @@ module StorageTables
 
     class_attribute :service_name
 
-    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, primary_key: :checksum,
-                      foreign_key: :checksum, inverse_of: :attachments
+    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]
 
     delegate :signed_id, to: :blob
 
-    after_initialize do
-      self.service_name ||= StorageTables::Blob.service.name
-    end
-
     def download
-      service.download(checksum)
-    end
-
-    def service
-      StorageTables::Blob.services.fetch(service_name)
+      association(:blob).klass.service.download(checksum)
     end
   end
 end

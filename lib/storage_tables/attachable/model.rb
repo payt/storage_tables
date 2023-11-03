@@ -26,9 +26,9 @@ module StorageTables
           end
 
           has_one :"#{name}_storage_attachment", lambda {
-                                                   where(name: name)
+                                                   where(name:)
                                                  }, class_name: class_name.to_s, inverse_of: :record,
-                                                    dependent: :destroy, foreign_key: :record_id
+                                                    foreign_key: :record_id
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
@@ -44,7 +44,7 @@ module StorageTables
             :stored_one_attachment,
             name,
             nil,
-            { class_name: class_name },
+            { class_name: },
             self
           )
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)

@@ -10,15 +10,14 @@ module StorageTables
 
       def path_for(key) # :nodoc:
         # Replace the forward slash with an underscore
-        key = key.tr("/", "_")
         # Replace the plus sign with a minus sign
-        key = key.tr("+", "-")
+        key = key.tr("/+", "_-")
 
         File.join root, folder_for(key), key
       end
 
       def folder_for(key)
-        [key[0], key[1..2], key[3..4]].join("/")
+        "#{key[0]}/#{key[1..2]}/#{key[3..4]}"
       end
 
       # We don't need to ensure the integrity of the file

@@ -6,8 +6,8 @@ require:
   - rubocop-packaging
 
 AllCops:
-  TargetRubyVersion: 2.7
-  TargetRailsVersion: 7.0
+  TargetRubyVersion: 3.2
+  TargetRailsVersion: 7.1
   NewCops: enable
   Exclude:
     - db/**/*
@@ -62,3 +62,10 @@ Metrics/MethodLength:
 ## MINITEST
 Minitest/MultipleAssertions:
   Max: 5
+
+## RAILS
+
+Rails/InverseOf:
+  Enabled: true
+  Exclude:
+    - app/models/storage_tables/attachment.rb
