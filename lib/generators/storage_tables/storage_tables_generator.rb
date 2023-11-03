@@ -16,7 +16,7 @@ class VersionsGenerator < Rails::Generators::NamedBase
     namespace
     @versioned_model_primary_key_type = model.columns_hash[model.primary_key].type
 
-    migration_template "versions_create_table.rb.erb", "db/migrate/create_#{singular_table_name}_attachment.rb"
+    migration_template "versions_create_table.rb.erb", "db/migrate/create_#{singular_table_name}_attachments.rb"
     template "versions_model_template.rb.erb", "app/models/#{table_name}/version.rb"
   end
 

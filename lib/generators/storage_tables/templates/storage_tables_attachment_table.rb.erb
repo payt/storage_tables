@@ -3,20 +3,14 @@
 # Creates the `<%= @singular_table_name %>_versions` table
 class Create<%= @model %>Versions < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
   def change
-    create_table :<%= @singular_table_name %>_versions, id: false do |t|
+    create_table :storage_tables_<%= @singular_table_name %>_attachments, primary_key: [:record_id, :checksum, :blob_key] do |t|
+      t.string :blob_key, null: false, limit: 1
       t.string :name,         null: false
-      t.string :filename, null: false
-      t.<%= @versioned_model_primary_key_type %> :object_id, null: false, index: true
-      t.references :actor, type: :string, foreign_key: { to_table: :audit_logs_actors, on_delete: :restrict },
-                   index: false, default: -> { "current_setting('var.actor_id')" }
-
-      t.string :source, null: false, default: -> { "current_setting('var.actor_source')" }
-      t.string :event, null: false
-      t.jsonb :object_changes
-      t.string :transaction_identifier, null: false, default: -> { "txid_current()" }
-
-      t.timestamptz :created_at, null: false, default: -> { "CURRENT_TIMESTAMP" }
-      t.index [:created_at, :object_id], where: "event = 'DELETE'"
+      t.string     :filename, null: false
+      t.belongs_to :record,   null: false, foreign_key: { to_table: :<%= @table_name %> }
+      t.string :checksum, null: false, foreign_key: false
+      t.datetime :created_at, null: false
+    end
     end
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
