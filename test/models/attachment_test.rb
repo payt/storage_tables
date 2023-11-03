@@ -10,6 +10,7 @@ module StorageTables
     end
 
     # TODO: Signed_IDS do not support composite primary keys.
+    # https://github.com/payt/storage_tables/issues/20
     # test "getting a signed blob ID from an attachment" do
     #   blob = create_blob
     #   @user.avatar.attach(blob)
