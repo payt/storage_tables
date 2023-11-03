@@ -11,13 +11,20 @@ class Create<%= @model %>Versions < ActiveRecord::Migration[<%= ActiveRecord::Mi
       t.string :checksum, null: false, foreign_key: false
       t.datetime :created_at, null: false
     end
-    end
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      ALTER TABLE storage_tables_user_attachments
-      ADD CONSTRAINT fk_rails_1d0e0e0e7a
+      ALTER TABLE storage_tables_<%= @singular_table_name %>_attachments
+      ADD CONSTRAINT storage_tables_<%= @singular_table_name %>_attachments_blob_fkey
       FOREIGN KEY (checksum, blob_key)
       REFERENCES storage_tables_blobs (checksum, partition_key);
+    SQL
+
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_created AFTER INSERT ON storage_tables_<%= @singular_table_name %>_attachments FOR EACH ROW EXECUTE FUNCTION increment_attachment_counter()
+    SQL
+
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_deleted AFTER INSERT ON storage_tables_<%= @singular_table_name %>_attachments FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
     SQL
   end
 end
