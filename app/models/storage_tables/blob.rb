@@ -9,21 +9,30 @@ module StorageTables
 
     before_create -> { self.partition_key = checksum[0] }
 
-    store :metadata, accessors: [:analyzed, :mtime], coder: ActiveRecord::Coders::JSON
+    store :metadata, accessors: [:analyzed, :identified, :mtime], coder: ActiveRecord::Coders::JSON
 
     class_attribute :services, default: {}
     class_attribute :service, instance_accessor: false
     class_attribute :service_name
 
     validates :checksum, presence: true
-    alias_attribute :key, :checksum
 
     after_initialize do
       self.service_name ||= self.class.service.name
     end
 
+    def checksum=(value)
+      self[:checksum] = value.chomp("==")
+    end
+
+    def checksum
+      return unless self[:checksum]
+
+      "#{self[:checksum]}=="
+    end
+
     class << self
-      def build_after_unfurling(io:, content_type:, metadata: nil)
+      def build_after_unfurling(io:, content_type: nil, metadata: nil)
         new_blob = new(content_type:, metadata:)
         new_blob.unfurl(io)
 
@@ -37,9 +46,7 @@ module StorageTables
       # Creates a new blob instance and then uploads the contents of
       # the given <tt>io</tt> to the service. The blob instance is going to
       # be saved before the upload begins to prevent the upload clobbering another due to key collisions.
-      # When providing a content type, pass <tt>identify: false</tt> to bypass
-      # automatic content type inference.
-      def create_and_upload!(io:, content_type:, metadata: nil)
+      def create_and_upload!(io:, content_type: nil, metadata: nil)
         create_after_unfurling!(io:, content_type:, metadata:).tap do |blob|
           blob.upload_without_unfurling(io)
         end
@@ -62,6 +69,7 @@ module StorageTables
     def unfurl(io)
       self.checksum = compute_checksum_in_chunks(io)
       self.partition_key = checksum[0]
+      self.content_type = extract_content_type(io)
       self.byte_size = io.size
     end
 
@@ -94,6 +102,10 @@ module StorageTables
       end.base64digest
     end
 
+    def extract_content_type(io)
+      Marcel::MimeType.for io, declared_type: content_type
+    end
+
     def forcibly_serve_as_binary?
       ActiveStorage.content_types_to_serve_as_binary.include?(content_type)
     end
@@ -104,9 +116,9 @@ module StorageTables
 
     def service_metadata
       if forcibly_serve_as_binary?
-        { content_type: ActiveStorage.binary_content_type, disposition: :attachment, filename: }
+        { content_type: ActiveStorage.binary_content_type, disposition: :attachment }
       elsif !allowed_inline?
-        { content_type:, disposition: :attachment, filename: }
+        { content_type:, disposition: :attachment }
       else
         { content_type: }
       end

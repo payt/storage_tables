@@ -13,7 +13,7 @@ module StorageTables
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::One.new(name.to_s, self)
           end
 
-          define_method("#{name}=") do |attachable|
+          define_method("#{name}=") do |attachable, filename|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
                 # TODO: Cover deleting attachments later.
@@ -21,14 +21,12 @@ module StorageTables
                 ActiveStorage::Attached::Changes::DeleteOne.new(name.to_s, self)
                 # :nocov:
               else
-                StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable)
+                StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable, filename)
               end
           end
 
-          has_one :"#{name}_storage_attachment", lambda {
-                                                   where(name:)
-                                                 }, class_name: class_name.to_s, inverse_of: :record,
-                                                    foreign_key: :record_id
+          has_one :"#{name}_storage_attachment", class_name: class_name.to_s, inverse_of: :record,
+                                                 foreign_key: :record_id
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 

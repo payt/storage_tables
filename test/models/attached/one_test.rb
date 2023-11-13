@@ -42,7 +42,7 @@ module StorageTables
     test "attaching StringIO attachable to an existing record" do
       upload = Rack::Test::UploadedFile.new StringIO.new(""), original_filename: "test.txt"
 
-      @user.avatar.attach upload
+      @user.avatar.attach upload, filename: "test.txt"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
@@ -55,7 +55,7 @@ module StorageTables
         tempfile: fixture_file_upload("racecar.jpg")
       })
 
-      @user.avatar.attach upload
+      @user.avatar.attach upload, filename: "avatar.jpeg"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
@@ -81,7 +81,7 @@ module StorageTables
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
-      user = User.create!(name: "New User", avatar: create_blob(filename: "funky.jpg").signed_id)
+      user = User.create!(name: "New User", avatar: create_blob.signed_id)
 
       assert_predicate user.avatar, :attached?
     end
@@ -103,7 +103,7 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.avatar.attach fixture_file_upload("racecar.jpg")
+      @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert_not @user.avatar.persisted?
@@ -115,15 +115,15 @@ module StorageTables
     end
 
     test "successfully replacing an existing, dependent attachment on an existing record" do
-      create_blob(filename: "funky.jpg").tap do |old_blob|
-        @user.avatar.attach old_blob
+      create_blob.tap do |old_blob|
+        @user.avatar.attach old_blob, filename: "old.txt"
 
-        @user.avatar.attach create_file_blob(filename: "report.pdf")
+        @user.avatar.attach create_file_blob(filename: "report.pdf"), filename: "report.pdf"
 
         # Blobs are not deleted directly if no longer used.
         assert StorageTables::Blob.service.exist?(old_blob.checksum)
 
-        assert_equal "report.pdf", @user.avatar.blob.filename.to_s
+        assert_equal "report.pdf", @user.avatar.filename.to_s
       end
     end
   end

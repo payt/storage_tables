@@ -46,22 +46,22 @@ module ActiveSupport
 
     private
 
-    def create_blob(data: "hello world", content_type: "image/jpeg", metadata: nil, filename: "hello.txt")
-      StorageTables::Blob.create_and_upload!(io: StringIO.new(data), content_type:, metadata:, filename:)
+    def create_blob(data: "hello world", content_type: "image/jpeg", metadata: nil)
+      StorageTables::Blob.create_and_upload!(io: StringIO.new(data), content_type:, metadata:)
     end
 
     def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload!(io: fixture_file_upload(filename).open, filename:,
-                                             content_type:, metadata:)
+      StorageTables::Blob.create_and_upload!(
+        io: fixture_file_upload(filename).open, content_type:, metadata:
+      )
     end
 
     def create_blob_before_direct_upload(byte_size:, checksum:, content_type: "text/plain")
       StorageTables::Blob.create_before_direct_upload!(byte_size:, checksum:, content_type:)
     end
 
-    def build_blob_after_unfurling(data: "Hello world!", content_type: "text/plain", \
-                                   identify: true)
-      StorageTables::Blob.build_after_unfurling(io: StringIO.new(data), content_type:, identify:)
+    def build_blob_after_unfurling(data: "Hello world!", content_type: "text/plain")
+      StorageTables::Blob.build_after_unfurling(io: StringIO.new(data), content_type:)
     end
 
     def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg")

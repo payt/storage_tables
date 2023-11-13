@@ -36,17 +36,9 @@ module StorageTables
       assert_equal "image/jpeg", blob.content_type
     end
 
-    test "create_after_unfurling! without identify also works" do
-      data = "Some other, even more funky file"
-      blob = StorageTables::Blob.create_after_unfurling!(io: StringIO.new(data), filename: "funky.bin",
-                                                         content_type: "text/plain", identify: false)
-
-      assert_predicate blob, :persisted?
-    end
-
     test "create_after_upload! has the same effect as create_and_upload!" do
       data = "Some other, even more funky file"
-      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
+      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), content_type: "application/octet-stream")
 
       assert_predicate blob, :persisted?
       assert_equal data, blob.download
@@ -54,7 +46,7 @@ module StorageTables
 
     test "create_and_upload sets byte size and checksum" do
       data = "Hello world!"
-      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), filename: "funky.bin")
+      blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(data), content_type: "application/octet-stream")
 
       assert_predicate blob, :persisted?
       assert_equal data.length, blob.byte_size

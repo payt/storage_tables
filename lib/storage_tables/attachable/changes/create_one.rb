@@ -4,7 +4,24 @@ module StorageTables
   module Attachable
     module Changes
       # Class used to create a new attachment from an attachable blob.
-      class CreateOne < ActiveStorage::Attached::Changes::CreateOne
+      class CreateOne
+        attr_reader :name, :record, :attachable, :filename
+
+        def initialize(name, record, attachable, filename)
+          @name = name
+          @record = record
+          @attachable = attachable
+          @filename = filename
+        end
+
+        def attachment
+          @attachment ||= find_or_build_attachment
+        end
+
+        def blob
+          @blob ||= find_or_build_blob
+        end
+
         def save
           record.public_send("#{name}_storage_attachment=", attachment)
           record.public_send("#{name}_storage_blob=", blob)
@@ -27,12 +44,15 @@ module StorageTables
 
         private
 
-        def build_attachment
-          attachment_service_name.constantize.new(record:, name:, blob:, filename: blob.filename.to_s,
-                                                  blob_key: blob[:partition_key])
+        def find_or_build_attachment
+          find_attachment || build_attachment
         end
 
-        def attachment_service_name
+        def build_attachment
+          attachment_class_name.constantize.new(record:, blob:, filename:, blob_key: blob[:partition_key])
+        end
+
+        def attachment_class_name
           record.attachment_reflections[name].options[:class_name]
         end
 
@@ -49,13 +69,11 @@ module StorageTables
           when ActionDispatch::Http::UploadedFile
             StorageTables::Blob.build_after_unfurling(
               io: attachable.open,
-              filename: attachable.original_filename,
               content_type: attachable.content_type
             )
           when Rack::Test::UploadedFile
             StorageTables::Blob.build_after_unfurling(
               io: attachable.respond_to?(:open) ? attachable.open : attachable,
-              filename: attachable.original_filename,
               content_type: attachable.content_type
             )
           when Hash
@@ -63,15 +81,9 @@ module StorageTables
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
-            StorageTables::Blob.build_after_unfurling(
-              io: attachable,
-              filename: File.basename(attachable)
-            )
+            StorageTables::Blob.build_after_unfurling(io: attachable)
           when Pathname
-            StorageTables::Blob.build_after_unfurling(
-              io: attachable.open,
-              filename: File.basename(attachable)
-            )
+            StorageTables::Blob.build_after_unfurling(io: attachable.open)
           else
             raise(
               ArgumentError,

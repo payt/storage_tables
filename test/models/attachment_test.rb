@@ -23,10 +23,10 @@ module StorageTables
 
     test "when trying to upload same file twice, only one record is created" do
       blob = create_blob
-      @user.avatar.attach(blob)
+      @user.avatar.attach(blob, filename: "test.txt")
 
       assert_no_difference -> { StorageTables::Blob.count } do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "test.txt")
       end
     end
 
@@ -34,7 +34,7 @@ module StorageTables
       blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 
       assert_blob_identified_before_owner_validated(@user, blob, "image/jpeg") do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "racecar.jpg")
       end
     end
 
@@ -51,7 +51,7 @@ module StorageTables
       blob = directly_upload_file_blob(filename: "racecar.jpg")
 
       assert_blob_identified_outside_transaction(blob) do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "racecar.jpg")
       end
     end
 
