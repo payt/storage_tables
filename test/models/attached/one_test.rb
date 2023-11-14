@@ -14,7 +14,8 @@ module StorageTables
     end
 
     test "creating a record with a File as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg").open)
+      @user = User.create!(name: "Dorian")
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert_not_nil @user.avatar_storage_attachment
@@ -22,7 +23,9 @@ module StorageTables
     end
 
     test "uploads the file when passing a File as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg").open)
+      @user = User.create!(name: "Dorian")
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+
       assert_nothing_raised { @user.avatar.download }
     end
 
@@ -93,7 +96,7 @@ module StorageTables
     end
 
     test "attaching a new blob from an uploaded file to an existing record" do
-      @user.avatar.attach fixture_file_upload("racecar.jpg")
+      @user.avatar.attach fixture_file_upload("racecar.jpg"), filename: "racecar.jpg"
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
     end
