@@ -30,8 +30,9 @@ module StorageTables
     end
 
     test "creating a record with an attachment where already one exists" do
-      @user = User.create!(name: "My User", avatar: fixture_file_upload("racecar.jpg"))
-      @user2 = User.create!(name: "My User", avatar: fixture_file_upload("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user2 = User.create!(name: "My User")
+      @user2.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
 
       assert_equal @user.avatar_storage_blob, @user2.avatar_storage_blob
     end

@@ -62,7 +62,7 @@ module StorageTables
       end
 
       def existing_blob(checksum)
-        find_by(partition_key: checksum[0], checksum:)
+        find_by(partition_key: checksum[0], checksum: checksum.chomp("=="))
       end
     end
 
