@@ -79,7 +79,8 @@ module StorageTables
     end
 
     test "creating a record with an existing blob attached" do
-      user = User.create!(name: "New User", avatar: create_blob(filename: "funky.jpg"))
+      user = User.create!(name: "New User")
+      user.avatar.attach create_blob, filename: "funky.jpg"
 
       assert_predicate user.avatar, :attached?
     end

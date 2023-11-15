@@ -12,6 +12,7 @@ module StorageTables
           @record = record
           @attachable = attachable
           @filename = filename
+          blob.identify_without_saving
         end
 
         def attachment

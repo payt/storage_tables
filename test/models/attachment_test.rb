@@ -65,7 +65,7 @@ module StorageTables
     # end
 
     test "attachments can use includes" do
-      @user.avatar.attach(io: StringIO.new("STUFF"), filename: "town.jpg", content_type: "avatar/jpeg")
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
       findable = User.with_stored_avatar.find_by(name: "Post")
 
       assert_equal @user, findable

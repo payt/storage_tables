@@ -28,7 +28,7 @@ module StorageTables
     def checksum
       return unless self[:checksum]
 
-      "#{self[:checksum]}=="
+      "#{partition_key}#{self[:checksum]}=="
     end
 
     class << self

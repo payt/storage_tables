@@ -10,7 +10,7 @@ module StorageTables
     delegate :signed_id, to: :blob
 
     def download
-      association(:blob).klass.service.download("#{checksum}==")
+      association(:blob).klass.service.download("#{blob_key}#{checksum}==")
     end
   end
 end
