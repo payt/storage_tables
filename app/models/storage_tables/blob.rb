@@ -3,11 +3,9 @@
 module StorageTables
   # Representation of a file with the location of the file stored in a database table.
   class Blob < ApplicationRecord
-    include ActiveStorage::Blob::Identifiable
+    # include ActiveStorage::Blob::Identifiable
 
     self.primary_key = [:checksum, :partition_key]
-
-    before_create -> { self.partition_key = checksum[0] }
 
     store :metadata, accessors: [:analyzed, :identified, :mtime], coder: ActiveRecord::Coders::JSON
 
@@ -22,6 +20,8 @@ module StorageTables
     end
 
     def checksum=(value)
+      self[:partition_key] = value[0]
+      value.slice!(0)
       self[:checksum] = value.chomp("==")
     end
 
@@ -62,6 +62,7 @@ module StorageTables
       end
 
       def existing_blob(checksum)
+        checksum.slice!(0)
         find_by(partition_key: checksum[0], checksum: checksum.chomp("=="))
       end
     end
