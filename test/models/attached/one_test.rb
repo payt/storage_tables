@@ -66,14 +66,14 @@ module StorageTables
     end
 
     test "creating a record with a Pathname as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg"), filename: "racecar.jpg"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
     end
 
     test "uploads the file when passing a Pathname as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg"), filename: "racecar.jpg"
 
       assert_nothing_raised { @user.avatar.download }
     end
@@ -86,13 +86,15 @@ module StorageTables
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
-      user = User.create!(name: "New User", avatar: create_blob.signed_id)
+      @user.avatar.attach create_blob.signed_id, filename: "funky.jpg"
 
-      assert_predicate user.avatar, :attached?
+      assert_predicate @user.avatar, :attached?
     end
 
     test "creating a record with an unexpected object attached" do
-      error = assert_raises(ArgumentError) { User.create!(name: "Jason", avatar: :foo) }
+      error = assert_raises(ArgumentError) do
+        @user.avatar.attach :foo, filename: "foo.txt"
+      end
 
       assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
     end
