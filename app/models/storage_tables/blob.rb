@@ -3,7 +3,7 @@
 module StorageTables
   # Representation of a file with the location of the file stored in a database table.
   class Blob < ApplicationRecord
-    include StorageTables::Blob::Identifiable
+    include StorageTables::Blobs::Identifiable
 
     self.primary_key = [:checksum, :partition_key]
 
