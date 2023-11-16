@@ -22,6 +22,12 @@ module StorageTables
       assert blob.service.exist?(blob.checksum)
     end
 
+    test "identify without byte size" do
+      blob = StorageTables::Blob.new(byte_size: 0)
+
+      assert blob.identify_without_saving
+    end
+
     test "created with custom metadata" do
       blob = create_blob metadata: { "author" => "DHH" }
 

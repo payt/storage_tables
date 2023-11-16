@@ -30,6 +30,16 @@ module StorageTables
       end
     end
 
+    test "when adding a new file without filename raises error" do
+      blob = create_blob
+      blob2 = create_blob(data: "NewData")
+      @user.avatar.attach(blob, filename: "test.txt")
+
+      assert_raises ActiveRecord::RecordNotSaved do
+        @user.avatar.attach(blob2, filename: nil)
+      end
+    end
+
     test "directly-uploaded blob identification for one attached occurs before validation" do
       blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 
