@@ -38,7 +38,7 @@ module StorageTables
     end
 
     test "attaching a new blob from a Hash to an existing record" do
-      @user.avatar.attach io: StringIO.new("STUFF"), filename: "town.jpg", content_type: "avatar/jpeg"
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
 
       assert_not_nil @user.avatar_storage_attachment
     end

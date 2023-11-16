@@ -3,7 +3,7 @@
 module StorageTables
   # Representation of a file with the location of the file stored in a database table.
   class Blob < ApplicationRecord
-    # include ActiveStorage::Blob::Identifiable
+    include StorageTables::Blob::Identifiable
 
     self.primary_key = [:checksum, :partition_key]
 
@@ -62,16 +62,17 @@ module StorageTables
       end
 
       def existing_blob(checksum)
+        partition_key = checksum[0]
         checksum.slice!(0)
-        find_by(partition_key: checksum[0], checksum: checksum.chomp("=="))
+        find_by(partition_key:, checksum: checksum.chomp("=="))
       end
     end
 
     def unfurl(io)
       self.checksum = compute_checksum_in_chunks(io)
-      self.partition_key = checksum[0]
       self.content_type = extract_content_type(io)
       self.byte_size = io.size
+      self.identified = true
     end
 
     def upload_without_unfurling(io)
