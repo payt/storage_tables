@@ -40,6 +40,16 @@ module StorageTables
       end
     end
 
+    test "when changing a file, the old one is replaced" do
+      blob = create_blob
+      blob2 = create_blob(data: "NewData")
+
+      @user.avatar.attach(blob, filename: "test.txt")
+      @user.avatar.attach(blob2, filename: "test.txt")
+
+      assert_equal @user.avatar.blob, blob2
+    end
+
     test "directly-uploaded blob identification for one attached occurs before validation" do
       blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 

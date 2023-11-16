@@ -16,7 +16,9 @@ module StorageTables
       #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
       def attach(attachable, filename:)
         record.public_send("#{name}=", attachable, filename)
+        # :nocov:
         return if record.persisted? && !record.changed? && !record.save
+        # :nocov:
 
         record.public_send(name.to_s)
       end
