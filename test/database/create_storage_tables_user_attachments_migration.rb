@@ -2,7 +2,7 @@
 
 class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.1]
   def up
-    create_table :storage_tables_user_avatar_attachments, primary_key: [:blob_key, :record_id, :checksum],
+    create_table :storage_tables_user_avatar_attachments, primary_key: [:record_id, :blob_key, :checksum],
                                                           force: :cascade do |t|
       t.string :blob_key, null: false, limit: 1
       t.string :checksum, limit: 85, null: false
