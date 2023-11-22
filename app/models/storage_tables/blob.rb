@@ -22,7 +22,6 @@ module StorageTables
     def checksum=(value)
       self[:partition_key] = value[0]
       self[:checksum] = value[1..].chomp("==")
-      value
     end
 
     def checksum
@@ -46,8 +45,8 @@ module StorageTables
       # Creates a new blob instance and then uploads the contents of
       # the given <tt>io</tt> to the service. The blob instance is going to
       # be saved before the upload begins to prevent the upload clobbering another due to key collisions.
-      def create_and_upload!(...)
-        create_after_unfurling!(...).tap do |blob|
+      def create_and_upload!(io:, content_type: nil, metadata: nil)
+        create_after_unfurling!(io:, content_type:, metadata:).tap do |blob|
           blob.upload_without_unfurling(io)
         end
       end
