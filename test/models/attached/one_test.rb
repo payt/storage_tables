@@ -80,9 +80,11 @@ module StorageTables
 
     test "creating a record with an existing blob attached" do
       user = User.create!(name: "New User")
-      user.avatar.attach create_blob, filename: "funky.jpg"
+      blob = create_blob
+      user.avatar.attach blob, filename: "funky.jpg"
 
       assert_predicate user.avatar, :attached?
+      assert_equal "funky.jpg", user.avatar.filename.to_s
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
@@ -132,6 +134,16 @@ module StorageTables
 
         assert_equal "report.pdf", @user.avatar.filename.to_s
       end
+    end
+
+    test "when uploading fails, the attachment is not created" do
+      assert_raises(StandardError) do
+        StorageTables::Blob.stub :upload_without_unfurling, raise(StandardError) do
+          @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
+        end
+      end
+
+      assert_predicate @user.avatar, :blank?
     end
   end
 end
