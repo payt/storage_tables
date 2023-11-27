@@ -32,10 +32,13 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        new_blob = new(content_type:, metadata:)
-        new_blob.unfurl(io)
+        checksum = determine_checksum(io)
 
-        existing_blob(new_blob.checksum) || new_blob
+        return existing_blob(checksum) if existing_blob(checksum)
+
+        new_blob = new(content_type:, metadata:, checksum:)
+        new_blob.unfurl(io)
+        new_blob
       end
 
       def create_after_unfurling!(...)
@@ -62,13 +65,26 @@ module StorageTables
 
       def existing_blob(checksum)
         partition_key = checksum[0]
-        checksum.slice!(0)
-        find_by(partition_key:, checksum: checksum.chomp("=="))
+
+        find_by(partition_key:, checksum: checksum[1..].chomp("=="))
+      end
+
+      def determine_checksum(io)
+        compute_checksum_in_chunks(io)
+      end
+
+      def compute_checksum_in_chunks(io)
+        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
+          while (chunk = io.read(5.megabytes))
+            checksum << chunk
+          end
+
+          io.rewind
+        end.base64digest
       end
     end
 
     def unfurl(io)
-      self.checksum = compute_checksum_in_chunks(io)
       self.content_type = extract_content_type(io)
       self.byte_size = io.size
       self.identified = true
@@ -92,16 +108,6 @@ module StorageTables
     end
 
     private
-
-    def compute_checksum_in_chunks(io)
-      OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-        while (chunk = io.read(5.megabytes))
-          checksum << chunk
-        end
-
-        io.rewind
-      end.base64digest
-    end
 
     def extract_content_type(io)
       Marcel::MimeType.for io, declared_type: content_type
