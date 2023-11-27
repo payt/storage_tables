@@ -32,7 +32,7 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        checksum = determine_checksum(io)
+        checksum = compute_checksum_in_chunks(io)
 
         return existing_blob(checksum) if existing_blob(checksum)
 
@@ -64,13 +64,7 @@ module StorageTables
       end
 
       def existing_blob(checksum)
-        partition_key = checksum[0]
-
-        find_by(partition_key:, checksum: checksum[1..].chomp("=="))
-      end
-
-      def determine_checksum(io)
-        compute_checksum_in_chunks(io)
+        find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 
       def compute_checksum_in_chunks(io)
