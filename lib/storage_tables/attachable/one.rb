@@ -16,11 +16,30 @@ module StorageTables
       #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
       def attach(attachable, filename:)
         record.public_send("#{name}=", attachable, filename)
+        blob.save! && upload(attachable)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
 
         record.public_send(name.to_s)
+      end
+
+      def upload(attachable)
+        case attachable
+        when ActionDispatch::Http::UploadedFile, Pathname
+          blob.upload_without_unfurling(attachable.open)
+        when Rack::Test::UploadedFile
+          blob.upload_without_unfurling(
+            attachable.respond_to?(:open) ? attachable.open : attachable
+          )
+        when Hash
+          blob.upload_without_unfurling(attachable.fetch(:io))
+        when File
+          blob.upload_without_unfurling(attachable)
+        end
+      rescue StandardError => e
+        blob.destroy!
+        raise e
       end
 
       # Returns the associated attachment record.

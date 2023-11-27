@@ -34,11 +34,8 @@ module StorageTables
             includes("#{name}_storage_attachment": :blob)
           }
 
-          before_save { attachment_changes[name.to_s]&.upload }
           after_save { attachment_changes[name.to_s]&.save }
           after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s) }
-
-          after_rollback { binding.pry }
 
           reflection = ActiveRecord::Reflection.create(
             :stored_one_attachment,
