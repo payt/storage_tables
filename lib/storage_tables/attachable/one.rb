@@ -16,6 +16,7 @@ module StorageTables
       #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
       def attach(attachable, filename:)
         record.public_send("#{name}=", attachable, filename)
+        binding.pry
         blob.save! && upload(attachable)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
@@ -38,6 +39,7 @@ module StorageTables
           blob.upload_without_unfurling(attachable)
         end
       rescue StandardError => e
+        binding.pry
         blob.destroy!
         raise e
       end

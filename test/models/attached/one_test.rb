@@ -137,9 +137,11 @@ module StorageTables
     end
 
     test "when uploading fails, the attachment is not created" do
-      assert_raises(StandardError) do
-        StorageTables::Blob.stub :upload_without_unfurling, raise(StandardError) do
-          @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
+      assert_difference -> { StorageTables::Blob.count } do
+        assert_raises(StandardError) do
+          StorageTables::Blob.service.stub :upload, raise(StandardError) do
+            @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
+          end
         end
       end
 
