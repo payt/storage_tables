@@ -85,5 +85,22 @@ module StorageTables
       assert_predicate blob, :persisted?
       assert blob.service.exist?(blob.checksum)
     end
+
+    test "Destroying a blob also removes the file on disk" do
+      blob = create_blob
+      blob.destroy!
+
+      assert_not blob.service.exist?(blob.checksum)
+    end
+
+    test "Cannot destroy a blob that is referenced by an attachment" do
+      blob = create_blob
+      @user = User.create!(name: "My User")
+      @user.avatar.attach blob, filename: "funky.jpg"
+
+      assert_raises(ActiveRecord::InvalidForeignKey) do
+        blob.destroy!
+      end
+    end
   end
 end

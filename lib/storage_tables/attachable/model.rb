@@ -35,7 +35,6 @@ module StorageTables
           }
 
           after_save { attachment_changes[name.to_s]&.save }
-          after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s) }
 
           reflection = ActiveRecord::Reflection.create(
             :stored_one_attachment,

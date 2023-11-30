@@ -15,7 +15,7 @@ SET row_security = off;
 
 CREATE FUNCTION public.decrement_attachment_counter() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count - 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE checksum = NEW.checksum; RETURN NEW; END; $$;
+    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count - 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE partition_key = OLD.blob_key AND checksum = OLD.checksum; RETURN OLD; END; $$;
 
 
 --
@@ -24,7 +24,7 @@ CREATE FUNCTION public.decrement_attachment_counter() RETURNS trigger
 
 CREATE FUNCTION public.increment_attachment_counter() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count + 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE checksum = NEW.checksum; RETURN NEW; END; $$;
+    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count + 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE partition_key = NEW.blob_key AND checksum = NEW.checksum; RETURN NEW; END; $$;
 
 
 SET default_tablespace = '';

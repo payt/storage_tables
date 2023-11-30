@@ -19,10 +19,10 @@ class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.1]
     SQL
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      CREATE TRIGGER storage_tables_user_attachments_created AFTER INSERT ON storage_tables_user_avatar_attachments FOR EACH ROW EXECUTE FUNCTION increment_attachment_counter()
+      CREATE TRIGGER storage_tables_user_attachments_created AFTER INSERT ON storage_tables_user_avatar_attachments FOR EACH ROW EXECUTE FUNCTION public.increment_attachment_counter()
     SQL
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      CREATE TRIGGER storage_tables_user_attachments_deleted AFTER INSERT ON storage_tables_user_avatar_attachments FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
+      CREATE TRIGGER storage_tables_user_attachments_deleted AFTER INSERT ON storage_tables_user_avatar_attachments FOR EACH ROW EXECUTE FUNCTION public.decrement_attachment_counter()
     SQL
   end
 
