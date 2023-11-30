@@ -156,11 +156,11 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.storage_tables_blobs (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
     metadata jsonb,
     CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
@@ -173,14 +173,13 @@ PARTITION BY LIST (partition_key);
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_0 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_0 FOR VALUES IN ('A');
 
@@ -190,14 +189,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_1 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_1 FOR VALUES IN ('B');
 
@@ -207,14 +205,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_10 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_10 FOR VALUES IN ('K');
 
@@ -224,14 +221,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_11 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_11 FOR VALUES IN ('L');
 
@@ -241,14 +237,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_12 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_12 FOR VALUES IN ('M');
 
@@ -258,14 +253,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_13 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_13 FOR VALUES IN ('N');
 
@@ -275,14 +269,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_14 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_14 FOR VALUES IN ('O');
 
@@ -292,14 +285,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_15 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_15 FOR VALUES IN ('P');
 
@@ -309,14 +301,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_16 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_16 FOR VALUES IN ('Q');
 
@@ -326,14 +317,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_17 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_17 FOR VALUES IN ('R');
 
@@ -343,14 +333,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_18 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_18 FOR VALUES IN ('S');
 
@@ -360,14 +349,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_19 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_19 FOR VALUES IN ('T');
 
@@ -377,14 +365,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_2 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_2 FOR VALUES IN ('C');
 
@@ -394,14 +381,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_20 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_20 FOR VALUES IN ('U');
 
@@ -411,14 +397,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_21 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_21 FOR VALUES IN ('V');
 
@@ -428,14 +413,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_22 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_22 FOR VALUES IN ('W');
 
@@ -445,14 +429,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_23 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_23 FOR VALUES IN ('X');
 
@@ -462,14 +445,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_24 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_24 FOR VALUES IN ('Y');
 
@@ -479,14 +461,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_25 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_25 FOR VALUES IN ('Z');
 
@@ -496,14 +477,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_26 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_26 FOR VALUES IN ('a');
 
@@ -513,14 +493,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_27 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_27 FOR VALUES IN ('b');
 
@@ -530,14 +509,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_28 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_28 FOR VALUES IN ('c');
 
@@ -547,14 +525,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_29 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_29 FOR VALUES IN ('d');
 
@@ -564,14 +541,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_3 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_3 FOR VALUES IN ('D');
 
@@ -581,14 +557,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_30 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_30 FOR VALUES IN ('e');
 
@@ -598,14 +573,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_31 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_31 FOR VALUES IN ('f');
 
@@ -615,14 +589,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_32 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_32 FOR VALUES IN ('g');
 
@@ -632,14 +605,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_33 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_33 FOR VALUES IN ('h');
 
@@ -649,14 +621,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_34 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_34 FOR VALUES IN ('i');
 
@@ -666,14 +637,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_35 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_35 FOR VALUES IN ('j');
 
@@ -683,14 +653,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_36 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_36 FOR VALUES IN ('k');
 
@@ -700,14 +669,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_37 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_37 FOR VALUES IN ('l');
 
@@ -717,14 +685,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_38 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_38 FOR VALUES IN ('m');
 
@@ -734,14 +701,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_39 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_39 FOR VALUES IN ('n');
 
@@ -751,14 +717,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_4 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_4 FOR VALUES IN ('E');
 
@@ -768,14 +733,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_40 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_40 FOR VALUES IN ('o');
 
@@ -785,14 +749,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_41 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_41 FOR VALUES IN ('p');
 
@@ -802,14 +765,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_42 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_42 FOR VALUES IN ('q');
 
@@ -819,14 +781,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_43 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_43 FOR VALUES IN ('r');
 
@@ -836,14 +797,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_44 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_44 FOR VALUES IN ('s');
 
@@ -853,14 +813,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_45 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_45 FOR VALUES IN ('t');
 
@@ -870,14 +829,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_46 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_46 FOR VALUES IN ('u');
 
@@ -887,14 +845,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_47 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_47 FOR VALUES IN ('v');
 
@@ -904,14 +861,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_48 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_48 FOR VALUES IN ('w');
 
@@ -921,14 +877,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_49 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_49 FOR VALUES IN ('x');
 
@@ -938,14 +893,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_5 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_5 FOR VALUES IN ('F');
 
@@ -955,14 +909,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_50 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_50 FOR VALUES IN ('y');
 
@@ -972,14 +925,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_51 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_51 FOR VALUES IN ('z');
 
@@ -989,14 +941,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_52 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_52 FOR VALUES IN ('0');
 
@@ -1006,14 +957,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_53 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_53 FOR VALUES IN ('1');
 
@@ -1023,14 +973,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_54 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_54 FOR VALUES IN ('2');
 
@@ -1040,14 +989,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_55 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_55 FOR VALUES IN ('3');
 
@@ -1057,14 +1005,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_56 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_56 FOR VALUES IN ('4');
 
@@ -1074,14 +1021,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_57 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_57 FOR VALUES IN ('5');
 
@@ -1091,14 +1037,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_58 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_58 FOR VALUES IN ('6');
 
@@ -1108,14 +1053,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_59 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_59 FOR VALUES IN ('7');
 
@@ -1125,14 +1069,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_6 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_6 FOR VALUES IN ('G');
 
@@ -1142,14 +1085,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_60 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_60 FOR VALUES IN ('8');
 
@@ -1159,14 +1101,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_61 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_61 FOR VALUES IN ('9');
 
@@ -1176,14 +1117,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_62 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_62 FOR VALUES IN ('+');
 
@@ -1193,14 +1133,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_63 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_63 FOR VALUES IN ('/');
 
@@ -1210,14 +1149,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_7 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_7 FOR VALUES IN ('H');
 
@@ -1227,14 +1165,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_8 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_8 FOR VALUES IN ('I');
 
@@ -1244,14 +1181,13 @@ ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tab
 --
 
 CREATE TABLE public.storage_tables_blobs_partition_9 (
-    attachments_count integer DEFAULT 0 NOT NULL,
-    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
     partition_key character(1) NOT NULL,
+    checksum character(85) NOT NULL,
+    attachments_count_modified timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    attachments_count integer DEFAULT 0 NOT NULL,
+    byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 );
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_9 FOR VALUES IN ('J');
 
@@ -3239,10 +3175,8 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20230911133621'),
-('20230914064811'),
-('20230914080339'),
+('20231005134835'),
 ('20230914102244'),
-('20231005134835');
-
+('20230914064811'),
+('20230911133621');
 

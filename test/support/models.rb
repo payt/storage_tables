@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  stored_one_attachment :avatar, class_name: "StorageTables::UserAttachment"
+  stored_one_attachment :avatar, class_name: "StorageTables::UserAvatarAttachment"
 
   validates :name, presence: true
 end
@@ -11,7 +11,7 @@ class Group < ApplicationRecord
 end
 
 module StorageTables
-  class UserAttachment < StorageTables::Attachment
+  class UserAvatarAttachment < StorageTables::Attachment
     belongs_to :record, class_name: "User", inverse_of: :avatar_storage_attachment
   end
 end

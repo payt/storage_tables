@@ -23,18 +23,38 @@ module StorageTables
 
     test "when trying to upload same file twice, only one record is created" do
       blob = create_blob
-      @user.avatar.attach(blob)
+      @user.avatar.attach(blob, filename: "test.txt")
 
       assert_no_difference -> { StorageTables::Blob.count } do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "test.txt")
       end
+    end
+
+    test "when adding a new file without filename raises error" do
+      blob = create_blob
+      blob2 = create_blob(data: "NewData")
+      @user.avatar.attach(blob, filename: "test.txt")
+
+      assert_raises ActiveRecord::RecordNotSaved do
+        @user.avatar.attach(blob2, filename: nil)
+      end
+    end
+
+    test "when changing a file, the old one is replaced" do
+      blob = create_blob
+      blob2 = create_blob(data: "NewData")
+
+      @user.avatar.attach(blob, filename: "test.txt")
+      @user.avatar.attach(blob2, filename: "test.txt")
+
+      assert_equal @user.avatar.blob, blob2
     end
 
     test "directly-uploaded blob identification for one attached occurs before validation" do
       blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 
       assert_blob_identified_before_owner_validated(@user, blob, "image/jpeg") do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "racecar.jpg")
       end
     end
 
@@ -51,7 +71,7 @@ module StorageTables
       blob = directly_upload_file_blob(filename: "racecar.jpg")
 
       assert_blob_identified_outside_transaction(blob) do
-        @user.avatar.attach(blob)
+        @user.avatar.attach(blob, filename: "racecar.jpg")
       end
     end
 
@@ -65,7 +85,7 @@ module StorageTables
     # end
 
     test "attachments can use includes" do
-      @user.avatar.attach(io: StringIO.new("STUFF"), filename: "town.jpg", content_type: "avatar/jpeg")
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
       findable = User.with_stored_avatar.find_by(name: "Post")
 
       assert_equal @user, findable

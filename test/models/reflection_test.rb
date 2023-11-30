@@ -14,7 +14,7 @@ module StorageTables
 
       reflection = User.reflect_on_attachment(:avatar)
 
-      assert_equal "StorageTables::UserAttachment", reflection.options[:class_name]
+      assert_equal "StorageTables::UserAvatarAttachment", reflection.options[:class_name]
 
       # reflection = User.reflect_on_attachment(:avatar_with_variants)
 

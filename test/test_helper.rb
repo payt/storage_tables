@@ -13,9 +13,9 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __d
 
 # Load fixtures from the engine
 if ActiveSupport::TestCase.respond_to?(:fixture_path=)
-  ActiveSupport::TestCase.fixture_path = File.expand_path("fixtures", __dir__)
-  ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
-  ActiveSupport::TestCase.file_fixture_path = "#{ActiveSupport::TestCase.fixture_path}/files"
+  ActiveSupport::TestCase.fixture_paths = [File.expand_path("fixtures", __dir__)]
+  ActionDispatch::IntegrationTest.fixture_paths = ActiveSupport::TestCase.fixture_paths
+  ActiveSupport::TestCase.file_fixture_path = "#{ActiveSupport::TestCase.fixture_paths.first}/files"
   ActiveSupport::TestCase.fixtures :all
 end
 
@@ -46,23 +46,22 @@ module ActiveSupport
 
     private
 
-    def create_blob(data: "hello world", filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload! io: StringIO.new(data), filename:, content_type:, metadata:
+    def create_blob(data: "hello world", content_type: "image/jpeg", metadata: nil)
+      StorageTables::Blob.create_and_upload!(io: StringIO.new(data), content_type:, metadata:)
     end
 
     def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
-      StorageTables::Blob.create_and_upload! io: fixture_file_upload(filename).open, filename:,
-                                             content_type:, metadata:
+      StorageTables::Blob.create_and_upload!(
+        io: fixture_file_upload(filename).open, content_type:, metadata:
+      )
     end
 
-    def create_blob_before_direct_upload(byte_size:, checksum:,
-                                         filename: "hello.txt", content_type: "text/plain")
-      StorageTables::Blob.create_before_direct_upload! filename:, byte_size:, checksum:, content_type:
+    def create_blob_before_direct_upload(byte_size:, checksum:, content_type: "text/plain")
+      StorageTables::Blob.create_before_direct_upload!(byte_size:, checksum:, content_type:)
     end
 
-    def build_blob_after_unfurling(data: "Hello world!", filename: "hello.txt", content_type: "text/plain",
-                                   identify: true)
-      StorageTables::Blob.build_after_unfurling io: StringIO.new(data), filename:, content_type:, identify:
+    def build_blob_after_unfurling(data: "Hello world!", content_type: "text/plain")
+      StorageTables::Blob.build_after_unfurling(io: StringIO.new(data), content_type:)
     end
 
     def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg")
@@ -70,9 +69,9 @@ module ActiveSupport
       byte_size = file.size
       checksum = OpenSSL::Digest.new("SHA3-512").file(file).base64digest
 
-      create_blob_before_direct_upload(filename:, byte_size:, checksum:, content_type:).tap do |blob|
+      create_blob_before_direct_upload(byte_size:, checksum:, content_type:).tap do |_blob|
         service = StorageTables::Blob.service.try(:primary) || StorageTables::Blob.service
-        service.upload(blob.checksum, file.open)
+        service.upload(checksum, file.open)
       end
     end
 

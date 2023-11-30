@@ -14,7 +14,8 @@ module StorageTables
     end
 
     test "creating a record with a File as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg").open)
+      @user = User.create!(name: "Dorian")
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert_not_nil @user.avatar_storage_attachment
@@ -22,19 +23,22 @@ module StorageTables
     end
 
     test "uploads the file when passing a File as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg").open)
+      @user = User.create!(name: "Dorian")
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+
       assert_nothing_raised { @user.avatar.download }
     end
 
     test "creating a record with an attachment where already one exists" do
-      @user = User.create!(name: "My User", avatar: fixture_file_upload("racecar.jpg"))
-      @user2 = User.create!(name: "My User", avatar: fixture_file_upload("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user2 = User.create!(name: "My User")
+      @user2.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
 
       assert_equal @user.avatar_storage_blob, @user2.avatar_storage_blob
     end
 
     test "attaching a new blob from a Hash to an existing record" do
-      @user.avatar.attach io: StringIO.new("STUFF"), filename: "town.jpg", content_type: "avatar/jpeg"
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
 
       assert_not_nil @user.avatar_storage_attachment
     end
@@ -42,7 +46,7 @@ module StorageTables
     test "attaching StringIO attachable to an existing record" do
       upload = Rack::Test::UploadedFile.new StringIO.new(""), original_filename: "test.txt"
 
-      @user.avatar.attach upload
+      @user.avatar.attach upload, filename: "test.txt"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
@@ -55,45 +59,48 @@ module StorageTables
         tempfile: fixture_file_upload("racecar.jpg")
       })
 
-      @user.avatar.attach upload
+      @user.avatar.attach upload, filename: "avatar.jpeg"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
     end
 
     test "creating a record with a Pathname as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg"), filename: "racecar.jpg"
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
     end
 
     test "uploads the file when passing a Pathname as attachable attribute" do
-      @user = User.create!(name: "Dorian", avatar: file_fixture("racecar.jpg"))
+      @user.avatar.attach file_fixture("racecar.jpg"), filename: "racecar.jpg"
 
       assert_nothing_raised { @user.avatar.download }
     end
 
     test "creating a record with an existing blob attached" do
-      user = User.create!(name: "New User", avatar: create_blob(filename: "funky.jpg"))
+      user = User.create!(name: "New User")
+      user.avatar.attach create_blob, filename: "funky.jpg"
 
       assert_predicate user.avatar, :attached?
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
-      user = User.create!(name: "New User", avatar: create_blob(filename: "funky.jpg").signed_id)
+      @user.avatar.attach create_blob.signed_id, filename: "funky.jpg"
 
-      assert_predicate user.avatar, :attached?
+      assert_predicate @user.avatar, :attached?
     end
 
     test "creating a record with an unexpected object attached" do
-      error = assert_raises(ArgumentError) { User.create!(name: "Jason", avatar: :foo) }
+      error = assert_raises(ArgumentError) do
+        @user.avatar.attach :foo, filename: "foo.txt"
+      end
 
       assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
     end
 
     test "attaching a new blob from an uploaded file to an existing record" do
-      @user.avatar.attach fixture_file_upload("racecar.jpg")
+      @user.avatar.attach fixture_file_upload("racecar.jpg"), filename: "racecar.jpg"
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
     end
@@ -103,7 +110,7 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.avatar.attach fixture_file_upload("racecar.jpg")
+      @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert_not @user.avatar.persisted?
@@ -115,15 +122,15 @@ module StorageTables
     end
 
     test "successfully replacing an existing, dependent attachment on an existing record" do
-      create_blob(filename: "funky.jpg").tap do |old_blob|
-        @user.avatar.attach old_blob
+      create_blob.tap do |old_blob|
+        @user.avatar.attach old_blob, filename: "old.txt"
 
-        @user.avatar.attach create_file_blob(filename: "report.pdf")
+        @user.avatar.attach create_file_blob(filename: "report.pdf"), filename: "report.pdf"
 
         # Blobs are not deleted directly if no longer used.
         assert StorageTables::Blob.service.exist?(old_blob.checksum)
 
-        assert_equal "report.pdf", @user.avatar.blob.filename.to_s
+        assert_equal "report.pdf", @user.avatar.filename.to_s
       end
     end
   end

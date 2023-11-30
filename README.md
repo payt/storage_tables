@@ -1,7 +1,11 @@
 # StorageTables
 [![CI](https://github.com/payt/storage_tables/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/payt/storage_tables/actions/workflows/ci.yml)
 
-Short description and motivation.
+| :exclamation: IN DEVELOPMENT   |
+|:-----------------------------------------|
+| This is still in development and should not be used in any production enviroment! |
+
+This is an idea after ActiveStorage from rails. We wanted to use separate models and tables for saving attachments.
 
 ## Usage
 How to use my plugin.
