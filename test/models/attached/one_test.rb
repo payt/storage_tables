@@ -145,5 +145,15 @@ module StorageTables
         end
       end
     end
+
+    test "when uploading fails, with a existing blob" do
+      blob = create_blob
+
+      StorageTables::Blob.service.stub :upload, ->(*) { raise ServiceError } do
+        assert_no_difference -> { StorageTables::Blob.count } do
+          @user.avatar.attach(blob, filename: "racecar.jpg")
+        end
+      end
+    end
   end
 end

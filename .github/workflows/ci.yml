@@ -44,6 +44,11 @@ jobs:
         run: |
           bundle exec rails test
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Coverage
+          path: coverage
+
   lint:
     runs-on: ubuntu-latest
 
