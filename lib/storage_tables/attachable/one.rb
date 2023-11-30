@@ -37,9 +37,9 @@ module StorageTables
         when File
           blob.upload_without_unfurling(attachable)
         end
-      rescue StandardError => e
+      rescue StandardError
         blob.destroy!
-        raise e
+        raise
       end
 
       # Returns the associated attachment record.

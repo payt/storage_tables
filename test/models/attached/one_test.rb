@@ -137,9 +137,9 @@ module StorageTables
     end
 
     test "when uploading fails, the blob is not created" do
-      StorageTables::Blob.service.stub :upload, ->(*) { raise StandardError } do
+      StorageTables::Blob.service.stub :upload, ->(*) { raise ServiceError } do
         assert_no_difference -> { StorageTables::Blob.count } do
-          assert_raises StandardError do
+          assert_raises ServiceError do
             @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
           end
         end

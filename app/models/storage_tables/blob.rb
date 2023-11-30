@@ -30,6 +30,12 @@ module StorageTables
       "#{partition_key}#{self[:checksum]}=="
     end
 
+    def destroy!
+      raise StorageTables::ActiveRecordError, "Cannot delete blob attached to a record" if attachments_count.positive?
+
+      super
+    end
+
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
         new_blob = new(content_type:, metadata:)
