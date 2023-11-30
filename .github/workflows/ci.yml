@@ -45,6 +45,8 @@ jobs:
           bundle exec rails test
 
       - uses: actions/upload-artifact@v3
+        name: Upload coverage
+        if: failure()
         with:
           name: Coverage
           path: coverage
