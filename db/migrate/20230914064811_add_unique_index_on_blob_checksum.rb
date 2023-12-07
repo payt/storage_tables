@@ -13,7 +13,7 @@ class AddUniqueIndexOnBlobChecksum < ActiveRecord::Migration[7.0]
         SET attachments_count = attachments_count + 1,
             attachments_count_modified = CURRENT_TIMESTAMP
         WHERE partition_key = NEW.blob_key AND checksum = NEW.checksum;
-        RETURN NEW;
+        RETURN NULL;
       END;
       $$;
     SQL
@@ -27,7 +27,7 @@ class AddUniqueIndexOnBlobChecksum < ActiveRecord::Migration[7.0]
         SET attachments_count = attachments_count - 1,
             attachments_count_modified = CURRENT_TIMESTAMP
         WHERE partition_key = OLD.blob_key AND checksum = OLD.checksum;
-        RETURN OLD;
+        RETURN NULL;
       END;
       $$;
     SQL
