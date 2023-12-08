@@ -85,7 +85,7 @@ module StorageTables
 
       assert_predicate user.avatar, :attached?
       assert_equal "funky.jpg", user.avatar.filename.to_s
-      assert_equal 1, blob.attachments_count
+      assert_equal 1, blob.reload.attachments_count
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
