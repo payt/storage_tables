@@ -80,9 +80,12 @@ module StorageTables
 
     test "creating a record with an existing blob attached" do
       user = User.create!(name: "New User")
-      user.avatar.attach create_blob, filename: "funky.jpg"
+      blob = create_blob
+      user.avatar.attach blob, filename: "funky.jpg"
 
       assert_predicate user.avatar, :attached?
+      assert_equal "funky.jpg", user.avatar.filename.to_s
+      assert_equal 1, blob.reload.attachments_count
     end
 
     test "creating a record with an existing blob from a signed ID attached" do
@@ -131,6 +134,26 @@ module StorageTables
         assert StorageTables::Blob.service.exist?(old_blob.checksum)
 
         assert_equal "report.pdf", @user.avatar.filename.to_s
+      end
+    end
+
+    test "when uploading fails, the blob is not created" do
+      StorageTables::Blob.service.stub :upload, ->(*) { raise ServiceError } do
+        assert_no_difference -> { StorageTables::Blob.count } do
+          assert_raises ServiceError do
+            @user.avatar.attach(fixture_file_upload("racecar.jpg"), filename: "racecar.jpg")
+          end
+        end
+      end
+    end
+
+    test "when uploading fails, with a existing blob" do
+      blob = create_blob
+
+      StorageTables::Blob.service.stub :upload, ->(*) { raise ServiceError } do
+        assert_no_difference -> { StorageTables::Blob.count } do
+          @user.avatar.attach(blob, filename: "racecar.jpg")
+        end
       end
     end
   end

@@ -4,7 +4,7 @@ module StorageTables
   # Loads and configures the Storage service to be used to store files.
   class Service
     extend ActiveSupport::Autoload
-    autoload StorageTables::Service::Configuraator
+    autoload StorageTables::Service::Configurator
 
     class << self
       # Configure an Active Storage service by name from a set of configurations,

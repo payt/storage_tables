@@ -4,14 +4,18 @@ require "test_helper"
 
 module StorageTables
   class BlobTest < ActiveSupport::TestCase
-    teardown do
-      StorageTables::Blob.delete_all
-    end
-
     test "setup" do
       blob = StorageTables::Blob.new
 
       assert_not blob.valid?
+    end
+
+    test "update checksum" do
+      blob = create_blob
+
+      assert_raises(ActiveRecord::StatementInvalid) do
+        blob.update!(checksum: "1234567890")
+      end
     end
 
     test "upload" do
@@ -84,6 +88,23 @@ module StorageTables
 
       assert_predicate blob, :persisted?
       assert blob.service.exist?(blob.checksum)
+    end
+
+    test "Destroying a blob also removes the file on disk" do
+      blob = create_blob
+      blob.destroy!
+
+      assert_not blob.service.exist?(blob.checksum)
+    end
+
+    test "Cannot destroy a blob that is referenced by an attachment" do
+      blob = create_blob
+      @user = User.create!(name: "My User")
+      @user.avatar.attach blob, filename: "funky.jpg"
+
+      assert_raises(StorageTables::ActiveRecordError) do
+        blob.reload.destroy!
+      end
     end
   end
 end

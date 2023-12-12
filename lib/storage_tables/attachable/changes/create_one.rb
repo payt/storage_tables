@@ -28,21 +28,6 @@ module StorageTables
           record.public_send("#{name}_storage_blob=", blob)
         end
 
-        def upload
-          case attachable
-          when ActionDispatch::Http::UploadedFile, Pathname
-            blob.upload_without_unfurling(attachable.open)
-          when Rack::Test::UploadedFile
-            blob.upload_without_unfurling(
-              attachable.respond_to?(:open) ? attachable.open : attachable
-            )
-          when Hash
-            blob.upload_without_unfurling(attachable.fetch(:io))
-          when File
-            blob.upload_without_unfurling(attachable)
-          end
-        end
-
         private
 
         def find_or_build_attachment
