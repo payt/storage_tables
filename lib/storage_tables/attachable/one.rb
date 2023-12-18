@@ -16,7 +16,8 @@ module StorageTables
       #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
       def attach(attachable, filename:)
         record.public_send("#{name}=", attachable, filename)
-        blob.save! && upload(attachable)
+        blob.save!
+        upload(attachable)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
@@ -25,6 +26,10 @@ module StorageTables
       end
 
       def upload(attachable)
+        unless ActiveRecord::Base.connection.open_transactions.zero?
+          raise StorageTables::ActiveRecordError, "Cannot upload a blob inside a transaction"
+        end
+
         case attachable
         when ActionDispatch::Http::UploadedFile, Pathname
           blob.upload_without_unfurling(attachable.open)

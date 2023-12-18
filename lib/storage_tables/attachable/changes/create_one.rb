@@ -25,7 +25,7 @@ module StorageTables
 
         def save
           record.public_send("#{name}_storage_attachment=", attachment)
-          record.public_send("#{name}_storage_blob=", blob)
+          # record.public_send("#{name}_storage_blob=", blob)
         end
 
         private

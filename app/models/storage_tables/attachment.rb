@@ -5,7 +5,7 @@ module StorageTables
   class Attachment < ApplicationRecord
     self.abstract_class = true
 
-    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]
+    belongs_to :blob, class_name: "StorageTables::Blob", query_constraints: [:checksum, :blob_key]
 
     delegate :signed_id, to: :blob
 
