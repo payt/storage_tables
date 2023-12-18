@@ -70,6 +70,8 @@ module StorageTables
             StorageTables::Blob.build_after_unfurling(io: attachable)
           when Pathname
             StorageTables::Blob.build_after_unfurling(io: attachable.open)
+          when ActiveStorage::Blob
+            StorageTables::Blob.build_after_unfurling(io: StringIO.new(attachable.download))
           else
             raise(
               ArgumentError,

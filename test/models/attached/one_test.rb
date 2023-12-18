@@ -33,7 +33,10 @@ module StorageTables
       blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("STUFF"), content_type: "avatar/jpeg",
                                                     filename: "town.jpg")
 
-      binding.pry
+      @user.avatar.attach blob
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
     end
 
     test "creating a record with an attachment where already one exists" do

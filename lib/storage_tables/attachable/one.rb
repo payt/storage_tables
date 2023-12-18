@@ -36,6 +36,8 @@ module StorageTables
           attachable.basename.to_s
         when Hash
           attachable.fetch(:filename)
+        when ActiveStorage::Blob
+          attachable.filename.to_s
         when File
           File.basename(attachable.path)
         end
@@ -53,6 +55,8 @@ module StorageTables
           blob.upload_without_unfurling(attachable.fetch(:io))
         when File
           blob.upload_without_unfurling(attachable)
+        when ActiveStorage::Blob
+          blob.upload_without_unfurling(StringIO.new(attachable.download))
         end
       rescue StandardError
         blob.destroy!
