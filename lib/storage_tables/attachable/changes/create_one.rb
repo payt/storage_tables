@@ -24,8 +24,8 @@ module StorageTables
         end
 
         def save
-          record.public_send("#{name}_storage_attachment=", attachment)
-          record.public_send("#{name}_storage_blob=", blob)
+          record.public_send(:"#{name}_storage_attachment=", attachment)
+          record.public_send(:"#{name}_storage_blob=", blob)
         end
 
         private
@@ -43,9 +43,9 @@ module StorageTables
         end
 
         def find_attachment
-          return unless record.public_send("#{name}_storage_blob") == blob
+          return unless record.public_send(:"#{name}_storage_blob") == blob
 
-          record.public_send("#{name}_storage_attachment")
+          record.public_send(:"#{name}_storage_attachment")
         end
 
         def find_or_build_blob
@@ -63,7 +63,7 @@ module StorageTables
               content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.build_after_unfurling(**attachable)
+            StorageTables::Blob.build_after_unfurling(**attachable.except(:filename))
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
