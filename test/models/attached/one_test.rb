@@ -15,7 +15,7 @@ module StorageTables
 
     test "creating a record with a File as attachable attribute" do
       @user = User.create!(name: "Dorian")
-      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user.avatar.attach file_fixture("racecar.jpg").open
 
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert_not_nil @user.avatar_storage_attachment
@@ -24,15 +24,15 @@ module StorageTables
 
     test "uploads the file when passing a File as attachable attribute" do
       @user = User.create!(name: "Dorian")
-      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user.avatar.attach file_fixture("racecar.jpg").open
 
       assert_nothing_raised { @user.avatar.download }
     end
 
     test "creating a record with an attachment where already one exists" do
-      @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user.avatar.attach file_fixture("racecar.jpg").open
       @user2 = User.create!(name: "My User")
-      @user2.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
+      @user2.avatar.attach file_fixture("racecar.jpg").open
 
       assert_equal @user.avatar_storage_blob, @user2.avatar_storage_blob
     end
@@ -41,6 +41,13 @@ module StorageTables
       @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
 
       assert_not_nil @user.avatar_storage_attachment
+    end
+
+    test "attaching a new blob from a Hash to an existing record with the filename in the hash" do
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg" })
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
     end
 
     test "attaching StringIO attachable to an existing record" do
@@ -59,14 +66,14 @@ module StorageTables
         tempfile: fixture_file_upload("racecar.jpg")
       })
 
-      @user.avatar.attach upload, filename: "avatar.jpeg"
+      @user.avatar.attach upload
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
     end
 
     test "creating a record with a Pathname as attachable attribute" do
-      @user.avatar.attach file_fixture("racecar.jpg"), filename: "racecar.jpg"
+      @user.avatar.attach file_fixture("racecar.jpg")
 
       assert_not_nil @user.avatar_storage_attachment
       assert_not_nil @user.avatar_storage_blob
