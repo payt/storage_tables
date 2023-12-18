@@ -35,7 +35,7 @@ module StorageTables
       blob2 = create_blob(data: "NewData")
       @user.avatar.attach(blob, filename: "test.txt")
 
-      assert_raises ActiveRecord::RecordNotSaved do
+      assert_raises ArgumentError do
         @user.avatar.attach(blob2, filename: nil)
       end
     end

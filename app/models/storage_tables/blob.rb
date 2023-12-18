@@ -38,7 +38,7 @@ module StorageTables
     end
 
     class << self
-      def build_after_unfurling(io:, content_type: nil, metadata: nil)
+      def build_after_unfurling(io:, content_type: nil, metadata: nil, filename: nil)
         checksum = compute_checksum_in_chunks(io)
         existing_blob = existing_blob(checksum)
 
