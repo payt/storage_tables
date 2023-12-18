@@ -29,6 +29,13 @@ module StorageTables
       assert_nothing_raised { @user.avatar.download }
     end
 
+    test "create a record with a ActiveStorage::Blob as attachable attribute" do
+      blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("STUFF"), content_type: "avatar/jpeg",
+                                                    filename: "town.jpg")
+
+      binding.pry
+    end
+
     test "creating a record with an attachment where already one exists" do
       @user.avatar.attach file_fixture("racecar.jpg").open, filename: "racecar.jpg"
       @user2 = User.create!(name: "My User")
