@@ -11,7 +11,7 @@ module StorageTables
       # record is next saved.
       #
       #   person.avatar.attach(params[:avatar]) # ActionDispatch::Http::UploadedFile object
-      #   person.avatar.attach(params[:signed_blob_id], filename: "Blob.file") # Signed reference to blob from direct upload
+      #   person.avatar.attach(params[:signed_blob_id], filename: "Blob.file") # Signed reference to blob
       #   person.avatar.attach(io: File.open("/path/to/face.jpg"), filename: "face.jpg", content_type: "image/jpeg")
       #   person.avatar.attach(avatar_blob, filename: "Blob.file") # ActiveStorage::Blob object
       #
