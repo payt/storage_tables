@@ -11,18 +11,36 @@ module StorageTables
       # record is next saved.
       #
       #   person.avatar.attach(params[:avatar]) # ActionDispatch::Http::UploadedFile object
-      #   person.avatar.attach(params[:signed_blob_id]) # Signed reference to blob from direct upload
+      #   person.avatar.attach(params[:signed_blob_id], filename: "Blob.file") # Signed reference to blob
       #   person.avatar.attach(io: File.open("/path/to/face.jpg"), filename: "face.jpg", content_type: "image/jpeg")
-      #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
-      def attach(attachable, filename:)
-        record.public_send("#{name}=", attachable, filename)
-        blob.save!
-        upload(attachable)
+      #   person.avatar.attach(avatar_blob, filename: "Blob.file") # ActiveStorage::Blob object
+      #
+      # If the filename cannot be determined from the attachable, pass the filename as option: +filename+.
+      def attach(attachable, filename: nil)
+        filename ||= extract_filename(attachable)
+
+        raise ArgumentError, "Could not determine filename from #{attachable.inspect}" unless filename
+
+        record.public_send(:"#{name}=", attachable, filename)
+        blob.save! && upload(attachable)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
 
         record.public_send(name.to_s)
+      end
+
+      def extract_filename(attachable)
+        case attachable
+        when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
+          attachable.original_filename
+        when Pathname
+          attachable.basename.to_s
+        when Hash
+          attachable.fetch(:filename)
+        when File
+          File.basename(attachable.path)
+        end
       end
 
       def upload(attachable)
@@ -55,7 +73,7 @@ module StorageTables
         if change.present?
           change.attachment
         else
-          record.public_send("#{name}_storage_attachment")
+          record.public_send(:"#{name}_storage_attachment")
         end
       end
     end
