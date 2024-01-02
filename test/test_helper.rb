@@ -36,6 +36,8 @@ Rails.configuration.active_storage.service = "local"
 
 module ActiveSupport
   class TestCase
+    self.use_transactional_tests = false
+
     setup do
       ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
     end
