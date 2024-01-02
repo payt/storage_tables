@@ -45,6 +45,42 @@ module StorageTables
           )
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
+
+        def stored_many_attachments(name, class_name:)
+          define_method(name) do
+            @storage_tables_attached ||= {}
+            @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::Many.new(name.to_s, self)
+          end
+
+          define_method(:"#{name}=") do |attachables|
+            attachables = Array(attachables).compact_blank
+            pending_uploads = attachment_changes[name.to_s].try(:pending_uploads)
+
+            attachment_changes[name.to_s] = if attachables.none?
+              ActiveStorage::Attached::Changes::DeleteMany.new(name.to_s, self)
+            else
+              StorageTables::Attached::Attachable::CreateMany.new(name.to_s, self, attachables, pending_uploads:)
+            end
+          end
+
+          has_many(:"#{name}_storage_attachments", as: :record, class_name: class_name.to_s, inverse_of: :record)
+          has_many(:"#{name}_storage_blobs", through: :"#{name}_storage_attachments",
+                                             class_name: "StorageTables::Blob", source: :blob)
+
+          scope :"with_attached_#{name}", -> { includes("#{name}_attachments": :blob) }
+
+          after_save { attachment_changes[name.to_s]&.save }
+
+          reflection = ActiveRecord::Reflection.create(
+            :has_many_attached,
+            name,
+            nil,
+            { dependent:, service_name: service },
+            self
+          )
+          yield reflection if block_given?
+          ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
+        end
       end
     end
   end
