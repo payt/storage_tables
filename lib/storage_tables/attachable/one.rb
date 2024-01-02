@@ -46,6 +46,10 @@ module StorageTables
       end
 
       def upload(attachable)
+        if ActiveRecord::Base.connection.open_transactions > MAX_TRANSACTIONS_OPEN
+          raise StorageTables::ActiveRecordError, "Cannot upload a blob inside a transaction"
+        end
+
         case attachable
         when ActionDispatch::Http::UploadedFile, Pathname
           blob.upload_without_unfurling(attachable.open)

@@ -119,6 +119,16 @@ module StorageTables
       assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
     end
 
+    test "upload a file in a transaction" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        ActiveRecord::Base.transaction do
+          @user.avatar.attach create_blob, filename: "foo.txt"
+        end
+      end
+
+      assert_equal "Cannot upload a blob inside a transaction", error.message
+    end
+
     test "attaching a new blob from an uploaded file to an existing record" do
       @user.avatar.attach fixture_file_upload("racecar.jpg"), filename: "racecar.jpg"
 
