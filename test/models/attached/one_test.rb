@@ -13,12 +13,6 @@ module StorageTables
       @user = User.create!(name: "My User")
     end
 
-    # teardown do
-    #   StorageTables::UserAvatarAttachment.delete_all
-    #   StorageTables::Blob.delete_all
-    #   User.delete_all
-    # end
-
     test "creating a record with a File as attachable attribute" do
       @user = User.create!(name: "Dorian")
       @user.avatar.attach file_fixture("racecar.jpg").open

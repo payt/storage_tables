@@ -14,6 +14,9 @@ require "marcel"
 module StorageTables
   extend ActiveSupport::Autoload
 
+  # Set to at least 1 for tests, because all tests are wrapped in a transaction.
+  MAX_TRANSACTIONS_OPEN = Rails.env.test? ? 1 : 0
+
   autoload :Attached
   autoload :Service
 end

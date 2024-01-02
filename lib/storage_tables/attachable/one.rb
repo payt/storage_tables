@@ -46,7 +46,7 @@ module StorageTables
       end
 
       def upload(attachable)
-        unless ActiveRecord::Base.connection.open_transactions > 1
+        if ActiveRecord::Base.connection.open_transactions > MAX_TRANSACTIONS_OPEN
           raise StorageTables::ActiveRecordError, "Cannot upload a blob inside a transaction"
         end
 
