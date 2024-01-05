@@ -72,10 +72,10 @@ module StorageTables
           after_save { attachment_changes[name.to_s]&.save }
 
           reflection = ActiveRecord::Reflection.create(
-            :has_many_attached,
+            :stored_many_attachments,
             name,
             nil,
-            { dependent:, service_name: service },
+            { class_name: },
             self
           )
           yield reflection if block_given?
