@@ -59,11 +59,12 @@ module StorageTables
             attachment_changes[name.to_s] = if attachables.none?
               ActiveStorage::Attached::Changes::DeleteMany.new(name.to_s, self)
             else
-              StorageTables::Attached::Attachable::CreateMany.new(name.to_s, self, attachables, pending_uploads:)
+              StorageTables::Attachable::Changes::CreateMany.new(name.to_s, self, attachables, pending_uploads:)
             end
           end
 
-          has_many(:"#{name}_storage_attachments", as: :record, class_name: class_name.to_s, inverse_of: :record)
+          has_many(:"#{name}_storage_attachments", class_name: class_name.to_s, inverse_of: :record,
+                                                   foreign_key: :record_id)
           has_many(:"#{name}_storage_blobs", through: :"#{name}_storage_attachments",
                                              class_name: "StorageTables::Blob", source: :blob)
 
