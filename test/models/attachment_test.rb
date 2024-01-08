@@ -59,13 +59,13 @@ module StorageTables
     end
 
     # TODO: Later add support for multiple attachments
-    # test "directly-uploaded blob identification for many attached occurs before validation" do
-    #   blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
+    test "directly-uploaded blob identification for many attached occurs before validation" do
+      blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 
-    #   assert_blob_identified_before_owner_validated(@user, blob, "image/jpeg") do
-    #     @user.highlights.attach(blob)
-    #   end
-    # end
+      assert_blob_identified_before_owner_validated(@user, blob, "image/jpeg") do
+        @user.highlights.attach(blob)
+      end
+    end
 
     test "directly-uploaded blob identification for one attached occurs outside transaction" do
       blob = directly_upload_file_blob(filename: "racecar.jpg")
@@ -76,13 +76,13 @@ module StorageTables
     end
 
     # TODO: Later add support for multiple attachments
-    # test "directly-uploaded blob identification for many attached occurs outside transaction" do
-    #   blob = directly_upload_file_blob(filename: "racecar.jpg")
+    test "directly-uploaded blob identification for many attached occurs outside transaction" do
+      blob = directly_upload_file_blob(filename: "racecar.jpg")
 
-    #   assert_blob_identified_outside_transaction(blob) do
-    #     @user.highlights.attach(blob)
-    #   end
-    # end
+      assert_blob_identified_outside_transaction(blob) do
+        @user.highlights.attach(blob)
+      end
+    end
 
     test "attachments can use includes" do
       @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
