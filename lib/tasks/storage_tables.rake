@@ -6,6 +6,6 @@ namespace :storage_tables do
 
   desc "Install storage tables"
   task environment: :install do
-    # Task goes here
+    Rake::Task["storage_tables:install:migrations"].invoke
   end
 end
