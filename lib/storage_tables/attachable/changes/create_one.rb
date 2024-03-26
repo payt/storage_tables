@@ -24,23 +24,8 @@ module StorageTables
         end
 
         def save
-          record.public_send("#{name}_storage_attachment=", attachment)
-          record.public_send("#{name}_storage_blob=", blob)
-        end
-
-        def upload
-          case attachable
-          when ActionDispatch::Http::UploadedFile, Pathname
-            blob.upload_without_unfurling(attachable.open)
-          when Rack::Test::UploadedFile
-            blob.upload_without_unfurling(
-              attachable.respond_to?(:open) ? attachable.open : attachable
-            )
-          when Hash
-            blob.upload_without_unfurling(attachable.fetch(:io))
-          when File
-            blob.upload_without_unfurling(attachable)
-          end
+          record.public_send(:"#{name}_storage_attachment=", attachment)
+          record.public_send(:"#{name}_storage_blob=", blob)
         end
 
         private
@@ -58,9 +43,9 @@ module StorageTables
         end
 
         def find_attachment
-          return unless record.public_send("#{name}_storage_blob") == blob
+          return unless record.public_send(:"#{name}_storage_blob") == blob
 
-          record.public_send("#{name}_storage_attachment")
+          record.public_send(:"#{name}_storage_attachment")
         end
 
         def find_or_build_blob
@@ -78,13 +63,15 @@ module StorageTables
               content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.build_after_unfurling(**attachable)
+            StorageTables::Blob.build_after_unfurling(**attachable.except(:filename))
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
             StorageTables::Blob.build_after_unfurling(io: attachable)
           when Pathname
             StorageTables::Blob.build_after_unfurling(io: attachable.open)
+          when ActiveStorage::Blob
+            StorageTables::Blob.build_after_unfurling(io: StringIO.new(attachable.download))
           else
             raise(
               ArgumentError,

@@ -15,7 +15,16 @@ SET row_security = off;
 
 CREATE FUNCTION public.decrement_attachment_counter() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count - 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE checksum = NEW.checksum; RETURN NEW; END; $$;
+    AS $$ DECLARE index integer; BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count - 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE partition_key = NEW.blob_key AND checksum = NEW.checksum; RETURN NULL; END; $$;
+
+
+--
+-- Name: immutable_blob_key_and_checksum(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.immutable_blob_key_and_checksum() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ BEGIN IF NEW.checksum <> OLD.checksum THEN RAISE EXCEPTION 'updating checksum not allowed'; END IF; IF NEW.partition_key <> OLD.partition_key THEN RAISE EXCEPTION 'updating partition_key not allowed'; END IF; RETURN NEW; END; $$;
 
 
 --
@@ -24,7 +33,16 @@ CREATE FUNCTION public.decrement_attachment_counter() RETURNS trigger
 
 CREATE FUNCTION public.increment_attachment_counter() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count + 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE checksum = NEW.checksum; RETURN NEW; END; $$;
+    AS $$ BEGIN UPDATE storage_tables_blobs SET attachments_count = attachments_count + 1, attachments_count_modified = CURRENT_TIMESTAMP WHERE partition_key = NEW.blob_key AND checksum = NEW.checksum; RETURN NULL; END; $$;
+
+
+--
+-- Name: partition_keys(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.partition_keys() RETURNS text[]
+    LANGUAGE plpgsql IMMUTABLE PARALLEL SAFE
+    AS $$ DECLARE list TEXT[] := '{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9,+,/}'; BEGIN RETURN list; END; $$;
 
 
 SET default_tablespace = '';
@@ -3150,6 +3168,454 @@ ALTER INDEX public.index_storage_tables_blobs_on_checksum ATTACH PARTITION publi
 --
 
 ALTER INDEX public.storage_tables_blobs_pkey ATTACH PARTITION public.storage_tables_blobs_partition_9_pkey;
+
+
+--
+-- Name: storage_tables_blobs_partition_0 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_0 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_1 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_1 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_10 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_10 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_11 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_11 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_12 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_12 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_13 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_13 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_14 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_14 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_15 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_15 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_16 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_16 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_17 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_17 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_18 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_18 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_19 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_19 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_2 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_2 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_20 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_20 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_21 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_21 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_22 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_22 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_23 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_23 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_24 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_24 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_25 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_25 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_26 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_26 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_27 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_27 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_28 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_28 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_29 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_29 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_3 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_3 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_30 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_30 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_31 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_31 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_32 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_32 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_33 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_33 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_34 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_34 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_35 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_35 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_36 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_36 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_37 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_37 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_38 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_38 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_39 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_39 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_4 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_4 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_40 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_40 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_41 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_41 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_42 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_42 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_43 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_43 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_44 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_44 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_45 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_45 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_46 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_46 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_47 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_47 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_48 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_48 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_49 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_49 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_5 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_5 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_50 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_50 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_51 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_51 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_52 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_52 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_53 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_53 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_54 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_54 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_55 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_55 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_56 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_56 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_57 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_57 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_58 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_58 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_59 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_59 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_6 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_6 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_60 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_60 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_61 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_61 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_62 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_62 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_63 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_63 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_7 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_7 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_8 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_8 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
+
+
+--
+-- Name: storage_tables_blobs_partition_9 immutable_blob_key_and_checksum; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_tables_blobs_partition_9 FOR EACH ROW EXECUTE FUNCTION public.immutable_blob_key_and_checksum();
 
 
 --

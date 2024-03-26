@@ -13,7 +13,7 @@ module StorageTables
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::One.new(name.to_s, self)
           end
 
-          define_method("#{name}=") do |attachable, filename|
+          define_method(:"#{name}=") do |attachable, filename|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
                 # TODO: Cover deleting attachments later.
@@ -35,8 +35,6 @@ module StorageTables
           }
 
           after_save { attachment_changes[name.to_s]&.save }
-
-          after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s).try(:upload) }
 
           reflection = ActiveRecord::Reflection.create(
             :stored_one_attachment,

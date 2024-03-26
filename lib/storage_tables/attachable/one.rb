@@ -11,16 +11,62 @@ module StorageTables
       # record is next saved.
       #
       #   person.avatar.attach(params[:avatar]) # ActionDispatch::Http::UploadedFile object
-      #   person.avatar.attach(params[:signed_blob_id]) # Signed reference to blob from direct upload
+      #   person.avatar.attach(params[:signed_blob_id], filename: "Blob.file") # Signed reference to blob
       #   person.avatar.attach(io: File.open("/path/to/face.jpg"), filename: "face.jpg", content_type: "image/jpeg")
-      #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
-      def attach(attachable, filename:)
-        record.public_send("#{name}=", attachable, filename)
+      #   person.avatar.attach(avatar_blob, filename: "Blob.file") # StorageTables::Blob or ActiveStorage::Blob object
+      #
+      # If the filename cannot be determined from the attachable, pass the filename as option: +filename+.
+      def attach(attachable, filename: nil)
+        filename ||= extract_filename(attachable)
+
+        raise ArgumentError, "Could not determine filename from #{attachable.inspect}" unless filename
+
+        record.public_send(:"#{name}=", attachable, filename)
+        blob.save! && upload(attachable)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
 
         record.public_send(name.to_s)
+      end
+
+      def extract_filename(attachable)
+        case attachable
+        when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
+          attachable.original_filename
+        when Pathname
+          attachable.basename.to_s
+        when Hash
+          attachable.fetch(:filename)
+        when ActiveStorage::Blob
+          attachable.filename.to_s
+        when File
+          File.basename(attachable.path)
+        end
+      end
+
+      def upload(attachable)
+        if ActiveRecord::Base.connection.open_transactions > MAX_TRANSACTIONS_OPEN
+          raise StorageTables::ActiveRecordError, "Cannot upload a blob inside a transaction"
+        end
+
+        case attachable
+        when ActionDispatch::Http::UploadedFile, Pathname
+          blob.upload_without_unfurling(attachable.open)
+        when Rack::Test::UploadedFile
+          blob.upload_without_unfurling(
+            attachable.respond_to?(:open) ? attachable.open : attachable
+          )
+        when Hash
+          blob.upload_without_unfurling(attachable.fetch(:io))
+        when File
+          blob.upload_without_unfurling(attachable)
+        when ActiveStorage::Blob
+          blob.upload_without_unfurling(StringIO.new(attachable.download))
+        end
+      rescue StandardError
+        blob.destroy!
+        raise
       end
 
       # Returns the associated attachment record.
@@ -31,7 +77,7 @@ module StorageTables
         if change.present?
           change.attachment
         else
-          record.public_send("#{name}_storage_attachment")
+          record.public_send(:"#{name}_storage_attachment")
         end
       end
     end

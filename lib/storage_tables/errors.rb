@@ -5,4 +5,6 @@ module StorageTables
   class Error < StandardError; end
 
   class ServiceError < Error; end
+
+  class ActiveRecordError < Error; end
 end

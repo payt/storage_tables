@@ -6,5 +6,6 @@ SimpleCov.start do
 
   add_filter "/test/"
 
-  SimpleCov.minimum_coverage 100
+  minimum_coverage line: 100, branch: 100
+  refuse_coverage_drop :line, :branch
 end
