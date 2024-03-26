@@ -180,8 +180,7 @@ CREATE TABLE public.storage_tables_blobs (
     attachments_count integer DEFAULT 0 NOT NULL,
     byte_size bigint NOT NULL,
     content_type character varying,
-    metadata jsonb,
-    CONSTRAINT partition_key_is_checksum_first_letter CHECK (((partition_key)::text = "left"((checksum)::text, 1)))
+    metadata jsonb
 )
 PARTITION BY LIST (partition_key);
 
