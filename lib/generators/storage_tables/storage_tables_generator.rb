@@ -18,8 +18,8 @@ class StorageTablesGenerator < Rails::Generators::NamedBase
     @versioned_model_primary_key_type = model.columns_hash[model.primary_key].type
 
     migration_template "storage_tables_attachment_table.rb.erb",
-                       "db/migrate/create_#{singular_table_name}_storage_tables_attachments.rb"
-    template "versions_model_template.rb.erb", "app/models/#{table_name}/version.rb"
+                       "db/migrate/create_#{singular_table_name}_storage_table.rb"
+    # template "versions_model_template.rb.erb", "app/models/#{table_name}/version.rb"
   end
 
   def self.next_migration_number(dirname)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Creates the `<%= @singular_table_name %>_versions` table
-class Create<%= @model %>Versions < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class Create<%= @model %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
   def change
     create_table :storage_tables_<%= @singular_table_name %>_attachments, primary_key: [:record_id, :checksum, :blob_key] do |t|
       t.string :blob_key, null: false, limit: 1
@@ -20,11 +20,11 @@ class Create<%= @model %>Versions < ActiveRecord::Migration[<%= ActiveRecord::Mi
     SQL
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_created AFTER INSERT ON storage_tables_<%= @singular_table_name %>_attachments FOR EACH ROW EXECUTE FUNCTION increment_attachment_counter()
+      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_created AFTER INSERT ON storage_tables_<%= @singular_table_name %> FOR EACH ROW EXECUTE FUNCTION increment_attachment_counter()
     SQL
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_deleted AFTER INSERT ON storage_tables_<%= @singular_table_name %>_attachments FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
+      CREATE TRIGGER storage_tables_<%= @singular_table_name %>_attachments_deleted AFTER INSERT ON storage_tables_<%= @singular_table_name %> FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
     SQL
   end
 end
