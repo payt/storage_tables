@@ -13,7 +13,7 @@ module StorageTables
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::One.new(name.to_s, self)
           end
 
-          define_method(:"#{name}=") do |attachable, filename: nil|
+          define_method(:"#{name}=") do |attachable, filename|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
                 # TODO: Cover deleting attachments later.
