@@ -34,6 +34,7 @@ module StorageTables
       @user.avatar = file_fixture("racecar.jpg").open
 
       assert_nothing_raised { @user.avatar.download }
+      assert_equal "racecar.jpg", @user.avatar.filename.to_s
     end
 
     test "create a record with a ActiveStorage::Blob as attachable attribute" do
