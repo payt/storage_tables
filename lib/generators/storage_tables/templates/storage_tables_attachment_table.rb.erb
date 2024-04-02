@@ -5,7 +5,6 @@ class Create<%= @table_name.camelcase %> < ActiveRecord::Migration[<%= ActiveRec
   def up
     create_table :<%= @table_name %>, primary_key: [:record_id, :checksum, :blob_key] do |t|
       t.string     :blob_key, null: false, limit: 1
-      t.string     :name,         null: false
       t.string     :filename, null: false
       t.belongs_to :record,   null: false, foreign_key: { to_table: :<%= @record.table_name %> }
       t.string     :checksum, null: false
