@@ -29,6 +29,13 @@ module StorageTables
       assert_nothing_raised { @user.avatar.download }
     end
 
+    test "uploads the file when set through set statement" do
+      @user = User.create!(name: "Dorian")
+      @user.avatar = file_fixture("racecar.jpg").open
+
+      assert_nothing_raised { @user.avatar.download }
+    end
+
     test "create a record with a ActiveStorage::Blob as attachable attribute" do
       blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("STUFF"), content_type: "avatar/jpeg",
                                                     filename: "town.jpg")
