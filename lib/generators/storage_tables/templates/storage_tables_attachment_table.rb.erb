@@ -23,7 +23,7 @@ class Create<%= @table_name.camelcase %> < ActiveRecord::Migration[<%= ActiveRec
     SQL
 
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      CREATE TRIGGER <%= @table_name %>_attachment_deleted AFTER INSERT ON <%= @table_name %> FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
+      CREATE TRIGGER <%= @table_name %>_attachment_deleted AFTER DELETE ON <%= @table_name %> FOR EACH ROW EXECUTE FUNCTION decrement_attachment_counter()
     SQL
   end
 
