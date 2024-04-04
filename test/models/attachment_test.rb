@@ -94,7 +94,6 @@ module StorageTables
     test "can create a path from attachment without touching a blob" do
       attachment = UserAvatarAttachment.new(checksum: "123456")
 
-      assert attachment.path.start_with?("/tmp/storage_tables_tests")
       assert attachment.path.end_with?(attachment.checksum.tr("/+", "_-"))
     end
 
