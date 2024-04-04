@@ -6,8 +6,6 @@ module StorageTables
   module Service
     # Local disk storage service.
     class DiskService < ActiveStorage::Service::DiskService
-      private
-
       def path_for(checksum) # :nodoc:
         # Replace the forward slash with an underscore
         # Replace the plus sign with a minus sign
@@ -15,6 +13,8 @@ module StorageTables
 
         File.join root, folder_for(checksum), checksum
       end
+
+      private
 
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"

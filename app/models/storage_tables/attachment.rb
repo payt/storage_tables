@@ -14,5 +14,9 @@ module StorageTables
     def download
       association(:blob).klass.service.download("#{blob_key}#{checksum}==")
     end
+
+    def path
+      association(:blob).klass.service.path_for(checksum)
+    end
   end
 end
