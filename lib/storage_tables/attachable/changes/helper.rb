@@ -3,6 +3,7 @@
 module StorageTables
   module Attachable
     module Changes
+      # Helper methods for attachable changes.
       module Helper
         def extract_filename(attachable)
           case attachable
