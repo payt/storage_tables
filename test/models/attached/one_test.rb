@@ -35,7 +35,7 @@ module StorageTables
       assert_nothing_raised { @user.save! }
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
     end
-    
+
     test "uploads the file when set through setter and set filename seperate" do
       @user.avatar = file_fixture("racecar.jpg")
       @user.avatar.filename = "racecar.jpg"
