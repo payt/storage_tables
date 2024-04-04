@@ -4,6 +4,8 @@ module StorageTables
   module Attachable
     # Representation of a single attachment to a model.
     class One < ActiveStorage::Attached::One
+      include Changes::Helper
+
       # Attaches an +attachable+ to the record.
       #
       # If the record is persisted and unchanged, the attachment is saved to
@@ -28,21 +30,6 @@ module StorageTables
         # :nocov:
 
         record.public_send(name.to_s)
-      end
-
-      def extract_filename(attachable)
-        case attachable
-        when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
-          attachable.original_filename
-        when Pathname
-          attachable.basename.to_s
-        when Hash
-          attachable.fetch(:filename)
-        when ActiveStorage::Blob
-          attachable.filename.to_s
-        when File
-          File.basename(attachable.path)
-        end
       end
 
       def upload(attachable)

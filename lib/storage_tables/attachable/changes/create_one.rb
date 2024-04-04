@@ -5,6 +5,8 @@ module StorageTables
     module Changes
       # Class used to create a new attachment from an attachable blob.
       class CreateOne
+        include Helper
+
         attr_reader :name, :record, :attachable, :filename
 
         def initialize(name, record, attachable, filename)
@@ -29,21 +31,6 @@ module StorageTables
         end
 
         private
-
-        def extract_filename(attachable)
-          case attachable
-          when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile
-            attachable.original_filename
-          when Pathname
-            attachable.basename.to_s
-          when Hash
-            attachable.fetch(:filename)
-          when ActiveStorage::Blob
-            attachable.filename.to_s
-          when File
-            File.basename(attachable.path)
-          end
-        end
 
         def find_or_build_attachment
           find_attachment || build_attachment
