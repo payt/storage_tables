@@ -5,13 +5,15 @@ module StorageTables
     module Changes
       # Class used to create a new attachment from an attachable blob.
       class CreateOne
+        include Helper
+
         attr_reader :name, :record, :attachable, :filename
 
         def initialize(name, record, attachable, filename)
           @name = name
           @record = record
           @attachable = attachable
-          @filename = filename
+          @filename = filename || extract_filename(attachable)
           blob.identify_without_saving
         end
 

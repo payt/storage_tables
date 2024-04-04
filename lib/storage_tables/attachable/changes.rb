@@ -6,6 +6,7 @@ module StorageTables
       extend ActiveSupport::Autoload
 
       eager_autoload do
+        autoload :Helper
         autoload :CreateOne
       end
     end
