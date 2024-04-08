@@ -30,6 +30,17 @@ $ bin/rails active_storage:install
 ```
 
 
+### Table generator
+
+To create a new storage table for a record you can use the generator
+```bash
+$ bin/rails g storage_tables Attachment --record User
+```
+
+This will create a attachment model file and the migrations for the new attachment table,
+with a foreign_key to the `User` table
+
+
 ## Contributing
 Contribution directions go here.
 
