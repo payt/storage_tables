@@ -17,16 +17,14 @@ module StorageTables
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
                 # TODO: Cover deleting attachments later.
-                # :nocov:
-                ActiveStorage::Attached::Changes::DeleteOne.new(name.to_s, self)
-                # :nocov:
+                StorageTables::Attachable::Changes::DeleteOne.new(name.to_s, self)
               else
                 StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable, filename)
               end
           end
 
           has_one :"#{name}_storage_attachment", class_name: class_name.to_s, inverse_of: :record,
-                                                 foreign_key: :record_id
+                                                 foreign_key: :record_id, dependent: :destroy
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 

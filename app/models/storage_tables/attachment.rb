@@ -7,7 +7,7 @@ module StorageTables
 
     belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]
 
-    delegate :signed_id, to: :blob
+    delegate :byte_size, to: :blob
 
     validates :filename, presence: true
 

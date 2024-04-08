@@ -106,6 +106,18 @@ module StorageTables
       assert attachment.path.end_with?(expected_path)
     end
 
+    test "set a attachment to nil" do
+      blob = create_blob(data: "NewData")
+
+      @user.avatar.attach(blob, filename: "test.txt")
+
+      @user.update(avatar: nil)
+
+      assert_not_predicate @user.avatar, :present?
+      assert_equal 0, blob.attachments_count
+      assert_predicate blob, :persisted?
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)
