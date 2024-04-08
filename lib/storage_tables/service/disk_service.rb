@@ -9,9 +9,9 @@ module StorageTables
       def path_for(checksum) # :nodoc:
         # Replace the forward slash with an underscore
         # Replace the plus sign with a minus sign
-        checksum = checksum.tr("/+", "_-")
+        refactored_checksum = checksum.tr("/+", "_-")
 
-        File.join root, folder_for(checksum), checksum
+        File.join root, folder_for(refactored_checksum), refactored_checksum
       end
 
       private

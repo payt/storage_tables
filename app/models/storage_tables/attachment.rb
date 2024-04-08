@@ -12,11 +12,15 @@ module StorageTables
     validates :filename, presence: true
 
     def download
-      association(:blob).klass.service.download("#{blob_key}#{checksum}==")
+      association(:blob).klass.service.download(full_checksum)
     end
 
     def path
-      association(:blob).klass.service.path_for(checksum)
+      association(:blob).klass.service.path_for(full_checksum)
+    end
+
+    def full_checksum
+      "#{blob_key}#{checksum}=="
     end
   end
 end

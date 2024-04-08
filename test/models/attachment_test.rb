@@ -91,10 +91,19 @@ module StorageTables
       assert_equal @user, findable
     end
 
-    test "can create a path from attachment without touching a blob" do
-      attachment = UserAvatarAttachment.new(checksum: "123456")
+    test "path can be created through the attachment" do
+      attachment = @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg" }, filename: "town.jpg")
 
-      assert attachment.path.end_with?(attachment.checksum.tr("/+", "_-"))
+      assert_path_exists attachment.path
+    end
+
+    test "can create a path from attachment without touching a blob" do
+      attachment = UserAvatarAttachment.new(checksum: "123456", blob_key: "a")
+      full_checksum = attachment.full_checksum
+
+      expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
+
+      assert attachment.path.end_with?(expected_path)
     end
 
     private
