@@ -51,7 +51,7 @@ module StorageTables
       @user.avatar.attach blob
 
       assert_not_nil @user.avatar_storage_attachment
-      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
     test "creating a record with an attachment where already one exists" do
@@ -72,7 +72,7 @@ module StorageTables
       @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg" })
 
       assert_not_nil @user.avatar_storage_attachment
-      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
     test "attaching StringIO attachable to an existing record" do
