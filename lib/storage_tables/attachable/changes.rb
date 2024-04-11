@@ -8,6 +8,7 @@ module StorageTables
       eager_autoload do
         autoload :Helper
         autoload :CreateOne
+        autoload :DeleteOne
       end
     end
   end

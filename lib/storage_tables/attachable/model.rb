@@ -16,10 +16,7 @@ module StorageTables
           define_method(:"#{name}=") do |attachable, filename = nil|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
-                # TODO: Cover deleting attachments later.
-                # :nocov:
-                ActiveStorage::Attached::Changes::DeleteOne.new(name.to_s, self)
-                # :nocov:
+                StorageTables::Attachable::Changes::DeleteOne.new(name.to_s, self)
               else
                 StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable, filename)
               end
