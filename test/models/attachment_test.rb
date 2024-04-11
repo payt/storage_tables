@@ -117,6 +117,12 @@ module StorageTables
       assert_predicate blob, :persisted?
     end
 
+    test "when attachment is nil and also set to nil" do
+      @user.update!(avatar: nil)
+
+      assert_not_predicate @user.avatar, :present?
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)
