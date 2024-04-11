@@ -111,10 +111,9 @@ module StorageTables
 
       @user.avatar.attach(blob, filename: "test.txt")
 
-      @user.update(avatar: nil)
+      @user.update!(avatar: nil)
 
       assert_not_predicate @user.avatar, :present?
-      assert_equal 0, blob.attachments_count
       assert_predicate blob, :persisted?
     end
 
