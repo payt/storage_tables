@@ -16,7 +16,6 @@ module StorageTables
           define_method(:"#{name}=") do |attachable, filename = nil|
             attachment_changes[name.to_s] =
               if attachable.nil? || attachable == ""
-                # TODO: Cover deleting attachments later.
                 StorageTables::Attachable::Changes::DeleteOne.new(name.to_s, self)
               else
                 StorageTables::Attachable::Changes::CreateOne.new(name.to_s, self, attachable, filename)
@@ -24,7 +23,7 @@ module StorageTables
           end
 
           has_one :"#{name}_storage_attachment", class_name: class_name.to_s, inverse_of: :record,
-                                                 foreign_key: :record_id, dependent: :destroy
+                                                 foreign_key: :record_id
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
