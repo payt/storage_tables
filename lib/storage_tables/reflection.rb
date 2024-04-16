@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_record/reflection"
+
 module StorageTables
   # Storage Tables reflection extensions for Active Record.
   module Reflection
