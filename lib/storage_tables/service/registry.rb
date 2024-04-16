@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "active_storage/service"
 require "active_storage/service/registry"
 require "storage_tables/service/configurator"
 
