@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails/engine"
+
 require "storage_tables"
 require "storage_tables/service/registry"
 require "storage_tables/reflection"
