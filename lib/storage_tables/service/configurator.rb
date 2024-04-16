@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "active_storage/service"
+require "active_storage/service/configurator"
+
 module StorageTables
   module Service
     # Set the storage service to be used by Storage Tables.
