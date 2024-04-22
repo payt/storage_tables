@@ -10,8 +10,10 @@ module StorageTables
       include Changes::Helper
 
       def attach(*attachables)
+        enriched_attachables(attachables)
+
         record.public_send(:"#{name}=", blobs + attachables.flatten)
-        blobs.save! && upload(attachable)
+        blobs.all?(&:save!) && upload_many(attachables)
 
         return if record.persisted? && !record.changed? && !record.save
 
@@ -32,6 +34,10 @@ module StorageTables
 
       def upload_many(attachables)
         attachables.each { |attachable| upload(attachable) }
+      end
+
+      def enriched_attachables(attachables)
+        binding.pry
       end
     end
   end

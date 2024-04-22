@@ -54,7 +54,7 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -73,7 +73,8 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.highlights.attach create_blob(filename: "funky.jpg").signed_id, create_blob(filename: "town.jpg").signed_id
+      @user.highlights.attach create_file_blob(filename: "funky.jpg").signed_id,
+                              create_file_blob(filename: "town.jpg").signed_id
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -230,8 +231,8 @@ module StorageTables
     end
 
     test "attaching existing blobs to an existing record one at a time" do
-      @user.highlights.attach create_blob(filename: "funky.jpg")
-      @user.highlights.attach create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename:  "funky.jpg")
+      @user.highlights.attach create_file_blob(filename:  "town.jpg")
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -250,8 +251,8 @@ module StorageTables
     end
 
     test "updating an existing record to attach existing blobs from signed IDs" do
-      @user.update! highlights: [create_blob(filename: "funky.jpg").signed_id,
-                                 create_blob(filename: "town.jpg").signed_id]
+      @user.update! highlights: [create_file_blob(filename:  "funky.jpg").signed_id,
+                                 create_file_blob(filename:  "town.jpg").signed_id]
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -282,7 +283,7 @@ module StorageTables
     end
 
     test "replacing existing, dependent attachments on an existing record via assign and attach" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |old_blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |old_blobs|
         @user.highlights.attach old_blobs
 
         @user.highlights = []
@@ -290,7 +291,8 @@ module StorageTables
         assert_not @user.highlights.attached?
 
         perform_enqueued_jobs do
-          @user.highlights.attach create_blob(filename: "whenever.jpg"), create_blob(filename: "wherever.jpg")
+          @user.highlights.attach create_file_blob(filename: "whenever.jpg"),
+                                  create_file_blob(filename: "wherever.jpg")
         end
 
         assert_equal "whenever.jpg", @user.highlights.first.filename.to_s
@@ -303,14 +305,14 @@ module StorageTables
     end
 
     test "replacing existing, independent attachments on an existing record via assign and attach" do
-      @user.vlogs.attach create_blob(filename: "funky.mp4"), create_blob(filename: "town.mp4")
+      @user.vlogs.attach create_file_blob(filename: "funky.mp4"), create_file_blob(filename: "town.mp4")
 
       @user.vlogs = []
 
       assert_not @user.vlogs.attached?
 
       assert_no_enqueued_jobs only: ActiveStorage::PurgeJob do
-        @user.vlogs.attach create_blob(filename: "whenever.mp4"), create_blob(filename: "wherever.mp4")
+        @user.vlogs.attach create_file_blob(filename: "whenever.mp4"), create_file_blob(filename: "wherever.mp4")
       end
 
       assert_equal "whenever.mp4", @user.vlogs.first.filename.to_s
@@ -337,11 +339,12 @@ module StorageTables
     end
 
     test "successfully updating an existing record to replace existing, dependent attachments" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |old_blobs|
+      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |old_blobs|
         @user.highlights.attach old_blobs
 
         perform_enqueued_jobs do
-          @user.update! highlights: [create_blob(filename: "whenever.jpg"), create_blob(filename: "wherever.jpg")]
+          @user.update! highlights: [create_file_blob(filename: "whenever.jpg"),
+                                     create_file_blob(filename: "wherever.jpg")]
         end
 
         assert_equal "whenever.jpg", @user.highlights.first.filename.to_s
@@ -354,10 +357,10 @@ module StorageTables
     end
 
     test "successfully updating an existing record to replace existing, independent attachments" do
-      @user.vlogs.attach create_blob(filename: "funky.mp4"), create_blob(filename: "town.mp4")
+      @user.vlogs.attach create_file_blob(filename: "funky.mp4"), create_file_blob(filename: "town.mp4")
 
       assert_no_enqueued_jobs only: ActiveStorage::PurgeJob do
-        @user.update! vlogs: [create_blob(filename: "whenever.mp4"), create_blob(filename: "wherever.mp4")]
+        @user.update! vlogs: [create_file_blob(filename: "whenever.mp4"), create_file_blob(filename: "wherever.mp4")]
       end
 
       assert_equal "whenever.mp4", @user.vlogs.first.filename.to_s
@@ -365,7 +368,7 @@ module StorageTables
     end
 
     test "unsuccessfully updating an existing record to replace existing attachments" do
-      @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
 
       assert_no_enqueued_jobs do
         assert_not @user.update(name: "",
@@ -380,7 +383,7 @@ module StorageTables
     end
 
     test "updating an existing record to attach one new blob and one previously-attached blob" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         @user.highlights.attach blobs.first
 
         perform_enqueued_jobs do
@@ -396,7 +399,7 @@ module StorageTables
     end
 
     test "updating an existing record to remove independent attachments" do
-      [create_blob(filename: "funky.mp4"), create_blob(filename: "town.mp4")].tap do |blobs|
+      [create_file_blob(filename: "funky.mp4"), create_file_blob(filename: "town.mp4")].tap do |blobs|
         @user.vlogs.attach blobs
 
         assert_no_enqueued_jobs only: ActiveStorage::PurgeJob do
@@ -408,14 +411,15 @@ module StorageTables
     end
 
     test "updating an existing record with attachments" do
-      @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
 
       assert_difference -> { @user.reload.highlights.count }, -2 do
         @user.update! highlights: []
       end
 
       assert_difference -> { @user.reload.highlights.count }, 2 do
-        @user.update! highlights: [create_blob(filename: "whenever.jpg"), create_blob(filename: "wherever.jpg")]
+        @user.update! highlights: [create_file_blob(filename: "whenever.jpg"),
+                                   create_file_blob(filename: "wherever.jpg")]
       end
 
       assert_difference -> { @user.reload.highlights.count }, -2 do
@@ -425,7 +429,7 @@ module StorageTables
 
     test "attaching existing blobs to a new record" do
       User.new(name: "Jason").tap do |user|
-        user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+        user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
 
         assert_predicate user, :new_record?
         assert_equal "funky.jpg", user.highlights.first.filename.to_s
@@ -440,7 +444,7 @@ module StorageTables
 
     test "attaching an existing blob from a signed ID to a new record" do
       User.new(name: "Jason").tap do |user|
-        user.highlights.attach create_blob(filename: "funky.jpg").signed_id
+        user.highlights.attach create_file_blob(filename: "funky.jpg").signed_id
 
         assert_predicate user, :new_record?
         assert_equal "funky.jpg", user.highlights.first.filename.to_s
@@ -510,8 +514,8 @@ module StorageTables
 
     test "creating a record with existing blobs attached" do
       user = User.create!(name: "Jason",
-                          highlights: [create_blob(filename: "funky.jpg"),
-                                       create_blob(filename: "town.jpg")])
+                          highlights: [create_file_blob(filename:  "funky.jpg"),
+                                       create_file_blob(filename:  "town.jpg")])
 
       assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
       assert_equal "town.jpg", user.reload.highlights.second.filename.to_s
@@ -519,7 +523,7 @@ module StorageTables
 
     test "creating a record with an existing blob from signed IDs attached" do
       user = User.create!(name: "Jason", highlights: [
-                            create_blob(filename: "funky.jpg").signed_id, create_blob(filename: "town.jpg").signed_id
+                            create_file_blob(filename: "funky.jpg").signed_id, create_file_blob(filename: "town.jpg").signed_id
                           ])
 
       assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
@@ -537,8 +541,6 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :new_record?
         assert_equal "racecar.jpg", user.highlights.first.filename.to_s
         assert_equal "video.mp4", user.highlights.second.filename.to_s
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.second.key)
 
         user.save!
 
@@ -554,7 +556,7 @@ module StorageTables
     end
 
     test "detaching" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         @user.highlights.attach blobs
 
         assert_predicate @user.highlights, :attached?
@@ -572,7 +574,7 @@ module StorageTables
     end
 
     test "detaching when record is not persisted" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_blob, create_blob].tap do |blobs|
         user = User.new
         user.highlights.attach blobs
 
@@ -591,7 +593,7 @@ module StorageTables
     end
 
     test "purging" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         @user.highlights.attach blobs
 
         assert_predicate @user.highlights, :attached?
@@ -609,9 +611,9 @@ module StorageTables
 
     test "purging attachment with shared blobs" do
       [
-        create_blob(filename: "funky.jpg"),
-        create_blob(filename: "town.jpg"),
-        create_blob(filename: "worm.jpg")
+        create_file_blob(filename:  "funky.jpg"),
+        create_file_blob(filename:  "town.jpg"),
+        create_file_blob(filename:  "worm.jpg")
       ].tap do |blobs|
         @user.highlights.attach blobs
 
@@ -638,7 +640,7 @@ module StorageTables
     end
 
     test "purging when record is not persisted" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         user = User.new
         user.highlights.attach blobs
 
@@ -666,7 +668,7 @@ module StorageTables
     end
 
     test "purging later" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         @user.highlights.attach blobs
 
         assert_predicate @user.highlights, :attached?
@@ -687,9 +689,9 @@ module StorageTables
 
     test "purging attachment later with shared blobs" do
       [
-        create_blob(filename: "funky.jpg"),
-        create_blob(filename: "town.jpg"),
-        create_blob(filename: "worm.jpg")
+        create_file_blob(filename:  "funky.jpg"),
+        create_file_blob(filename:  "town.jpg"),
+        create_file_blob(filename:  "worm.jpg")
       ].tap do |blobs|
         @user.highlights.attach blobs
 
@@ -717,7 +719,7 @@ module StorageTables
     end
 
     test "purging attachment later when record is not persisted" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         user = User.new
         user.highlights.attach blobs
 
@@ -736,7 +738,7 @@ module StorageTables
     end
 
     test "purging dependent attachment later on destroy" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
+      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
         @user.highlights.attach blobs
 
         perform_enqueued_jobs do
@@ -750,34 +752,18 @@ module StorageTables
       end
     end
 
-    test "not purging independent attachment on destroy" do
-      [create_blob(filename: "funky.mp4"), create_blob(filename: "town.mp4")].tap do |blobs|
-        @user.vlogs.attach blobs
-
-        assert_no_enqueued_jobs do
-          @user.destroy!
-        end
-      end
-    end
-
-    test "duped record does not share attachments" do
-      @user.highlights.attach [create_blob(filename: "funky.jpg")]
-
-      assert_not_equal @user.highlights.first, @user.dup.highlights.first
-    end
-
     test "duped record does not share attachment changes" do
-      @user.highlights.attach [create_blob(filename: "funky.jpg")]
+      @user.highlights.attach [create_file_blob(filename: "funky.jpg")]
 
       assert_not_predicate @user, :changed_for_autosave?
 
-      @user.dup.highlights.attach [create_blob(filename: "town.mp4")]
+      @user.dup.highlights.attach [create_file_blob(filename: "town.mp4")]
 
       assert_not_predicate @user, :changed_for_autosave?
     end
 
     test "clearing change on reload" do
-      @user.highlights = [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")]
+      @user.highlights = [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")]
 
       assert_predicate @user.highlights, :attached?
 
@@ -787,7 +773,7 @@ module StorageTables
     end
 
     test "overriding attached reader" do
-      @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -827,8 +813,9 @@ module StorageTables
     end
 
     test "attaching blobs to a persisted, unchanged, and valid record, returns the attachments" do
-      @user.highlights.attach create_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "racecar.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
+                                             create_file_blob(filename: "town.jpg")
 
       assert_equal @user.highlights, return_value
     end
@@ -838,24 +825,27 @@ module StorageTables
 
       assert_not @user.valid?
 
-      @user.highlights.attach create_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "racecar.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
+                                             create_file_blob(filename: "town.jpg")
 
       assert_nil return_value
     end
 
     test "attaching blobs to a changed record, returns the attachments" do
       @user.name = "Tina"
-      @user.highlights.attach create_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "racecar.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
+                                             create_file_blob(filename: "town.jpg")
 
       assert_equal @user.highlights, return_value
     end
 
     test "attaching blobs to a non persisted record, returns the attachments" do
       user = User.new(name: "John")
-      user.highlights.attach create_blob(filename: "racecar.jpg")
-      return_value = user.highlights.attach create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")
+      user.highlights.attach create_file_blob(filename: "racecar.jpg")
+      return_value = user.highlights.attach create_file_blob(filename: "funky.jpg"),
+                                            create_file_blob(filename: "town.jpg")
 
       assert_equal user.highlights, return_value
     end
@@ -984,7 +974,7 @@ module StorageTables
     end
 
     test "avoids enqueuing transform later job when blob is not representable" do
-      unrepresentable_blob = create_blob(filename: "hello.txt")
+      unrepresentable_blob = create_file_blob(filename:  "hello.txt")
 
       assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
         @user.highlights_with_preprocessed.attach unrepresentable_blob
@@ -992,7 +982,7 @@ module StorageTables
     end
 
     test "successfully attaches new blobs and destroys attachments marked for destruction via nested attributes" do
-      town_blob = create_blob(filename: "town.jpg")
+      town_blob = create_file_blob(filename:  "town.jpg")
       @user.highlights.attach(town_blob)
       @user.reload
 

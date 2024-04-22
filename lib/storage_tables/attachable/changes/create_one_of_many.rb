@@ -8,7 +8,7 @@ module StorageTables
         private
 
         def find_attachment
-          record.public_send(:"#{name}_storage_attachments").detect { |attachment| attachment.blob_id == blob.id }
+          record.public_send(:"#{name}_storage_attachments").detect { |attachment| attachment.blob == blob }
         end
       end
     end

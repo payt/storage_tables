@@ -8,7 +8,7 @@ module StorageTables
         private
 
         def build_subchange_from(attachable)
-          StorageTables::Attachable::Changes::CreateOneOfMany.new(name, record, attachable, filename)
+          StorageTables::Attachable::Changes::CreateOneOfMany.new(name, record, attachable)
         end
 
         def subchanges_without_blobs
