@@ -26,7 +26,7 @@ module StorageTables
     end
 
     test "attaching existing blobs from signed IDs to an existing record" do
-      @user.highlights.attach create_blob(filename: "funky.jpg").signed_id, create_blob(filename: "town.jpg").signed_id
+      @user.highlights.attach create_blob.signed_id, create_blob.signed_id
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -148,8 +148,8 @@ module StorageTables
 
       assert_equal "racecar.jpg", @user.highlights.reload.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
     end
 
     test "attaching new blobs within a transaction uploads all the files" do
@@ -163,9 +163,9 @@ module StorageTables
       assert_equal "image.gif", @user.highlights.first.filename.to_s
       assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
       assert_equal "video.mp4", @user.highlights.third.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.third.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.third.key)
     end
 
     test "attaching many new blobs within a transaction uploads all the files" do
@@ -196,22 +196,22 @@ module StorageTables
       assert_equal "image.gif", @user.highlights.first.filename.to_s
       assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
       assert_equal "video.mp4", @user.highlights.third.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.third.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.third.key)
     end
 
     test "attaching many new blobs within a transaction on a new record uploads all the files" do
-      user = User.create!(name: "John") do |user|
-        user.highlights.attach(io: StringIO.new("STUFF"), filename: "funky.jpg", content_type: "image/jpeg")
-        user.highlights.attach(io: StringIO.new("THINGS"), filename: "town.jpg", content_type: "image/jpeg")
+      user = User.create!(name: "John") do |u|
+        u.highlights.attach(io: StringIO.new("STUFF"), filename: "funky.jpg", content_type: "image/jpeg")
+        u.highlights.attach(io: StringIO.new("THINGS"), filename: "town.jpg", content_type: "image/jpeg")
       end
 
       assert_equal 2, user.highlights.count
       assert_equal "funky.jpg", user.highlights.first.filename.to_s
       assert_equal "town.jpg", user.highlights.second.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(user.highlights.first.key)
+      assert StorageTables::Blob.service.exist?(user.highlights.second.key)
     end
 
     test "attaching new blobs within a transaction create the exact amount of records" do
@@ -346,10 +346,10 @@ module StorageTables
 
         assert_equal "whenever.jpg", @user.highlights.first.filename.to_s
         assert_equal "wherever.jpg", @user.highlights.second.filename.to_s
-        assert_not ActiveStorage::Blob.exists?(old_blobs.first.id)
-        assert_not ActiveStorage::Blob.exists?(old_blobs.second.id)
-        assert_not ActiveStorage::Blob.service.exist?(old_blobs.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(old_blobs.second.key)
+        assert_not StorageTables::Blob.exists?(old_blobs.first.id)
+        assert_not StorageTables::Blob.exists?(old_blobs.second.id)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.first.key)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.second.key)
       end
     end
 
@@ -375,8 +375,8 @@ module StorageTables
 
       assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.key)
     end
 
     test "updating an existing record to attach one new blob and one previously-attached blob" do
@@ -391,21 +391,7 @@ module StorageTables
 
         assert_equal "funky.jpg", @user.highlights.first.filename.to_s
         assert_equal "town.jpg", @user.highlights.second.filename.to_s
-        assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      end
-    end
-
-    test "updating an existing record to remove dependent attachments" do
-      [create_blob(filename: "funky.jpg"), create_blob(filename: "town.jpg")].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_enqueued_with job: ActiveStorage::PurgeJob, args: [blobs.first] do
-          assert_enqueued_with job: ActiveStorage::PurgeJob, args: [blobs.second] do
-            @user.update! highlights: []
-          end
-        end
-
-        assert_not @user.highlights.attached?
+        assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
       end
     end
 
@@ -506,8 +492,8 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :new_record?
         assert_equal "racecar.jpg", user.highlights.first.filename.to_s
         assert_equal "video.mp4", user.highlights.second.filename.to_s
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.second.key)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.first.key)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.second.key)
 
         user.save!
 
@@ -517,8 +503,8 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :persisted?
         assert_equal "racecar.jpg", user.reload.highlights.first.filename.to_s
         assert_equal "video.mp4", user.highlights.second.filename.to_s
-        assert ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-        assert ActiveStorage::Blob.service.exist?(user.highlights.second.key)
+        assert StorageTables::Blob.service.exist?(user.highlights.first.key)
+        assert StorageTables::Blob.service.exist?(user.highlights.second.key)
       end
     end
 

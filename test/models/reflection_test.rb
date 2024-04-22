@@ -31,7 +31,7 @@ module StorageTables
       reflections = User.reflect_on_all_attachments.sort_by(&:name)
 
       assert_equal [User], reflections.collect(&:active_record).uniq
-      assert_equal [:avatar],
+      assert_equal [:avatar, :highlights],
                    reflections.collect(&:name)
       assert_equal [:stored_one_attachment],
                    reflections.collect(&:macro)

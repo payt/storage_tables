@@ -7,8 +7,10 @@ module StorageTables
   module Attachable
     # Create many attachments to a model.
     class Many < ActiveStorage::Attached::Many
+      include Changes::Helper
+
       def attach(*attachables)
-        record.public_send("#{name}=", blobs + attachables.flatten)
+        record.public_send(:"#{name}=", blobs + attachables.flatten)
         blobs.save! && upload(attachable)
 
         return if record.persisted? && !record.changed? && !record.save
@@ -26,6 +28,10 @@ module StorageTables
       # Returns all attached blobs.
       def blobs
         change.present? ? change.blobs : record.public_send(:"#{name}_storage_blobs")
+      end
+
+      def upload_many(attachables)
+        attachables.each { |attachable| upload(attachable) }
       end
     end
   end

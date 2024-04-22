@@ -16,11 +16,11 @@ module StorageTables
         end
 
         def assign_associated_attachments
-          record.public_send("#{name}_storage_attachments=", persisted_or_new_attachments)
+          record.public_send(:"#{name}_storage_attachments=", persisted_or_new_attachments)
         end
 
         def reset_associated_blobs
-          record.public_send("#{name}_storage_blobs").reset
+          record.public_send(:"#{name}_storage_blobs").reset
         end
       end
     end
