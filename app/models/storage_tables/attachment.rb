@@ -7,12 +7,27 @@ module StorageTables
 
     belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]
 
-    delegate :signed_id, to: :blob
+    delegate :byte_size, :content_type, to: :blob
 
     validates :filename, presence: true
 
     def download
-      association(:blob).klass.service.download("#{blob_key}#{checksum}==")
+      association(:blob).klass.service.download(full_checksum)
+    end
+
+    def path
+      association(:blob).klass.service.path_for(full_checksum)
+    end
+
+    def full_checksum
+      "#{blob_key}#{checksum}=="
+    end
+
+    # Returns an ActiveStorage::Filename instance of the filename that can be
+    # queried for basename, extension, and a sanitized version of the filename
+    # that's safe to use in URLs.
+    def filename
+      ActiveStorage::Filename.new(self[:filename])
     end
   end
 end

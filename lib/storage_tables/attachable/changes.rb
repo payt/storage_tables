@@ -6,9 +6,11 @@ module StorageTables
       extend ActiveSupport::Autoload
 
       eager_autoload do
+        autoload :Helper
         autoload :CreateOne
         autoload :CreateMany
         autoload :CreateOneOfMany
+        autoload :DeleteOne
       end
     end
   end

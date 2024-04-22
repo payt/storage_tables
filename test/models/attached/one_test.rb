@@ -29,6 +29,21 @@ module StorageTables
       assert_nothing_raised { @user.avatar.download }
     end
 
+    test "uploads the file when set through setter" do
+      @user.avatar = file_fixture("racecar.jpg")
+
+      assert_nothing_raised { @user.save! }
+      assert_equal "racecar.jpg", @user.avatar.filename.to_s
+    end
+
+    test "uploads the file when set through setter and set filename seperate" do
+      @user.avatar = file_fixture("racecar.jpg")
+      @user.avatar.filename = "racecar.jpg"
+
+      assert_nothing_raised { @user.save! }
+      assert_equal "racecar.jpg", @user.avatar.filename.to_s
+    end
+
     test "create a record with a ActiveStorage::Blob as attachable attribute" do
       blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("STUFF"), content_type: "avatar/jpeg",
                                                     filename: "town.jpg")
@@ -36,7 +51,7 @@ module StorageTables
       @user.avatar.attach blob
 
       assert_not_nil @user.avatar_storage_attachment
-      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
     test "creating a record with an attachment where already one exists" do
@@ -57,7 +72,7 @@ module StorageTables
       @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg" })
 
       assert_not_nil @user.avatar_storage_attachment
-      assert_equal "town.jpg", @user.avatar_storage_attachment.filename
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
     test "attaching StringIO attachable to an existing record" do
@@ -117,6 +132,16 @@ module StorageTables
       end
 
       assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
+    end
+
+    test "upload a file in a transaction" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        ActiveRecord::Base.transaction do
+          @user.avatar.attach create_blob, filename: "foo.txt"
+        end
+      end
+
+      assert_equal "Cannot upload a blob inside a transaction", error.message
     end
 
     test "attaching a new blob from an uploaded file to an existing record" do
