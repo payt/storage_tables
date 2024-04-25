@@ -42,6 +42,7 @@ module StorageTables
 
       assert_nothing_raised { @user.save! }
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
+      assert StorageTables::Blob.service.exist?(@user.avatar.full_checksum)
     end
 
     test "create a record with a ActiveStorage::Blob as attachable attribute" do

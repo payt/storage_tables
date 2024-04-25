@@ -94,6 +94,9 @@ module StorageTables
 
     def upload_without_unfurling(io)
       service.upload checksum, io, checksum:, **service_metadata
+    rescue StorageTables::ServiceError => e
+      destroy!
+      raise e
     end
 
     # Downloads the file associated with this blob. If no block is given,
