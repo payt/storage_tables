@@ -45,6 +45,17 @@ module StorageTables
       assert StorageTables::Blob.service.exist?(@user.avatar.full_checksum)
     end
 
+    test "when assigning a empty blob it cannot save" do
+      @user.avatar = Blob.new(byte_size: 0, checksum: Digest::MD5.base64digest(""))
+      @user.avatar.filename = "racecar.jpg"
+
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        @user.save!
+      end
+
+      assert_equal "File is not yet uploaded", error.message
+    end
+
     test "create a record with a ActiveStorage::Blob as attachable attribute" do
       blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("STUFF"), content_type: "avatar/jpeg",
                                                     filename: "town.jpg")
