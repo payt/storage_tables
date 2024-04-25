@@ -92,6 +92,8 @@ module StorageTables
       self.identified = true
     end
 
+    # Uploads the file associated with this blob to the service.
+    # When uploading fails the blob is deleted from the database, as it is not usable.
     def upload_without_unfurling(io)
       service.upload checksum, io, checksum:, **service_metadata
     rescue StorageTables::ServiceError => e
