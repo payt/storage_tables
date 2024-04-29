@@ -7,7 +7,7 @@ module StorageTables
         def save
           record.public_send(:"#{name}_storage_attachment")&.delete
           record.attachment_changes.delete(name)
-          record.public_send("#{name}_storage_attachment=", nil)
+          record.public_send(:"#{name}=", nil)
         end
       end
     end
