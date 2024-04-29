@@ -123,6 +123,17 @@ module StorageTables
       assert_not_predicate @user.avatar, :present?
     end
 
+    test "when attachment is set to nil an saved later" do
+      blob = create_blob(data: "NewData")
+      @user.avatar.attach(blob, filename: "test.txt")
+      @user.save!
+
+      @user.avatar = nil
+      @user.save!
+
+      assert_not_predicate @user.avatar, :present?
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)

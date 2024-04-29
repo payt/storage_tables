@@ -6,6 +6,8 @@ module StorageTables
       class DeleteOne < ActiveStorage::Attached::Changes::DeleteOne # :nodoc:
         def save
           record.public_send(:"#{name}_storage_attachment")&.delete
+          record.attachment_changes.delete(name)
+          record.public_send("#{name}_storage_attachment=", nil)
         end
       end
     end
