@@ -8,8 +8,6 @@ module StorageTables
           record.public_send(:"#{name}_storage_attachment")&.delete
           record.attachment_changes.delete(name)
           record.public_send(:"#{name}_storage_attachment=", nil)
-
-          binding.pry
         end
       end
     end
