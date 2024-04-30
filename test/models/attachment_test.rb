@@ -132,6 +132,7 @@ module StorageTables
       @user.save!
 
       assert_not_predicate @user.avatar, :present?
+      assert_nil @user.avatar.filename
     end
 
     private
