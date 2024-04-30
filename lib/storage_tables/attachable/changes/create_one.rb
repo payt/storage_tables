@@ -32,6 +32,7 @@ module StorageTables
 
           record.public_send(:"#{name}_storage_attachment=", attachment)
           record.public_send(:"#{name}_storage_blob=", blob)
+          binding.pry
           attachment.save! unless attachment.persisted?
           blob.save! unless blob.persisted?
         end
