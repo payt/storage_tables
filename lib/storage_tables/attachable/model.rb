@@ -23,7 +23,7 @@ module StorageTables
           end
 
           has_one :"#{name}_storage_attachment", class_name: class_name.to_s, inverse_of: :record,
-                                                 foreign_key: :record_id, autosave: true
+                                                 foreign_key: :record_id, dependent: :delete
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
@@ -31,7 +31,6 @@ module StorageTables
             includes("#{name}_storage_attachment": :blob)
           }
 
-          
           after_save { attachment_changes[name.to_s]&.save }
           after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s) }
 
