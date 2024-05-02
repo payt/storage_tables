@@ -30,6 +30,18 @@ module StorageTables
       end
     end
 
+    test "when changing the attachment, only one attachment is present" do
+      blob = create_blob
+      @user.avatar.attach(blob, filename: "test.txt")
+      new_blob = create_blob(data: "NewData")
+
+      assert_no_difference -> { StorageTables::UserAvatarAttachment.count } do
+        @user.avatar.attach(new_blob, filename: "test2.txt")
+      end
+      assert_equal @user.avatar.blob, new_blob
+      assert_equal "test2.txt", @user.avatar.filename.to_s
+    end
+
     test "when adding a new file without filename raises error" do
       blob = create_blob
       blob2 = create_blob(data: "NewData")

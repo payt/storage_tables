@@ -30,7 +30,8 @@ module StorageTables
             raise StorageTables::ActiveRecordError, "File is not yet uploaded"
           end
 
-          binding.pry
+          # Delete the old attachment if it exists
+          attachment.class.where(record:).where.not(checksum: attachment.checksum).delete_all
 
           record.public_send(:"#{name}_storage_attachment=", attachment)
           record.public_send(:"#{name}_storage_blob=", blob)
