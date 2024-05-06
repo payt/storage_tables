@@ -21,13 +21,15 @@ module StorageTables
     #   assert_equal blob, StorageTables::Blob.find_signed(signed_id)
     # end
 
-    test "when trying to upload same file twice, only one record is created" do
+    test "when trying to upload same file twice, only one blob is present and the filename is replaced" do
       blob = create_blob
       @user.avatar.attach(blob, filename: "test.txt")
 
       assert_no_difference -> { StorageTables::Blob.count } do
-        @user.avatar.attach(blob, filename: "test.txt")
+        @user.avatar.attach(blob, filename: "test2.txt")
       end
+
+      assert_equal "test2.txt", @user.avatar.filename.to_s
     end
 
     test "when changing the attachment, only one attachment is present" do
@@ -135,7 +137,7 @@ module StorageTables
       assert_not_predicate @user.avatar, :present?
     end
 
-    test "when attachment is set to nil an saved later" do
+    test "when attachment is set to nil and saved later" do
       blob = create_blob(data: "NewData")
       @user.avatar.attach(blob, filename: "test.txt")
       @user.save!

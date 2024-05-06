@@ -30,6 +30,9 @@ module StorageTables
             raise StorageTables::ActiveRecordError, "File is not yet uploaded"
           end
 
+          # Set the filename on the attachment
+          attachment.filename = filename
+
           # Delete the old attachment if it exists
           attachment.class.where(record:).where.not(checksum: attachment.checksum).delete_all
 
