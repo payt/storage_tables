@@ -23,7 +23,7 @@ module StorageTables
           end
 
           has_one :"#{name}_storage_attachment", class_name: class_name.to_s, inverse_of: :record,
-                                                 foreign_key: :record_id, dependent: :destroy
+                                                 foreign_key: :record_id
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
