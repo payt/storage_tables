@@ -6,13 +6,14 @@ require:
   - rubocop-packaging
 
 AllCops:
-  TargetRubyVersion: 2.7
-  TargetRailsVersion: 7.0
+  TargetRubyVersion: 3.2
+  TargetRailsVersion: 7.1
   NewCops: enable
   Exclude:
     - db/**/*
     - bin/**/*
     - vendor/**/*
+    - test/dummy/**/*
 
 Style/StringLiterals:
   Enabled: true
@@ -36,3 +37,35 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
+
+########### METRICS ###############
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Metrics/MethodLength:
+  CountAsOne:
+    - array
+    - hash
+    - heredoc
+  Max: 30
+
+## MINITEST
+Minitest/MultipleAssertions:
+  Max: 5
+
+## RAILS
+
+Rails/InverseOf:
+  Enabled: true
+  Exclude:
+    - app/models/storage_tables/attachment.rb

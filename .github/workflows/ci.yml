@@ -15,11 +15,11 @@ jobs:
         ports: ["5432:5432"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.4
+          ruby-version: 3.2.2
           bundler-cache: true
 
       - name: Setup database
@@ -44,15 +44,22 @@ jobs:
         run: |
           bundle exec rails test
 
+      - uses: actions/upload-artifact@v3
+        name: Upload coverage
+        if: failure()
+        with:
+          name: Coverage
+          path: coverage
+
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.4
+          ruby-version: 3.2.2
           bundler-cache: true
 
       - name: Run Rubocop
