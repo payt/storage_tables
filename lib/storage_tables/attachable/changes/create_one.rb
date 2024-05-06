@@ -27,11 +27,16 @@ module StorageTables
 
         def save
           unless StorageTables::Blob.service.exist?(attachment.full_checksum)
-            raise StorageTables::ActiveRecordError, "File is not yet uploaded"
+            raise StorageTables::ActiveRecordError,
+                  "No file exists with checksum #{attachment.full_checksum}, try uploading the file first. " \
+                  "Use the `attach` or `attachment=` method to upload the file."
           end
 
           # Set the filename on the attachment
           attachment.filename = filename
+
+          # Do not change anything if nothing has changed
+          return unless attachment.previous_changes.any? || attachment.changes.any?
 
           # Delete the old attachment if it exists
           attachment.class.where(record:).where.not(checksum: attachment.checksum).delete_all

@@ -3,6 +3,8 @@
 module StorageTables
   # Base attachment class for all attachments.
   class Attachment < ApplicationRecord
+    include ActiveModel::Dirty
+
     self.abstract_class = true
 
     belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]

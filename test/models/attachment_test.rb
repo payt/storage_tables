@@ -32,6 +32,17 @@ module StorageTables
       assert_equal "test2.txt", @user.avatar.filename.to_s
     end
 
+    test "when trying to upload same file twice, only one blob is present" do
+      blob = create_blob
+      @user.avatar.attach(blob, filename: "test.txt")
+
+      assert_no_difference -> { StorageTables::Blob.count } do
+        @user.avatar.attach(blob, filename: "test.txt")
+      end
+
+      assert_equal "test.txt", @user.avatar.filename.to_s
+    end
+
     test "when changing the attachment, only one attachment is present" do
       blob = create_blob
       @user.avatar.attach(blob, filename: "test.txt")
