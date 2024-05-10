@@ -32,17 +32,18 @@ module StorageTables
                   "Use the `attach` or `attachment=` method to upload the file."
           end
 
-          # Set the filename on the attachment
-          attachment.filename = filename
+          if attachment.persisted?
+            # Do not change anything if nothing has changed
+            return if attachment.filename == filename
 
-          # Do not change anything if nothing has changed
-          return unless attachment.previous_changes.any? || attachment.changes.any?
-
-          # Delete the old attachment if it exists
-          attachment.class.where(record:).where.not(checksum: attachment.checksum).delete_all
-
+            # Set the filename on the attachment
+            attachment.filename = filename
+          else
+            # Delete the old attachment if it exists
+            attachment.class.where(record:).delete_all
+            record.public_send(:"#{name}_storage_blob=", blob)
+          end
           record.public_send(:"#{name}_storage_attachment=", attachment)
-          record.public_send(:"#{name}_storage_blob=", blob)
         end
 
         private
