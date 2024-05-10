@@ -53,7 +53,9 @@ module StorageTables
         @user.save!
       end
 
-      assert_equal "File is not yet uploaded", error.message
+      assert_equal "No file exists with checksum 1B2M2Y8AsgTpgAmY7PhCfg==, try uploading the file first. " \
+                   "Use the `attach` or `attachment=` method to upload the file.",
+                   error.message
     end
 
     test "create a record with a ActiveStorage::Blob as attachable attribute" do

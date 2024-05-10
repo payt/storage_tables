@@ -21,13 +21,38 @@ module StorageTables
     #   assert_equal blob, StorageTables::Blob.find_signed(signed_id)
     # end
 
-    test "when trying to upload same file twice, only one record is created" do
+    test "when trying to upload same file twice, only one blob is present and the filename is replaced" do
+      blob = create_blob
+      @user.avatar.attach(blob, filename: "test.txt")
+
+      assert_no_difference -> { StorageTables::Blob.count } do
+        @user.avatar.attach(blob, filename: "test2.txt")
+      end
+
+      assert_equal "test2.txt", @user.avatar.filename.to_s
+    end
+
+    test "when trying to upload same file twice, only one blob is present" do
       blob = create_blob
       @user.avatar.attach(blob, filename: "test.txt")
 
       assert_no_difference -> { StorageTables::Blob.count } do
         @user.avatar.attach(blob, filename: "test.txt")
       end
+
+      assert_equal "test.txt", @user.avatar.filename.to_s
+    end
+
+    test "when changing the attachment, only one attachment is present" do
+      blob = create_blob
+      @user.avatar.attach(blob, filename: "test.txt")
+      new_blob = create_blob(data: "NewData")
+
+      assert_no_difference -> { StorageTables::UserAvatarAttachment.count } do
+        @user.avatar.attach(new_blob, filename: "test2.txt")
+      end
+      assert_equal @user.avatar.blob, new_blob
+      assert_equal "test2.txt", @user.avatar.filename.to_s
     end
 
     test "when adding a new file without filename raises error" do
@@ -121,6 +146,18 @@ module StorageTables
       @user.update!(avatar: nil)
 
       assert_not_predicate @user.avatar, :present?
+    end
+
+    test "when attachment is set to nil and saved later" do
+      blob = create_blob(data: "NewData")
+      @user.avatar.attach(blob, filename: "test.txt")
+      @user.save!
+
+      @user.avatar = nil
+      @user.save!
+
+      assert_not_predicate @user.avatar, :present?
+      assert_nil @user.avatar.filename
     end
 
     private
