@@ -137,7 +137,7 @@ module StorageTables
 
       expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
 
-      assert attachment.relative_path.end_with?(expected_path)
+      assert_equal attachment.relative_path, expected_path
     end
 
     test "set a attachment to nil" do
@@ -167,6 +167,18 @@ module StorageTables
 
       assert_not_predicate @user.avatar, :present?
       assert_nil @user.avatar.filename
+    end
+
+    test "when no checksum is present, path returns nil" do
+      assert_nil UserAvatarAttachment.new.path
+    end
+
+    test "when no checksum is present, relative_path returns nil" do
+      assert_nil UserAvatarAttachment.new.relative_path
+    end
+
+    test "when no checksum is present, download returns nil" do
+      assert_nil UserAvatarAttachment.new.relative_path
     end
 
     private
