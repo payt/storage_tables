@@ -169,16 +169,25 @@ module StorageTables
       assert_nil @user.avatar.filename
     end
 
-    test "when no checksum is present, path returns nil" do
-      assert_nil UserAvatarAttachment.new.path
+    test "when no checksum is present, path raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.path
+      end
+      assert_equal "blob is nil", error.message
     end
 
-    test "when no checksum is present, relative_path returns nil" do
-      assert_nil UserAvatarAttachment.new.relative_path
+    test "when no checksum is present, relative_path raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.relative_path
+      end
+      assert_equal "blob is nil", error.message
     end
 
-    test "when no checksum is present, download returns nil" do
-      assert_nil UserAvatarAttachment.new.download
+    test "when no checksum is present, download raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.download
+      end
+      assert_equal "blob is nil", error.message
     end
 
     private

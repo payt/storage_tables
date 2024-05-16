@@ -12,18 +12,20 @@ module StorageTables
     validates :filename, presence: true
 
     def download
-      association(:blob).klass.service.download(full_checksum) if checksum
+      association(:blob).klass.service.download(full_checksum)
     end
 
     def path
-      association(:blob).klass.service.path_for(full_checksum) if checksum
+      association(:blob).klass.service.path_for(full_checksum)
     end
 
     def relative_path
-      association(:blob).klass.service.relative_path_for(full_checksum) if checksum
+      association(:blob).klass.service.relative_path_for(full_checksum)
     end
 
     def full_checksum
+      raise StorageTables::ActiveRecordError, "blob is nil" unless checksum
+
       "#{blob_key}#{checksum}=="
     end
 
