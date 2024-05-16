@@ -131,6 +131,15 @@ module StorageTables
       assert attachment.path.end_with?(expected_path)
     end
 
+    test "can create a relative path from attachment without touching a blob" do
+      attachment = UserAvatarAttachment.new(checksum: "123456", blob_key: "a")
+      full_checksum = attachment.full_checksum
+
+      expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
+
+      assert_equal attachment.relative_path, expected_path
+    end
+
     test "set a attachment to nil" do
       blob = create_blob(data: "NewData")
 
@@ -158,6 +167,27 @@ module StorageTables
 
       assert_not_predicate @user.avatar, :present?
       assert_nil @user.avatar.filename
+    end
+
+    test "when no checksum is present, path raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.path
+      end
+      assert_equal "blob is nil", error.message
+    end
+
+    test "when no checksum is present, relative_path raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.relative_path
+      end
+      assert_equal "blob is nil", error.message
+    end
+
+    test "when no checksum is present, download raises an error" do
+      error = assert_raises(StorageTables::ActiveRecordError) do
+        UserAvatarAttachment.new.download
+      end
+      assert_equal "blob is nil", error.message
     end
 
     private
