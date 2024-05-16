@@ -178,7 +178,7 @@ module StorageTables
     end
 
     test "when no checksum is present, download returns nil" do
-      assert_nil UserAvatarAttachment.new.relative_path
+      assert_nil UserAvatarAttachment.new.download
     end
 
     private
