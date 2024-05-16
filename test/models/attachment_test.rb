@@ -131,6 +131,15 @@ module StorageTables
       assert attachment.path.end_with?(expected_path)
     end
 
+    test "can create a relative path from attachment without touching a blob" do
+      attachment = UserAvatarAttachment.new(checksum: "123456", blob_key: "a")
+      full_checksum = attachment.full_checksum
+
+      expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
+
+      assert attachment.relative_path.end_with?(expected_path)
+    end
+
     test "set a attachment to nil" do
       blob = create_blob(data: "NewData")
 

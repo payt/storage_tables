@@ -7,14 +7,20 @@ module StorageTables
     # Local disk storage service.
     class DiskService < ActiveStorage::Service::DiskService
       def path_for(checksum) # :nodoc:
-        # Replace the forward slash with an underscore
-        # Replace the plus sign with a minus sign
-        refactored_checksum = checksum.tr("/+", "_-")
+        File.join root, folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
+      end
 
-        File.join root, folder_for(refactored_checksum), refactored_checksum
+      def relative_path_for(checksum)
+        File.join folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
       end
 
       private
+
+      def refactored_checksum(checksum)
+        # Replace the forward slash with an underscore
+        # Replace the plus sign with a minus sign
+        checksum.tr("/+", "_-")
+      end
 
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"

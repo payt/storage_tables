@@ -19,6 +19,10 @@ module StorageTables
       association(:blob).klass.service.path_for(full_checksum)
     end
 
+    def relative_path
+      association(:blob).klass.service.relative_path_for(full_checksum)
+    end
+
     def full_checksum
       "#{blob_key}#{checksum}=="
     end
