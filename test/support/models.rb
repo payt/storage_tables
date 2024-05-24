@@ -17,6 +17,8 @@ module StorageTables
   end
 
   class UserPhotoAttachment < StorageTables::Attachment
+    self.primary_key = [:record_id, :blob_key, :checksum]
+
     belongs_to :record, class_name: "User", inverse_of: :highlights_storage_attachments
   end
 end

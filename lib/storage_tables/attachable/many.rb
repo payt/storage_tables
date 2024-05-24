@@ -10,8 +10,6 @@ module StorageTables
       include Changes::Helper
 
       def attach(*attachables)
-        binding.pry
-
         record.public_send(:"#{name}=", blobs + attachables)
         blobs.all?(&:save!) && upload_many
 

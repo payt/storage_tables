@@ -15,7 +15,6 @@ module StorageTables
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
 
-          binding.pry
           blob.identify_without_saving
         end
 

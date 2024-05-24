@@ -88,7 +88,7 @@ module StorageTables
       blob = directly_upload_file_blob(filename: "racecar.jpg", content_type: "application/octet-stream")
 
       assert_blob_identified_before_owner_validated(@user, blob, "image/jpeg") do
-        @user.highlights.attach(blob)
+        @user.highlights.attach([blob, "racecar.jpg"])
       end
     end
 
@@ -104,7 +104,7 @@ module StorageTables
       blob = directly_upload_file_blob(filename: "racecar.jpg")
 
       assert_blob_identified_outside_transaction(blob) do
-        @user.highlights.attach(blob)
+        @user.highlights.attach([blob, "racecar.jpg"])
       end
     end
 
