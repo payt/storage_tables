@@ -26,8 +26,24 @@ module StorageTables
         end
 
         def save
+          unless StorageTables::Blob.service.exist?(attachment.full_checksum)
+            raise StorageTables::ActiveRecordError,
+                  "No file exists with checksum #{attachment.full_checksum}, try uploading the file first. " \
+                  "Use the `attach` or `attachment=` method to upload the file."
+          end
+
+          if attachment.persisted?
+            # Do not change anything if nothing has changed
+            return if attachment.filename == filename
+
+            # Set the filename on the attachment
+            attachment.filename = filename
+          else
+            # Delete the old attachment if it exists
+            attachment.class.where(record:).delete_all
+            record.public_send(:"#{name}_storage_blob=", blob)
+          end
           record.public_send(:"#{name}_storage_attachment=", attachment)
-          record.public_send(:"#{name}_storage_blob=", blob)
         end
 
         private
@@ -55,25 +71,25 @@ module StorageTables
           when StorageTables::Blob
             attachable
           when ActionDispatch::Http::UploadedFile
-            StorageTables::Blob.build_after_unfurling(
+            StorageTables::Blob.create_and_upload!(
               io: attachable.open,
               content_type: attachable.content_type
             )
           when Rack::Test::UploadedFile
-            StorageTables::Blob.build_after_unfurling(
+            StorageTables::Blob.create_and_upload!(
               io: attachable.respond_to?(:open) ? attachable.open : attachable,
               content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.build_after_unfurling(**attachable.except(:filename))
+            StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
-            StorageTables::Blob.build_after_unfurling(io: attachable)
+            StorageTables::Blob.create_and_upload!(io: attachable)
           when Pathname
-            StorageTables::Blob.build_after_unfurling(io: attachable.open)
+            StorageTables::Blob.create_and_upload!(io: attachable.open)
           when ActiveStorage::Blob
-            StorageTables::Blob.build_after_unfurling(io: StringIO.new(attachable.download))
+            StorageTables::Blob.create_and_upload!(io: StringIO.new(attachable.download))
           else
             raise(
               ArgumentError,
