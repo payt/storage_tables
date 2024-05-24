@@ -20,7 +20,7 @@ module StorageTables
 
       # Returns all the associated attachment records.
       #
-      # All methods called on this proxy object that aren't listed here will automatically be delegated to +attachments+.
+      # All methods called on this proxy object that aren't listed here will automatically be delegated to attachments
       def attachments
         change.present? ? change.attachments : record.public_send(:"#{name}_storage_attachments")
       end

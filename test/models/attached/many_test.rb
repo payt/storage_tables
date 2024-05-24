@@ -12,7 +12,7 @@ module StorageTables
     end
 
     teardown do
-      ActiveStorage::Blob.all.each(&:delete)
+      ActiveStorage::Blob.all.find_each(&:delete)
     end
 
     test "attaching existing blobs to an existing record" do
@@ -489,7 +489,7 @@ module StorageTables
     end
 
     test "attaching blobs to a persisted, unchanged, and invalid record, returns nil" do
-      @user.update_attribute(:name, nil)
+      @user.update_attribute(:name, nil) # rubocop:disable Rails/SkipsModelValidations
 
       assert_not @user.valid?
 
