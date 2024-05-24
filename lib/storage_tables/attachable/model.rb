@@ -77,7 +77,6 @@ module StorageTables
             { class_name: },
             self
           )
-          yield reflection if block_given?
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
       end
