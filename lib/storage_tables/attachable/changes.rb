@@ -7,6 +7,7 @@ module StorageTables
 
       eager_autoload do
         autoload :Helper
+        autoload :ManyHelper
         autoload :CreateOne
         autoload :CreateMany
         autoload :CreateOneOfMany

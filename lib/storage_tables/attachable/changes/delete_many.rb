@@ -4,8 +4,10 @@ module StorageTables
   module Attachable
     module Changes
       class DeleteMany < ActiveStorage::Attached::Changes::DeleteMany # :nodoc:
+        include ManyHelper
+
         def save
-          klazz.where(klazz.primary_key => current_attachments.pluck(:record_id, :blob_key, :checksum)).delete_all
+          delete_old_attachments(current_attachments)
           record.attachment_changes.delete(name)
           record.public_send(:"#{name}_storage_attachments=", [])
         end
@@ -20,10 +22,6 @@ module StorageTables
 
         def blobs
           StorageTables::Blob.none
-        end
-
-        def klazz
-          current_attachments.first.class
         end
       end
     end

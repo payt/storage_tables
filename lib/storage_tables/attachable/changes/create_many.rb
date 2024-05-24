@@ -5,9 +5,11 @@ module StorageTables
     module Changes
       # Class used to create many attachments from an attachable blob.
       class CreateMany < Attached::Changes::CreateMany
+        include ManyHelper
+
         def save
           ActiveRecord::Base.transaction do
-            delete_old_attachments if removable_attachments.any?
+            delete_old_attachments(removable_attachments)
             super
           end
         end
@@ -28,18 +30,6 @@ module StorageTables
 
         def reset_associated_blobs
           record.public_send(:"#{name}_storage_blobs").reset
-        end
-
-        def original_attachments
-          record.public_send(:"#{name}_storage_attachments")
-        end
-
-        def delete_old_attachments
-          klazz.where(klazz.primary_key => removable_attachments.pluck(:record_id, :blob_key, :checksum)).delete_all
-        end
-
-        def klazz
-          original_attachments.first.class
         end
 
         def removable_attachments
