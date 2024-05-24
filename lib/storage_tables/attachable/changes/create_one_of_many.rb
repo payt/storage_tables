@@ -5,6 +5,15 @@ module StorageTables
     module Changes
       # Class used to create one attachment for a one-of-many association.
       class CreateOneOfMany < Attachable::Changes::CreateOne
+        def initialize(name, record, attachable)
+          if attachable.is_a?(Array)
+            extracted_attachable = attachable.first
+            extracted_filename = attachable.second
+          end
+
+          super(name, record, extracted_attachable || attachable, extracted_filename)
+        end
+
         private
 
         def find_attachment

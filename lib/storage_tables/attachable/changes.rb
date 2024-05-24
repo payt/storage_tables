@@ -11,6 +11,7 @@ module StorageTables
         autoload :CreateMany
         autoload :CreateOneOfMany
         autoload :DeleteOne
+        autoload :DeleteMany
       end
     end
   end

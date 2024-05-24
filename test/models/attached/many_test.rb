@@ -54,18 +54,18 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "image.gif"), create_file_blob(filename: "report.pdf")
 
-      assert_equal "funky.jpg", @user.highlights.first.filename.to_s
-      assert_equal "town.jpg", @user.highlights.second.filename.to_s
+      assert_equal "image.gif", @user.highlights.first.filename.to_s
+      assert_equal "report.pdf", @user.highlights.second.filename.to_s
       assert_not @user.highlights.first.persisted?
       assert_not @user.highlights.second.persisted?
       assert_predicate @user, :will_save_change_to_name?
 
       @user.save!
 
-      assert_equal "funky.jpg", @user.highlights.reload.first.filename.to_s
-      assert_equal "town.jpg", @user.highlights.second.filename.to_s
+      assert_equal "image.gif", @user.highlights.reload.first.filename.to_s
+      assert_equal "report.pdf", @user.highlights.second.filename.to_s
     end
 
     test "attaching existing blobs from signed IDs to an existing, changed record" do
@@ -73,19 +73,19 @@ module StorageTables
 
       assert_predicate @user, :changed?
 
-      @user.highlights.attach create_file_blob(filename: "funky.jpg").signed_id,
-                              create_file_blob(filename: "town.jpg").signed_id
+      @user.highlights.attach create_file_blob(filename: "image.gif").signed_id,
+                              create_file_blob(filename: "report.pdf").signed_id
 
-      assert_equal "funky.jpg", @user.highlights.first.filename.to_s
-      assert_equal "town.jpg", @user.highlights.second.filename.to_s
+      assert_equal "image.gif", @user.highlights.first.filename.to_s
+      assert_equal "report.pdf", @user.highlights.second.filename.to_s
       assert_not @user.highlights.first.persisted?
       assert_not @user.highlights.second.persisted?
       assert_predicate @user, :will_save_change_to_name?
 
       @user.save!
 
-      assert_equal "funky.jpg", @user.highlights.reload.first.filename.to_s
-      assert_equal "town.jpg", @user.highlights.second.filename.to_s
+      assert_equal "image.gif", @user.highlights.reload.first.filename.to_s
+      assert_equal "report.pdf", @user.highlights.second.filename.to_s
     end
 
     test "attaching new blobs from Hashes to an existing, changed record" do
@@ -142,64 +142,56 @@ module StorageTables
       assert_not @user.highlights.first.persisted?
       assert_not @user.highlights.second.persisted?
       assert_predicate @user, :will_save_change_to_name?
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
 
       @user.save!
 
       assert_equal "racecar.jpg", @user.highlights.reload.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
-      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
     end
 
     test "attaching new blobs within a transaction uploads all the files" do
       @user.highlights.attach fixture_file_upload("image.gif")
-
-      ActiveRecord::Base.transaction do
-        @user.highlights.attach fixture_file_upload("racecar.jpg")
-        @user.highlights.attach fixture_file_upload("video.mp4")
-      end
+      @user.highlights.attach fixture_file_upload("racecar.jpg")
+      @user.highlights.attach fixture_file_upload("video.mp4")
 
       assert_equal "image.gif", @user.highlights.first.filename.to_s
       assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
       assert_equal "video.mp4", @user.highlights.third.filename.to_s
-      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
-      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
-      assert StorageTables::Blob.service.exist?(@user.highlights.third.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.third.full_checksum)
     end
 
     test "attaching many new blobs within a transaction uploads all the files" do
-      ActiveRecord::Base.transaction do
-        @user.highlights.attach [fixture_file_upload("image.gif"), fixture_file_upload("racecar.jpg")]
-        @user.highlights.attach fixture_file_upload("video.mp4")
-      end
+      @user.highlights.attach [fixture_file_upload("image.gif"), fixture_file_upload("racecar.jpg")]
+      @user.highlights.attach fixture_file_upload("video.mp4")
 
       assert_equal "image.gif", @user.highlights.first.filename.to_s
       assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
       assert_equal "video.mp4", @user.highlights.third.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.third.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.third.full_checksum)
     end
 
     test "attaching many new blobs within a transaction on a dirty record uploads all the files" do
       @user.name = "Tina"
 
-      ActiveRecord::Base.transaction do
-        @user.highlights.attach fixture_file_upload("image.gif")
-        @user.highlights.attach fixture_file_upload("racecar.jpg")
-      end
-
+      @user.highlights.attach fixture_file_upload("image.gif")
+      @user.highlights.attach fixture_file_upload("racecar.jpg")
       @user.highlights.attach fixture_file_upload("video.mp4")
       @user.save
 
       assert_equal "image.gif", @user.highlights.first.filename.to_s
       assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
       assert_equal "video.mp4", @user.highlights.third.filename.to_s
-      assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
-      assert StorageTables::Blob.service.exist?(@user.highlights.second.key)
-      assert StorageTables::Blob.service.exist?(@user.highlights.third.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.third.full_checksum)
     end
 
     test "attaching many new blobs within a transaction on a new record uploads all the files" do
@@ -211,8 +203,8 @@ module StorageTables
       assert_equal 2, user.highlights.count
       assert_equal "funky.jpg", user.highlights.first.filename.to_s
       assert_equal "town.jpg", user.highlights.second.filename.to_s
-      assert StorageTables::Blob.service.exist?(user.highlights.first.key)
-      assert StorageTables::Blob.service.exist?(user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(user.highlights.second.full_checksum)
     end
 
     test "attaching new blobs within a transaction create the exact amount of records" do
@@ -226,13 +218,13 @@ module StorageTables
       assert_equal 2, @user.highlights.count
       assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
     end
 
     test "attaching existing blobs to an existing record one at a time" do
-      @user.highlights.attach create_file_blob(filename:  "funky.jpg")
-      @user.highlights.attach create_file_blob(filename:  "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "image.gif")
+      @user.highlights.attach create_file_blob(filename: "report.pdf")
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -251,8 +243,8 @@ module StorageTables
     end
 
     test "updating an existing record to attach existing blobs from signed IDs" do
-      @user.update! highlights: [create_file_blob(filename:  "funky.jpg").signed_id,
-                                 create_file_blob(filename:  "town.jpg").signed_id]
+      @user.update! highlights: [create_file_blob(filename: "image.gif").signed_id,
+                                 create_file_blob(filename: "report.pdf").signed_id]
 
       assert_equal "funky.jpg", @user.highlights.first.filename.to_s
       assert_equal "town.jpg", @user.highlights.second.filename.to_s
@@ -263,13 +255,13 @@ module StorageTables
 
       assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
 
       @user.save!
 
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
     end
 
     test "unsuccessfully updating an existing record to attach new blobs from uploaded files" do
@@ -278,8 +270,8 @@ module StorageTables
                                            fixture_file_upload("video.mp4")])
       assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.first.key)
-      assert_not ActiveStorage::Blob.service.exist?(@user.highlights.second.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
     end
 
     test "replacing existing, dependent attachments on an existing record via assign and attach" do
@@ -299,8 +291,8 @@ module StorageTables
         assert_equal "wherever.jpg", @user.highlights.second.filename.to_s
         assert_not ActiveStorage::Blob.exists?(old_blobs.first.id)
         assert_not ActiveStorage::Blob.exists?(old_blobs.second.id)
-        assert_not ActiveStorage::Blob.service.exist?(old_blobs.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(old_blobs.second.key)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.first.full_checksum)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.second.full_checksum)
       end
     end
 
@@ -339,7 +331,7 @@ module StorageTables
     end
 
     test "successfully updating an existing record to replace existing, dependent attachments" do
-      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |old_blobs|
+      [create_file_blob(filename: "image.gif"), create_file_blob(filename: "town.jpg")].tap do |old_blobs|
         @user.highlights.attach old_blobs
 
         perform_enqueued_jobs do
@@ -351,20 +343,20 @@ module StorageTables
         assert_equal "wherever.jpg", @user.highlights.second.filename.to_s
         assert_not StorageTables::Blob.exists?(old_blobs.first.id)
         assert_not StorageTables::Blob.exists?(old_blobs.second.id)
-        assert_not StorageTables::Blob.service.exist?(old_blobs.first.key)
-        assert_not StorageTables::Blob.service.exist?(old_blobs.second.key)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.first.full_checksum)
+        assert_not StorageTables::Blob.service.exist?(old_blobs.second.full_checksum)
       end
     end
 
     test "successfully updating an existing record to replace existing, independent attachments" do
-      @user.vlogs.attach create_file_blob(filename: "funky.mp4"), create_file_blob(filename: "town.mp4")
+      @user.highlights.attach [create_file_blob(filename: "video.mp4"), "video.mp4"],
+                              [create_file_blob(filename: "racecar.jpg"), "racecar.jpg"]
 
-      assert_no_enqueued_jobs only: ActiveStorage::PurgeJob do
-        @user.update! vlogs: [create_file_blob(filename: "whenever.mp4"), create_file_blob(filename: "wherever.mp4")]
-      end
+      @user.update! highlights: [[create_file_blob(filename: "image.gif"), "image.gif"],
+                                 [create_file_blob(filename: "report.pdf"), "report.pdf"]]
 
-      assert_equal "whenever.mp4", @user.vlogs.first.filename.to_s
-      assert_equal "wherever.mp4", @user.vlogs.second.filename.to_s
+      assert_equal "report.pdf", @user.highlights.first.filename.to_s
+      assert_equal "image.gif", @user.highlights.second.filename.to_s
     end
 
     test "unsuccessfully updating an existing record to replace existing attachments" do
@@ -378,8 +370,8 @@ module StorageTables
 
       assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
       assert_equal "video.mp4", @user.highlights.second.filename.to_s
-      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.key)
-      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.key)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
+      assert_not StorageTables::Blob.service.exist?(@user.highlights.second.full_checksum)
     end
 
     test "updating an existing record to attach one new blob and one previously-attached blob" do
@@ -394,7 +386,7 @@ module StorageTables
 
         assert_equal "funky.jpg", @user.highlights.first.filename.to_s
         assert_equal "town.jpg", @user.highlights.second.filename.to_s
-        assert StorageTables::Blob.service.exist?(@user.highlights.first.key)
+        assert StorageTables::Blob.service.exist?(@user.highlights.first.full_checksum)
       end
     end
 
@@ -429,7 +421,7 @@ module StorageTables
 
     test "attaching existing blobs to a new record" do
       User.new(name: "Jason").tap do |user|
-        user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
+        user.highlights.attach create_file_blob(filename: "racecar.jpg"), create_file_blob(filename: "image.gif")
 
         assert_predicate user, :new_record?
         assert_equal "funky.jpg", user.highlights.first.filename.to_s
@@ -444,14 +436,14 @@ module StorageTables
 
     test "attaching an existing blob from a signed ID to a new record" do
       User.new(name: "Jason").tap do |user|
-        user.highlights.attach create_file_blob(filename: "funky.jpg").signed_id
+        user.highlights.attach create_file_blob(filename: "racecar.jpg").signed_id
 
         assert_predicate user, :new_record?
-        assert_equal "funky.jpg", user.highlights.first.filename.to_s
+        assert_equal "racecar.jpg", user.highlights.first.filename.to_s
 
         user.save!
 
-        assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
+        assert_equal "racecar.jpg", user.reload.highlights.first.filename.to_s
       end
     end
 
@@ -469,8 +461,8 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :new_record?
         assert_equal "funky.jpg", user.highlights.first.filename.to_s
         assert_equal "town.jpg", user.highlights.second.filename.to_s
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(user.highlights.second.key)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.first.full_checksum)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.second.full_checksum)
 
         user.save!
 
@@ -480,8 +472,8 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :persisted?
         assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
         assert_equal "town.jpg", user.highlights.second.filename.to_s
-        assert ActiveStorage::Blob.service.exist?(user.highlights.first.key)
-        assert ActiveStorage::Blob.service.exist?(user.highlights.second.key)
+        assert StorageTables::Blob.service.exist?(user.highlights.first.full_checksum)
+        assert StorageTables::Blob.service.exist?(user.highlights.second.full_checksum)
       end
     end
 
@@ -496,8 +488,8 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :new_record?
         assert_equal "racecar.jpg", user.highlights.first.filename.to_s
         assert_equal "video.mp4", user.highlights.second.filename.to_s
-        assert_not StorageTables::Blob.service.exist?(user.highlights.first.key)
-        assert_not StorageTables::Blob.service.exist?(user.highlights.second.key)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.first.full_checksum)
+        assert_not StorageTables::Blob.service.exist?(user.highlights.second.full_checksum)
 
         user.save!
 
@@ -507,15 +499,15 @@ module StorageTables
         assert_predicate user.highlights.second.blob, :persisted?
         assert_equal "racecar.jpg", user.reload.highlights.first.filename.to_s
         assert_equal "video.mp4", user.highlights.second.filename.to_s
-        assert StorageTables::Blob.service.exist?(user.highlights.first.key)
-        assert StorageTables::Blob.service.exist?(user.highlights.second.key)
+        assert StorageTables::Blob.service.exist?(user.highlights.first.full_checksum)
+        assert StorageTables::Blob.service.exist?(user.highlights.second.full_checksum)
       end
     end
 
     test "creating a record with existing blobs attached" do
       user = User.create!(name: "Jason",
-                          highlights: [create_file_blob(filename:  "funky.jpg"),
-                                       create_file_blob(filename:  "town.jpg")])
+                          highlights: [create_file_blob(filename: "image.gif"),
+                                       create_file_blob(filename: "report.pdf")])
 
       assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
       assert_equal "town.jpg", user.reload.highlights.second.filename.to_s
@@ -523,17 +515,18 @@ module StorageTables
 
     test "creating a record with an existing blob from signed IDs attached" do
       user = User.create!(name: "Jason", highlights: [
-                            create_file_blob(filename: "funky.jpg").signed_id, create_file_blob(filename: "town.jpg").signed_id
+                            [create_file_blob(filename: "image.gif").signed_id,
+                             "image.gif"], [create_file_blob(filename: "report.pdf").signed_id, "report.pdf"]
                           ])
 
-      assert_equal "funky.jpg", user.reload.highlights.first.filename.to_s
-      assert_equal "town.jpg", user.reload.highlights.second.filename.to_s
+      assert_equal "report.pdf", user.reload.highlights.first.filename.to_s
+      assert_equal "image.gif", user.reload.highlights.second.filename.to_s
     end
 
     test "creating a record with new blobs from uploaded files attached" do
       User.new(name: "Jason",
-               highlights: [fixture_file_upload("racecar.jpg"),
-                            fixture_file_upload("video.mp4")]).tap do |user|
+               highlights: [[fixture_file_upload("racecar.jpg")],
+                            [fixture_file_upload("video.mp4"), "video.mp4"]]).tap do |user|
         assert_predicate user, :new_record?
         assert_predicate user.highlights.first, :new_record?
         assert_predicate user.highlights.second, :new_record?
@@ -555,205 +548,8 @@ module StorageTables
       assert_equal "Could not find or build blob: expected attachable, got :foo", error.message
     end
 
-    test "detaching" do
-      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_predicate @user.highlights, :attached?
-
-        perform_enqueued_jobs do
-          @user.highlights.detach
-        end
-
-        assert_not @user.highlights.attached?
-        assert ActiveStorage::Blob.exists?(blobs.first.id)
-        assert ActiveStorage::Blob.exists?(blobs.second.id)
-        assert ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.second.key)
-      end
-    end
-
-    test "detaching when record is not persisted" do
-      [create_blob, create_blob].tap do |blobs|
-        user = User.new
-        user.highlights.attach blobs
-
-        assert_predicate user.highlights, :attached?
-
-        perform_enqueued_jobs do
-          user.highlights.detach
-        end
-
-        assert_not user.highlights.attached?
-        assert ActiveStorage::Blob.exists?(blobs.first.id)
-        assert ActiveStorage::Blob.exists?(blobs.second.id)
-        assert ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.second.key)
-      end
-    end
-
-    test "purging" do
-      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_predicate @user.highlights, :attached?
-
-        assert_changes -> { @user.updated_at } do
-          @user.highlights.purge
-        end
-        assert_not @user.highlights.attached?
-        assert_not ActiveStorage::Blob.exists?(blobs.first.id)
-        assert_not ActiveStorage::Blob.exists?(blobs.second.id)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.second.key)
-      end
-    end
-
-    test "purging attachment with shared blobs" do
-      [
-        create_file_blob(filename:  "funky.jpg"),
-        create_file_blob(filename:  "town.jpg"),
-        create_file_blob(filename:  "worm.jpg")
-      ].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_predicate @user.highlights, :attached?
-
-        another_user = User.create!(name: "John")
-        shared_blobs = [blobs.second, blobs.third]
-        another_user.highlights.attach shared_blobs
-
-        assert_predicate another_user.highlights, :attached?
-
-        @user.highlights.purge
-
-        assert_not @user.highlights.attached?
-
-        assert_not ActiveStorage::Blob.exists?(blobs.first.id)
-        assert ActiveStorage::Blob.exists?(blobs.second.id)
-        assert ActiveStorage::Blob.exists?(blobs.third.id)
-
-        assert_not ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.second.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.third.key)
-      end
-    end
-
-    test "purging when record is not persisted" do
-      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        user = User.new
-        user.highlights.attach blobs
-
-        assert_predicate user.highlights, :attached?
-
-        attachments = user.highlights.attachments
-        user.highlights.purge
-
-        assert_not user.highlights.attached?
-        assert attachments.all?(&:destroyed?)
-        blobs.each do |blob|
-          assert_not ActiveStorage::Blob.exists?(blob.id)
-          assert_not ActiveStorage::Blob.service.exist?(blob.key)
-        end
-      end
-    end
-
-    test "purging delete changes when record is not persisted" do
-      user = User.new
-      user.highlights = []
-
-      user.highlights.purge
-
-      assert_nil user.attachment_changes["highlights"]
-    end
-
-    test "purging later" do
-      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_predicate @user.highlights, :attached?
-
-        perform_enqueued_jobs do
-          assert_changes -> { @user.updated_at } do
-            @user.highlights.purge_later
-          end
-        end
-
-        assert_not @user.highlights.attached?
-        assert_not ActiveStorage::Blob.exists?(blobs.first.id)
-        assert_not ActiveStorage::Blob.exists?(blobs.second.id)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.second.key)
-      end
-    end
-
-    test "purging attachment later with shared blobs" do
-      [
-        create_file_blob(filename:  "funky.jpg"),
-        create_file_blob(filename:  "town.jpg"),
-        create_file_blob(filename:  "worm.jpg")
-      ].tap do |blobs|
-        @user.highlights.attach blobs
-
-        assert_predicate @user.highlights, :attached?
-
-        another_user = User.create!(name: "John")
-        shared_blobs = [blobs.second, blobs.third]
-        another_user.highlights.attach shared_blobs
-
-        assert_predicate another_user.highlights, :attached?
-
-        perform_enqueued_jobs do
-          @user.highlights.purge_later
-        end
-
-        assert_not @user.highlights.attached?
-        assert_not ActiveStorage::Blob.exists?(blobs.first.id)
-        assert ActiveStorage::Blob.exists?(blobs.second.id)
-        assert ActiveStorage::Blob.exists?(blobs.third.id)
-
-        assert_not ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.second.key)
-        assert ActiveStorage::Blob.service.exist?(blobs.third.key)
-      end
-    end
-
-    test "purging attachment later when record is not persisted" do
-      [create_file_blob(filename:  "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        user = User.new
-        user.highlights.attach blobs
-
-        assert_predicate user.highlights, :attached?
-
-        perform_enqueued_jobs do
-          user.highlights.purge_later
-        end
-
-        assert_not user.highlights.attached?
-        blobs.each do |blob|
-          assert_not ActiveStorage::Blob.exists?(blob.id)
-          assert_not ActiveStorage::Blob.service.exist?(blob.key)
-        end
-      end
-    end
-
-    test "purging dependent attachment later on destroy" do
-      [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")].tap do |blobs|
-        @user.highlights.attach blobs
-
-        perform_enqueued_jobs do
-          @user.destroy!
-        end
-
-        assert_not ActiveStorage::Blob.exists?(blobs.first.id)
-        assert_not ActiveStorage::Blob.exists?(blobs.second.id)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.first.key)
-        assert_not ActiveStorage::Blob.service.exist?(blobs.second.key)
-      end
-    end
-
     test "duped record does not share attachment changes" do
-      @user.highlights.attach [create_file_blob(filename: "funky.jpg")]
+      @user.highlights.attach [create_file_blob(filename: "image.gif")]
 
       assert_not_predicate @user, :changed_for_autosave?
 
@@ -763,7 +559,7 @@ module StorageTables
     end
 
     test "clearing change on reload" do
-      @user.highlights = [create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")]
+      @user.highlights = [create_file_blob(filename: "image.gif"), create_file_blob(filename: "racecar.jpg")]
 
       assert_predicate @user.highlights, :attached?
 
@@ -773,10 +569,10 @@ module StorageTables
     end
 
     test "overriding attached reader" do
-      @user.highlights.attach create_file_blob(filename: "funky.jpg"), create_file_blob(filename: "town.jpg")
+      @user.highlights.attach create_file_blob(filename: "image.gif"), create_file_blob(filename: "racecar.jpg")
 
-      assert_equal "funky.jpg", @user.highlights.first.filename.to_s
-      assert_equal "town.jpg", @user.highlights.second.filename.to_s
+      assert_equal "image.gif", @user.highlights.first.filename.to_s
+      assert_equal "racecar.jpg", @user.highlights.second.filename.to_s
 
       begin
         User.class_eval do
@@ -785,8 +581,8 @@ module StorageTables
           end
         end
 
-        assert_equal "town.jpg", @user.highlights.first.filename.to_s
-        assert_equal "funky.jpg", @user.highlights.second.filename.to_s
+        assert_equal "racecar.jpg", @user.highlights.first.filename.to_s
+        assert_equal "image.gif", @user.highlights.second.filename.to_s
       ensure
         User.remove_method :highlights
       end
@@ -802,20 +598,10 @@ module StorageTables
       end
     end
 
-    test "attaching a new blob from an uploaded file with a custom service" do
-      with_service("mirror") do
-        @user.highlights.attach fixture_file_upload("racecar.jpg")
-        @user.vlogs.attach fixture_file_upload("racecar.jpg")
-
-        assert_instance_of ActiveStorage::Service::MirrorService, @user.highlights.first.service
-        assert_instance_of ActiveStorage::Service::DiskService, @user.vlogs.first.service
-      end
-    end
-
     test "attaching blobs to a persisted, unchanged, and valid record, returns the attachments" do
       @user.highlights.attach create_file_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
-                                             create_file_blob(filename: "town.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "image.gif"),
+                                             create_file_blob(filename: "report.pdf")
 
       assert_equal @user.highlights, return_value
     end
@@ -826,8 +612,8 @@ module StorageTables
       assert_not @user.valid?
 
       @user.highlights.attach create_file_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
-                                             create_file_blob(filename: "town.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "image.gif"),
+                                             create_file_blob(filename: "report.pdf")
 
       assert_nil return_value
     end
@@ -835,8 +621,8 @@ module StorageTables
     test "attaching blobs to a changed record, returns the attachments" do
       @user.name = "Tina"
       @user.highlights.attach create_file_blob(filename: "racecar.jpg")
-      return_value = @user.highlights.attach create_file_blob(filename: "funky.jpg"),
-                                             create_file_blob(filename: "town.jpg")
+      return_value = @user.highlights.attach create_file_blob(filename: "image.gif"),
+                                             create_file_blob(filename: "report.pdf")
 
       assert_equal @user.highlights, return_value
     end
@@ -844,145 +630,121 @@ module StorageTables
     test "attaching blobs to a non persisted record, returns the attachments" do
       user = User.new(name: "John")
       user.highlights.attach create_file_blob(filename: "racecar.jpg")
-      return_value = user.highlights.attach create_file_blob(filename: "funky.jpg"),
-                                            create_file_blob(filename: "town.jpg")
+      return_value = user.highlights.attach create_file_blob(filename: "image.gif"),
+                                            create_file_blob(filename: "report.pdf")
 
       assert_equal user.highlights, return_value
     end
 
-    test "raises error when global service configuration is missing" do
-      Rails.configuration.active_storage.stub(:service, nil) do
-        error = assert_raises RuntimeError do
-          User.class_eval do
-            has_many_attached :featured_photos
-          end
-        end
+    # test "creating variation by variation name" do
+    #   assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
+    #     @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
+    #   end
+    #   variant = @user.highlights_with_variants.first.variant(:thumb).processed
 
-        assert_match(
-          %r{Missing Active Storage service name. Specify Active Storage service name for config.active_storage.service in config/environments/test.rb}, error.message
-        )
-      end
-    end
+    #   image = read_image(variant)
 
-    test "raises error when misconfigured service is passed" do
-      error = assert_raises ArgumentError do
-        User.class_eval do
-          has_many_attached :featured_photos, service: :unknown
-        end
-      end
+    #   assert_equal "JPEG", image.type
+    #   assert_equal 100, image.width
+    #   assert_equal 67, image.height
+    # end
 
-      assert_match(/Cannot configure service :unknown for User#featured_photos/, error.message)
-    end
+    # test "raises error when unknown variant name is used to generate variant" do
+    #   @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
 
-    test "creating variation by variation name" do
-      assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
-        @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
-      end
-      variant = @user.highlights_with_variants.first.variant(:thumb).processed
+    #   error = assert_raises ArgumentError do
+    #     @user.highlights_with_variants.first.variant(:unknown).processed
+    #   end
 
-      image = read_image(variant)
+    #   assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
+    # end
 
-      assert_equal "JPEG", image.type
-      assert_equal 100, image.width
-      assert_equal 67, image.height
-    end
+    # test "creating preview by variation name" do
+    #   @user.highlights_with_variants.attach fixture_file_upload("report.pdf")
+    #   preview = @user.highlights_with_variants.first.preview(:thumb).processed
 
-    test "raises error when unknown variant name is used to generate variant" do
-      @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
+    #   image = read_image(preview.send(:variant))
 
-      error = assert_raises ArgumentError do
-        @user.highlights_with_variants.first.variant(:unknown).processed
-      end
+    #   assert_equal "PNG", image.type
+    #   assert_equal 77, image.width
+    #   assert_equal 100, image.height
+    # end
 
-      assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
-    end
+    # test "raises error when unknown variant name is used to generate preview" do
+    #   @user.highlights_with_variants.attach fixture_file_upload("report.pdf")
 
-    test "creating preview by variation name" do
-      @user.highlights_with_variants.attach fixture_file_upload("report.pdf")
-      preview = @user.highlights_with_variants.first.preview(:thumb).processed
+    #   error = assert_raises ArgumentError do
+    #     @user.highlights_with_variants.first.preview(:unknown).processed
+    #   end
 
-      image = read_image(preview.send(:variant))
+    #   assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
+    # end
 
-      assert_equal "PNG", image.type
-      assert_equal 77, image.width
-      assert_equal 100, image.height
-    end
+    # test "creating representation by variation name" do
+    #   @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
+    #   variant = @user.highlights_with_variants.first.representation(:thumb).processed
 
-    test "raises error when unknown variant name is used to generate preview" do
-      @user.highlights_with_variants.attach fixture_file_upload("report.pdf")
+    #   image = read_image(variant)
 
-      error = assert_raises ArgumentError do
-        @user.highlights_with_variants.first.preview(:unknown).processed
-      end
+    #   assert_equal "JPEG", image.type
+    #   assert_equal 100, image.width
+    #   assert_equal 67, image.height
+    # end
 
-      assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
-    end
+    # test "raises error when unknown variant name is used to generate representation" do
+    #   @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
 
-    test "creating representation by variation name" do
-      @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
-      variant = @user.highlights_with_variants.first.representation(:thumb).processed
+    #   error = assert_raises ArgumentError do
+    #     @user.highlights_with_variants.first.representation(:unknown).processed
+    #   end
 
-      image = read_image(variant)
+    #   assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
+    # end
 
-      assert_equal "JPEG", image.type
-      assert_equal 100, image.width
-      assert_equal 67, image.height
-    end
+    # test "transforms variants later" do
+    #   blob = create_file_blob(filename: "racecar.jpg")
 
-    test "raises error when unknown variant name is used to generate representation" do
-      @user.highlights_with_variants.attach fixture_file_upload("racecar.jpg")
+    #   assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [1, 1] }] do
+    #     @user.highlights_with_preprocessed.attach blob
+    #   end
+    # end
 
-      error = assert_raises ArgumentError do
-        @user.highlights_with_variants.first.representation(:unknown).processed
-      end
+    # test "transforms variants later conditionally via proc" do
+    #   assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
+    #     @user.highlights_with_conditional_preprocessed.attach create_file_blob(filename: "racecar.jpg")
+    #   end
 
-      assert_match(/Cannot find variant :unknown for User#highlights_with_variants/, error.message)
-    end
+    #   blob = create_file_blob(filename: "racecar.jpg")
+    #   @user.update(name: "transform via proc")
 
-    test "transforms variants later" do
-      blob = create_file_blob(filename: "racecar.jpg")
+    #   assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [2, 2] }] do
+    #     @user.highlights_with_conditional_preprocessed.attach blob
+    #   end
+    # end
 
-      assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [1, 1] }] do
-        @user.highlights_with_preprocessed.attach blob
-      end
-    end
+    # test "transforms variants later conditionally via method" do
+    #   assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
+    #     @user.highlights_with_conditional_preprocessed.attach create_file_blob(filename: "racecar.jpg")
+    #   end
 
-    test "transforms variants later conditionally via proc" do
-      assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
-        @user.highlights_with_conditional_preprocessed.attach create_file_blob(filename: "racecar.jpg")
-      end
+    #   blob = create_file_blob(filename: "racecar.jpg")
+    #   @user.update(name: "transform via method")
 
-      blob = create_file_blob(filename: "racecar.jpg")
-      @user.update(name: "transform via proc")
+    #   assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [3, 3] }] do
+    #     @user.highlights_with_conditional_preprocessed.attach blob
+    #   end
+    # end
 
-      assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [2, 2] }] do
-        @user.highlights_with_conditional_preprocessed.attach blob
-      end
-    end
+    # test "avoids enqueuing transform later job when blob is not representable" do
+    #   unrepresentable_blob = create_file_blob(filename:  "hello.txt")
 
-    test "transforms variants later conditionally via method" do
-      assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
-        @user.highlights_with_conditional_preprocessed.attach create_file_blob(filename: "racecar.jpg")
-      end
-
-      blob = create_file_blob(filename: "racecar.jpg")
-      @user.update(name: "transform via method")
-
-      assert_enqueued_with job: ActiveStorage::TransformJob, args: [blob, { resize_to_limit: [3, 3] }] do
-        @user.highlights_with_conditional_preprocessed.attach blob
-      end
-    end
-
-    test "avoids enqueuing transform later job when blob is not representable" do
-      unrepresentable_blob = create_file_blob(filename:  "hello.txt")
-
-      assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
-        @user.highlights_with_preprocessed.attach unrepresentable_blob
-      end
-    end
+    #   assert_no_enqueued_jobs only: ActiveStorage::TransformJob do
+    #     @user.highlights_with_preprocessed.attach unrepresentable_blob
+    #   end
+    # end
 
     test "successfully attaches new blobs and destroys attachments marked for destruction via nested attributes" do
-      town_blob = create_file_blob(filename:  "town.jpg")
+      town_blob = create_file_blob(filename: "image.gif")
       @user.highlights.attach(town_blob)
       @user.reload
 

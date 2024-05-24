@@ -55,7 +55,7 @@ module StorageTables
             pending_uploads = attachment_changes[name.to_s].try(:pending_uploads)
 
             attachment_changes[name.to_s] = if attachables.none?
-              ActiveStorage::Attached::Changes::DeleteMany.new(name.to_s, self)
+              StorageTables::Attachable::Changes::DeleteMany.new(name.to_s, self)
             else
               StorageTables::Attachable::Changes::CreateMany.new(name.to_s, self, attachables, pending_uploads:)
             end

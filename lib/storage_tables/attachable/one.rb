@@ -24,7 +24,7 @@ module StorageTables
         raise ArgumentError, "Could not determine filename from #{attachable.inspect}" unless filename
 
         record.public_send(:"#{name}=", attachable, filename)
-        blob.save! && upload(attachable)
+        blob.save! && upload(attachable, blob)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
