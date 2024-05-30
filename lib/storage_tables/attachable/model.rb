@@ -27,9 +27,7 @@ module StorageTables
           has_one :"#{name}_storage_blob", through: :"#{name}_storage_attachment", class_name: "StorageTables::Blob",
                                            source: :blob
 
-          scope :"with_stored_#{name}", lambda {
-            includes("#{name}_storage_attachment": :blob)
-          }
+          scope :"with_storage_#{name}", -> { includes(:"#{name}_storage_attachment") }
 
           before_save { attachment_changes[name.to_s]&.save }
           after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s) }
@@ -66,7 +64,7 @@ module StorageTables
           has_many(:"#{name}_storage_blobs", through: :"#{name}_storage_attachments",
                                              class_name: "StorageTables::Blob", source: :blob)
 
-          scope :"with_attached_#{name}", -> { includes("#{name}_attachments": :blob) }
+          scope :"with_storage_#{name}", -> { includes(:"#{name}_storage_attachments") }
 
           after_save { attachment_changes[name.to_s]&.save }
 

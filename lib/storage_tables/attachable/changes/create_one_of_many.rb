@@ -17,7 +17,9 @@ module StorageTables
         private
 
         def find_attachment
-          record.public_send(:"#{name}_storage_attachments").detect { |attachment| attachment.blob == blob }
+          record.public_send(:"#{name}_storage_attachments").detect do |attachment|
+            attachment.full_checksum == blob.checksum
+          end
         end
       end
     end
