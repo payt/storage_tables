@@ -13,3 +13,4 @@ end
 require "storage_tables/attachable/changes"
 require "storage_tables/attachable/model"
 require "storage_tables/attachable/one"
+require "storage_tables/attachable/many"

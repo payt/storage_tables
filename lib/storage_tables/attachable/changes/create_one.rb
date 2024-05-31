@@ -9,11 +9,12 @@ module StorageTables
 
         attr_reader :name, :record, :attachable, :filename
 
-        def initialize(name, record, attachable, filename)
+        def initialize(name, record, attachable, filename = nil)
           @name = name
           @record = record
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
+
           blob.identify_without_saving
         end
 
