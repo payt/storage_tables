@@ -299,6 +299,20 @@ module StorageTables
       assert_empty @user.highlights
     end
 
+    test "attaching with an empty list" do
+      @user.highlights.attach []
+
+      assert_empty @user.highlights
+    end
+
+    test "when attaching with an empty list, and has an existing attachment" do
+      @user.highlights.attach [create_file_blob(filename: "video.mp4"), "video.mp4"]
+
+      @user.highlights.attach []
+
+      assert_equal 1, @user.highlights.count
+    end
+
     test "replacing attachments with a list containing a mixture of empty and present items" do
       @user.highlights = ["", fixture_file_upload("racecar.jpg")]
 
