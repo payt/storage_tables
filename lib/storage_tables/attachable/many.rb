@@ -11,7 +11,7 @@ module StorageTables
 
       def attach(*attachables)
         record.public_send(:"#{name}=", blobs + attachables)
-        blobs.all?(&:save!) && upload_many
+        blobs.all?(&:save!) && upload_many unless attachables.flatten.empty?
 
         return if record.persisted? && !record.changed? && !record.save
 
