@@ -19,7 +19,6 @@ module StorageTables
         return if exist?(checksum) && file_match?(checksum)
 
         instrument(:upload, checksum:) do
-          binding.pry
           IO.copy_stream(io, make_path_for(checksum))
           ensure_integrity_of(checksum)
         end
