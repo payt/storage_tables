@@ -27,6 +27,7 @@ module StorageTables
       @user.avatar.attach file_fixture("racecar.jpg").open
 
       assert_nothing_raised { @user.avatar.download }
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "uploads the file when set through setter" do
