@@ -43,6 +43,7 @@ module StorageTables
       assert_nothing_raised { @user.save! }
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert StorageTables::Blob.service.exist?(@user.avatar.full_checksum)
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "when assigning a empty blob it cannot save" do

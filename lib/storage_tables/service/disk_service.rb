@@ -26,8 +26,12 @@ module StorageTables
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end
 
-      # We don't need to ensure the integrity of the file
-      def ensure_integrity_of(key, checksum); end
+      def ensure_integrity_of(_key, checksum)
+        return if OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
+
+        delete checksum
+        raise StorageTables::IntegrityError
+      end
     end
   end
 end
