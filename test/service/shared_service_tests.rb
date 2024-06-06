@@ -17,7 +17,7 @@ module StorageTables
 
         test "uploading without integrity" do
           data = "Something else entirely!"
-          checksum = OpenSSL::Digest.base64digest("MD5", "bad data")
+          checksum = OpenSSL::Digest.new("SHA3-512").base64digest(FIXTURE_DATA)
 
           assert_raises(StorageTables::IntegrityError) do
             @service.upload(checksum, StringIO.new(data))
