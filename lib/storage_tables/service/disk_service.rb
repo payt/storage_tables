@@ -14,6 +14,16 @@ module StorageTables
         File.join folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
       end
 
+      def upload(checksum, io, **)
+        # Prevent uploading the same file twice
+        return if exist?(checksum) && file_match?(checksum)
+
+        instrument(:upload, checksum:) do
+          IO.copy_stream(io, make_path_for(checksum))
+          ensure_integrity_of(checksum)
+        end
+      end
+
       private
 
       def refactored_checksum(checksum)
@@ -26,8 +36,16 @@ module StorageTables
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end
 
-      # We don't need to ensure the integrity of the file
-      def ensure_integrity_of(key, checksum); end
+      def ensure_integrity_of(checksum)
+        return if file_match?(checksum)
+
+        delete checksum
+        raise StorageTables::IntegrityError
+      end
+
+      def file_match?(checksum)
+        OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
+      end
     end
   end
 end

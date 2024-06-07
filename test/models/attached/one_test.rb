@@ -27,6 +27,7 @@ module StorageTables
       @user.avatar.attach file_fixture("racecar.jpg").open
 
       assert_nothing_raised { @user.avatar.download }
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "uploads the file when set through setter" do
@@ -43,6 +44,7 @@ module StorageTables
       assert_nothing_raised { @user.save! }
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert StorageTables::Blob.service.exist?(@user.avatar.full_checksum)
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "when assigning a empty blob it cannot save" do

@@ -13,6 +13,15 @@ module StorageTables
       def configure(service_name, configurations)
         StorageTables::Service::Configurator.build(service_name, configurations)
       end
+
+      private
+
+      def instrument(operation, payload = {}, &)
+        ActiveSupport::Notifications.instrument(
+          "service_#{operation}.storage_tables",
+          payload.merge(service: service_name), &
+        )
+      end
     end
   end
 end
