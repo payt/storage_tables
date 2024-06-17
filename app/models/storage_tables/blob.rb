@@ -5,7 +5,7 @@ module StorageTables
   class Blob < ApplicationRecord
     include StorageTables::Blobs::Identifiable
 
-    self.primary_key = [:partition_key, :checksum]
+    self.primary_key = [:checksum, :partition_key]
 
     store :metadata, accessors: [:analyzed, :identified, :mtime], coder: ActiveRecord::Coders::JSON
 
@@ -77,7 +77,7 @@ module StorageTables
 
       def by_checksum(input)
         if input.is_a?(Array)
-          where(primary_key => input.map { |value| [value[0], value[1..].chomp("==")] })
+          where(primary_key => input.map { |value| [value[1..].chomp("=="), value[0]] })
         else
           where(partition_key: input[0], checksum: input[1..].chomp("=="))
         end
