@@ -15,12 +15,6 @@ module StorageTables
 
     validates :checksum, presence: true
 
-    scope :by_checksum, lambda { |checksums|
-                          where(primary_key => checksums.map do |value|
-                                                 [value[0], value[1..].chomp("==")]
-                                               end)
-                        }
-
     after_initialize do
       self.service_name ||= self.class.service.name
     end
@@ -79,6 +73,14 @@ module StorageTables
 
       def existing_blob(checksum)
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
+      def by_checksum(input)
+        if input.is_a?(Array)
+          where(primary_key => input.map { |value| [value[0], value[1..].chomp("==")] })
+        else
+          where(partition_key: input[0], checksum: input[1..].chomp("=="))
+        end
       end
 
       def compute_checksum_in_chunks(io)
