@@ -5,7 +5,7 @@ module StorageTables
   class Blob < ApplicationRecord
     include StorageTables::Blobs::Identifiable
 
-    self.primary_key = [:checksum, :partition_key]
+    self.primary_key = [:partition_key, :checksum]
 
     store :metadata, accessors: [:analyzed, :identified, :mtime], coder: ActiveRecord::Coders::JSON
 
@@ -14,6 +14,12 @@ module StorageTables
     class_attribute :service_name
 
     validates :checksum, presence: true
+
+    scope :by_checksum, lambda { |checksums|
+                          where(primary_key => checksums.map do |value|
+                                                 [value[0], value[1..].chomp("==")]
+                                               end)
+                        }
 
     after_initialize do
       self.service_name ||= self.class.service.name

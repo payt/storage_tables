@@ -106,5 +106,20 @@ module StorageTables
         blob.reload.destroy!
       end
     end
+
+    ## Scope
+
+    test "by_checksums" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+      blob3 = create_blob(data: "Third blob")
+
+      checksum = blob.checksum
+      checksum2 = blob2.checksum
+
+      assert_includes Blob.by_checksum([checksum, checksum2]), blob
+      assert_includes Blob.by_checksum([checksum, checksum2]), blob2
+      assert_not_includes Blob.by_checksum([checksum, checksum2]), blob3
+    end
   end
 end
