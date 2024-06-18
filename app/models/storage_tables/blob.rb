@@ -40,7 +40,7 @@ module StorageTables
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
         checksum = compute_checksum_in_chunks(io)
-        existing_blob = find_with_checksum(checksum)
+        existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob
 
@@ -71,11 +71,11 @@ module StorageTables
         create!(byte_size:, checksum:, content_type:, metadata:)
       end
 
-      def find_with_checksum(checksum)
+      def find_by_checksum(checksum)
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 
-      def find_with_checksum!(checksum)
+      def find_by_checksum!(checksum)
         find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 
@@ -131,7 +131,7 @@ module StorageTables
         "#existing_blob is deprecated. " \
         "Use #find_by_checksum instead."
       )
-      find_with_checksum(checksum)
+      find_by_checksum(checksum)
     end
 
     private

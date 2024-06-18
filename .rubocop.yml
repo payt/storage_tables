@@ -69,3 +69,9 @@ Rails/InverseOf:
   Enabled: true
   Exclude:
     - app/models/storage_tables/attachment.rb
+
+Rails/DynamicFindBy:
+  Enabled: true
+  Whitelist:
+    - find_by_checksum
+    - find_by_checksum!

@@ -138,17 +138,17 @@ module StorageTables
 
     ## StorageTables::Blob.find_by_checksum!
 
-    test "find_with_checksum!" do
+    test "find_by_checksum!" do
       blob = create_blob(data: "First blob")
 
-      search = Blob.find_with_checksum!(blob.checksum)
+      search = Blob.find_by_checksum!(blob.checksum)
 
       assert_equal blob, search
     end
 
-    test "find_with_checksum! with non-existing checksum" do
+    test "find_by_checksum! with non-existing checksum" do
       assert_raises(ActiveRecord::RecordNotFound) do
-        Blob.find_with_checksum!("non-existing-checksum")
+        Blob.find_by_checksum!("non-existing-checksum")
       end
     end
   end
