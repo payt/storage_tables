@@ -89,7 +89,7 @@ module StorageTables
 
       def where_checksum(input)
         if input.is_a?(Array)
-          where(primary_key => input.map { |value| [value[1..].chomp("=="), value[0]] })
+          where(primary_key => input.map { checksum_to_primary(_1) })
         else
           where(partition_key: input[0], checksum: input[1..].chomp("=="))
         end
@@ -103,6 +103,13 @@ module StorageTables
 
           io.rewind
         end.base64digest
+      end
+
+      private
+
+      # Cut the checksum into an Array to match the primary key
+      def checksum_to_primary(checksum)
+        [checksum[1..].chomp("=="), checksum[0]]
       end
     end
 
