@@ -151,5 +151,13 @@ module StorageTables
         Blob.find_by_checksum!("non-existing-checksum")
       end
     end
+
+    ## StorageTables::Blob.existing_blob()
+
+    test "existing_blob is deprecated" do
+      assert_deprecated("StorageTables", StorageTables.deprecator) do
+        Blob.existing_blob("non-existing-checksum")
+      end
+    end
   end
 end

@@ -71,6 +71,14 @@ module StorageTables
         create!(byte_size:, checksum:, content_type:, metadata:)
       end
 
+      def existing_blob(checksum)
+        StorageTables.deprecator.warn(
+          "[StorageTables] #existing_blob is deprecated. " \
+          "Use #find_by_checksum instead."
+        )
+        find_by_checksum(checksum)
+      end
+
       def find_by_checksum(checksum)
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
@@ -124,14 +132,6 @@ module StorageTables
     # Returns an instance of service, which can be configured globally or per attachment
     def service
       services.fetch(service_name)
-    end
-
-    def existing_blob(checksum)
-      ActiveSupport::Deprecation.warn(
-        "#existing_blob is deprecated. " \
-        "Use #find_by_checksum instead."
-      )
-      find_by_checksum(checksum)
     end
 
     private

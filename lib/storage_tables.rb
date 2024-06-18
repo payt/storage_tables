@@ -20,4 +20,8 @@ module StorageTables
 
   autoload :Attached
   autoload :Service
+
+  def self.deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new("0.2.0", "StorageTables")
+  end
 end
