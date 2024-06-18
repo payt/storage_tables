@@ -40,7 +40,7 @@ module StorageTables
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
         checksum = compute_checksum_in_chunks(io)
-        existing_blob = existing_blob(checksum)
+        existing_blob = find_with_checksum(checksum)
 
         return existing_blob if existing_blob
 
@@ -71,11 +71,11 @@ module StorageTables
         create!(byte_size:, checksum:, content_type:, metadata:)
       end
 
-      def existing_blob(checksum)
+      def find_with_checksum(checksum)
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 
-      def by_checksum(input)
+      def where_checksum(input)
         if input.is_a?(Array)
           where(primary_key => input.map { |value| [value[1..].chomp("=="), value[0]] })
         else
@@ -120,6 +120,14 @@ module StorageTables
     # Returns an instance of service, which can be configured globally or per attachment
     def service
       services.fetch(service_name)
+    end
+
+    def existing_blob(checksum)
+      ActiveSupport::Deprecation.warn(
+        "#existing_blob is deprecated. " \
+        "Use #find_by_checksum instead."
+      )
+      find_with_checksum(checksum)
     end
 
     private

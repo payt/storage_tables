@@ -109,19 +109,19 @@ module StorageTables
 
     ## Scope
 
-    test "by_checksum" do
+    test "where_checksum" do
       blob = create_blob(data: "First blob")
       blob2 = create_blob(data: "Second blob")
 
       checksum = blob.checksum
 
-      search = Blob.by_checksum(checksum)
+      search = Blob.where_checksum(checksum)
 
       assert_includes search, blob
       assert_not_includes search, blob2
     end
 
-    test "by_checksum with array" do
+    test "where_checksum with array" do
       blob = create_blob(data: "First blob")
       blob2 = create_blob(data: "Second blob")
       blob3 = create_blob(data: "Third blob")
@@ -129,7 +129,7 @@ module StorageTables
       checksum = blob.checksum
       checksum2 = blob2.checksum
 
-      search = Blob.by_checksum([checksum, checksum2])
+      search = Blob.where_checksum([checksum, checksum2])
 
       assert_includes search, blob
       assert_includes search, blob2
