@@ -107,7 +107,7 @@ module StorageTables
       end
     end
 
-    ## Scope
+    ## StorageTables::Blob.where_checksum
 
     test "where_checksum" do
       blob = create_blob(data: "First blob")
@@ -134,6 +134,22 @@ module StorageTables
       assert_includes search, blob
       assert_includes search, blob2
       assert_not_includes search, blob3
+    end
+
+    ## StorageTables::Blob.find_by_checksum!
+
+    test "find_with_checksum!" do
+      blob = create_blob(data: "First blob")
+
+      search = Blob.find_with_checksum!(blob.checksum)
+
+      assert_equal blob, search
+    end
+
+    test "find_with_checksum! with non-existing checksum" do
+      assert_raises(ActiveRecord::RecordNotFound) do
+        Blob.find_with_checksum!("non-existing-checksum")
+      end
     end
   end
 end

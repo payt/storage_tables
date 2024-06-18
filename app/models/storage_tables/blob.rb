@@ -75,6 +75,10 @@ module StorageTables
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 
+      def find_with_checksum!(checksum)
+        find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
       def where_checksum(input)
         if input.is_a?(Array)
           where(primary_key => input.map { |value| [value[1..].chomp("=="), value[0]] })
