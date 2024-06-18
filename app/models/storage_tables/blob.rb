@@ -40,7 +40,7 @@ module StorageTables
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
         checksum = compute_checksum_in_chunks(io)
-        existing_blob = existing_blob(checksum)
+        existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob
 
@@ -72,7 +72,27 @@ module StorageTables
       end
 
       def existing_blob(checksum)
+        StorageTables.deprecator.warn(
+          "[StorageTables] #existing_blob is deprecated. " \
+          "Use #find_by_checksum instead."
+        )
+        find_by_checksum(checksum)
+      end
+
+      def find_by_checksum(checksum)
         find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
+      def find_by_checksum!(checksum)
+        find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
+      def where_checksum(input)
+        if input.is_a?(Array)
+          where(primary_key => input.map { checksum_to_primary(_1) })
+        else
+          where(partition_key: input[0], checksum: input[1..].chomp("=="))
+        end
       end
 
       def compute_checksum_in_chunks(io)
@@ -83,6 +103,13 @@ module StorageTables
 
           io.rewind
         end.base64digest
+      end
+
+      private
+
+      # Cut the checksum into an Array to match the primary key
+      def checksum_to_primary(checksum)
+        [checksum[1..].chomp("=="), checksum[0]]
       end
     end
 

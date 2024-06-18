@@ -106,5 +106,58 @@ module StorageTables
         blob.reload.destroy!
       end
     end
+
+    ## StorageTables::Blob.where_checksum
+
+    test "where_checksum" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+
+      checksum = blob.checksum
+
+      search = Blob.where_checksum(checksum)
+
+      assert_includes search, blob
+      assert_not_includes search, blob2
+    end
+
+    test "where_checksum with array" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+      blob3 = create_blob(data: "Third blob")
+
+      checksum = blob.checksum
+      checksum2 = blob2.checksum
+
+      search = Blob.where_checksum([checksum, checksum2])
+
+      assert_includes search, blob
+      assert_includes search, blob2
+      assert_not_includes search, blob3
+    end
+
+    ## StorageTables::Blob.find_by_checksum!
+
+    test "find_by_checksum!" do
+      blob = create_blob(data: "First blob")
+
+      search = Blob.find_by_checksum!(blob.checksum)
+
+      assert_equal blob, search
+    end
+
+    test "find_by_checksum! with non-existing checksum" do
+      assert_raises(ActiveRecord::RecordNotFound) do
+        Blob.find_by_checksum!("non-existing-checksum")
+      end
+    end
+
+    ## StorageTables::Blob.existing_blob()
+
+    test "existing_blob is deprecated" do
+      assert_deprecated("StorageTables", StorageTables.deprecator) do
+        Blob.existing_blob("non-existing-checksum")
+      end
+    end
   end
 end
