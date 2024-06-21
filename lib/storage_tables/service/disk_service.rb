@@ -24,7 +24,7 @@ module StorageTables
         end
       end
 
-      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, custom_metadata: {})
+      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:)
         instrument(:url, checksum:) do |payload|
           verified_token_with_expiration = ActiveStorage.verifier.generate(
             {
