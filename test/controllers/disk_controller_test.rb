@@ -6,7 +6,7 @@ require "database/setup"
 module StorageTables
   class DiskControllerTest < ActionDispatch::IntegrationTest
     test "directly uploading blob with integrity" do
-      data = "Something else entirely!"
+      data = name
       blob = create_blob_before_direct_upload byte_size: data.size, checksum: create_checksum(data)
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
@@ -16,32 +16,30 @@ module StorageTables
     end
 
     test "directly uploading blob without integrity" do
-      data = "Something else entirely!"
+      data = name
       blob = create_blob_before_direct_upload byte_size: data.size,
-                                              checksum: OpenSSL::Digest.base64digest(
-                                                "MD5", "bad data"
-                                              )
+                                              checksum: create_checksum("bad data")
 
       put blob.service_url_for_direct_upload, params: data
 
       assert_response :unprocessable_entity
-      assert_not blob.service.exist?(blob.key)
+      assert_not blob.service.exist?(blob.checksum)
     end
 
     test "directly uploading blob with mismatched content type" do
-      data = "Something else entirely!"
-      blob = create_blob_before_direct_upload byte_size: data.size, checksum: OpenSSL::Digest::MD5.base64digest(data)
+      data = name
+      blob = create_blob_before_direct_upload byte_size: data.size, checksum: create_checksum(data)
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "application/octet-stream" }
 
       assert_response :unprocessable_entity
-      assert_not blob.service.exist?(blob.key)
+      assert_not blob.service.exist?(blob.checksum)
     end
 
     test "directly uploading blob with different but equivalent content type" do
-      data = "Something else entirely!"
+      data = name
       blob = create_blob_before_direct_upload(
-        byte_size: data.size, checksum: OpenSSL::Digest::MD5.base64digest(data), content_type: "application/x-gzip"
+        byte_size: data.size, checksum: create_checksum(data), content_type: "application/x-gzip"
       )
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "application/x-gzip" }
@@ -51,14 +49,14 @@ module StorageTables
     end
 
     test "directly uploading blob with mismatched content length" do
-      data = "Something else entirely!"
+      data = name
       blob = create_blob_before_direct_upload byte_size: data.size - 1,
-                                              checksum: OpenSSL::Digest::MD5.base64digest(data)
+                                              checksum: create_checksum(data)
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
 
       assert_response :unprocessable_entity
-      assert_not blob.service.exist?(blob.key)
+      assert_not blob.service.exist?(blob.checksum)
     end
 
     test "directly uploading blob with invalid token" do
