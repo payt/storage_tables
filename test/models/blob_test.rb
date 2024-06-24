@@ -107,6 +107,15 @@ module StorageTables
       end
     end
 
+    ## ServiceUrl for direct upload
+    test "service_url_for_direct_upload" do
+      blob = create_blob
+
+      url = blob.service_url_for_direct_upload
+
+      assert_match(%r{/rails/storage_tables/disk/}, url)
+    end
+
     ## StorageTables::Blob.where_checksum
 
     test "where_checksum" do

@@ -24,6 +24,25 @@ module StorageTables
         end
       end
 
+      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:)
+        instrument(:url, checksum:) do |payload|
+          verified_token_with_expiration = StorageTables.verifier.generate(
+            {
+              checksum:,
+              content_type:,
+              content_length:
+            },
+            expires_in:,
+            purpose: :blob_token
+          )
+
+          url_helpers.update_storage_tables_disk_service_url(verified_token_with_expiration,
+                                                             url_options).tap do |generated_url|
+            payload[:url] = generated_url
+          end
+        end
+      end
+
       private
 
       def refactored_checksum(checksum)
