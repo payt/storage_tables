@@ -34,7 +34,7 @@ module StorageTables
 
       blob = create_blob_before_direct_upload(byte_size: file.size, checksum:, content_type: "application/pdf")
 
-      put blob.service_url_for_direct_upload, params: file.read, headers: { "Content-Type" => "application/pdf" }
+      put blob.service_url_for_direct_upload, params: file.binread, headers: { "Content-Type" => "application/pdf" }
 
       assert_response :no_content
       assert blob.service.exist?(blob.checksum)
