@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "database/setup"
+require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class DiskControllerTest < ActionDispatch::IntegrationTest
@@ -60,10 +61,22 @@ module StorageTables
     end
 
     test "directly uploading blob with invalid token" do
-      put update_rails_disk_service_url(encoded_token: "invalid"),
+      put update_storage_tables_disk_service_url(encoded_token: "invalid"),
           params: "Something else entirely!", headers: { "Content-Type" => "text/plain" }
 
       assert_response :not_found
+    end
+
+    test "when uploading fails" do
+      StorageTables::Blob.service.stub :upload, ->(*) { raise IntegrityError } do
+        data = name
+        blob = create_blob_before_direct_upload byte_size: data.size, checksum: create_checksum(data)
+
+        put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
+
+        assert_response :unprocessable_entity
+        assert_not blob.service.exist?(blob.checksum)
+      end
     end
 
     def create_checksum(data)
