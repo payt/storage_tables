@@ -7,29 +7,44 @@ module StorageTables
   # to the service URL.
   class DiskController < ActiveStorage::BaseController
     def update
-      if (token = decode_verified_token)
-        if acceptable_content?(token)
+      if token
+        if invalid_content_type?
+          render json: { error: "Received Content-Type does not match the expected value. Expected " \
+                                "'#{token[:content_type]}', but got '#{request.content_mime_type}'. Please ensure " \
+                                "the request Content-Type is correct." },
+                 status: :unprocessable_entity
+        elsif invalid_content_length?
+          render json: { error: "Received file size does not match the expected value. Expected " \
+                                "'#{token[:content_length]}' bytes, but got '#{request.content_length}' bytes. " \
+                                "Please ensure the request file_size is correct." }, status: :unprocessable_entity
+        else
           StorageTables::Blob.service.upload token[:checksum], request.body
           head :no_content
-        else
-          head :unprocessable_entity
         end
       else
         head :not_found
       end
     rescue StorageTables::IntegrityError
-      head :unprocessable_entity
+      render json: { error: "File checksum does not match the expected value" }, status: :unprocessable_entity
     end
 
     private
+
+    def token
+      @token ||= decode_verified_token
+    end
 
     def decode_verified_token
       token = StorageTables.verifier.verified(params[:encoded_token], purpose: :blob_token)
       token&.deep_symbolize_keys
     end
 
-    def acceptable_content?(token)
-      token[:content_type] == request.content_mime_type && token[:content_length] == request.content_length
+    def invalid_content_type?
+      token[:content_type] != request.content_mime_type
+    end
+
+    def invalid_content_length?
+      token[:content_length] != request.content_length
     end
   end
 end

@@ -49,6 +49,7 @@ module StorageTables
       put blob.service_url_for_direct_upload, params: data
 
       assert_response :unprocessable_entity
+      assert_match(/Received Content-Type does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
 
@@ -59,6 +60,7 @@ module StorageTables
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "application/octet-stream" }
 
       assert_response :unprocessable_entity
+      assert_match(/Received Content-Type does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
 
@@ -70,6 +72,7 @@ module StorageTables
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
 
       assert_response :unprocessable_entity
+      assert_match(/Received file size does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
 
@@ -89,6 +92,7 @@ module StorageTables
       put blob.service_url_for_direct_upload, params: mismatched_data, headers: { "Content-Type" => "text/plain" }
 
       assert_response :unprocessable_entity
+      assert_match(/File checksum does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
 
