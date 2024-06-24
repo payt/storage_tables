@@ -21,6 +21,12 @@ module StorageTables
       end
     end
 
+    initializer "storage_tables.verifier" do
+      config.after_initialize do |app|
+        StorageTables.verifier = app.message_verifier("StorageTables")
+      end
+    end
+
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.

@@ -24,7 +24,7 @@ module StorageTables
     private
 
     def decode_verified_token
-      token = ActiveStorage.verifier.verified(params[:encoded_token], purpose: :blob_token)
+      token = StorageTables.verifier.verified(params[:encoded_token], purpose: :blob_token)
       token&.deep_symbolize_keys
     end
 
