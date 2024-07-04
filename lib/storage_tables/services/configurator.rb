@@ -10,8 +10,8 @@ module StorageTables
       private
 
       def resolve(class_name)
-        require "storage_tables/service/#{class_name.to_s.underscore}_service"
-        StorageTables::Service.const_get(:"#{class_name.camelize}Service")
+        require "storage_tables/services/#{class_name.to_s.underscore}_service"
+        StorageTables::Services.const_get(:"#{class_name.camelize}Service")
       rescue LoadError
         raise "Missing service adapter for #{class_name.inspect}"
       end
