@@ -30,15 +30,15 @@ module StorageTables
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
-        # configs = Rails.configuration.storage_tables.service_configurations
-        # StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
+        configs = Rails.configuration.active_storage.service_configurations
+        StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
         config_choice = Rails.configuration.storage_tables.service
         StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
       end
     end
 
-    initializer "active_storage.reflection" do
+    initializer "storage_tables.reflection" do
       ActiveSupport.on_load(:active_record) do
         include Reflection::ActiveRecordExtensions
         ActiveRecord::Reflection.singleton_class.prepend(Reflection::ReflectionExtension)
