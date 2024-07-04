@@ -4,7 +4,21 @@ module StorageTables
   module Blobs
     # Identify the content type of a blob.
     module Identifiable
-      include ActiveStorage::Blob::Identifiable
+      def identify
+        identify_without_saving
+        save!
+      end
+
+      def identify_without_saving
+        return if identified?
+
+        self.content_type = identify_content_type
+        self.identified = true
+      end
+
+      def identified?
+        identified
+      end
 
       private
 
