@@ -4,7 +4,7 @@ require "active_storage/service"
 require "active_storage/service/configurator"
 
 module StorageTables
-  module Service
+  module Services
     # Set the storage service to be used by Storage Tables.
     class Configurator < ActiveStorage::Service::Configurator
       private

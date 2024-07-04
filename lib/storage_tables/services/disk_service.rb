@@ -3,7 +3,7 @@
 require "active_storage/service/disk_service"
 
 module StorageTables
-  module Service
+  module Services
     # Local disk storage service.
     class DiskService < ActiveStorage::Service::DiskService
       def path_for(checksum) # :nodoc:

@@ -2,10 +2,10 @@
 
 require "active_storage/service"
 require "active_storage/service/registry"
-require "storage_tables/service/configurator"
+require "storage_tables/services/configurator"
 
 module StorageTables
-  module Service
+  module Services
     class Registry < ActiveStorage::Service::Registry # :nodoc:
       private
 
