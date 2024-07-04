@@ -3,31 +3,31 @@
 # require "service/shared_service_tests"
 
 module StorageTables
-  module Service
+  module Services
     class ConfiguratorTest < ActiveSupport::TestCase
       test "builds correct service instance based on service name" do
-        service = StorageTables::Service::Configurator.build(:foo, foo: { service: "Disk", root: "path" })
+        service = StorageTables::Services::Configurator.build(:foo, foo: { service: "Disk", root: "path" })
 
-        assert_instance_of StorageTables::Service::DiskService, service
+        assert_instance_of StorageTables::Services::DiskService, service
         assert_equal "path", service.root
       end
 
       test "builds correct service instance based on lowercase service name" do
-        service = StorageTables::Service::Configurator.build(:foo, foo: { service: "disk", root: "path" })
+        service = StorageTables::Services::Configurator.build(:foo, foo: { service: "disk", root: "path" })
 
-        assert_instance_of StorageTables::Service::DiskService, service
+        assert_instance_of StorageTables::Services::DiskService, service
         assert_equal "path", service.root
       end
 
       test "raises error when not using disk service" do
         assert_raise RuntimeError do
-          StorageTables::Service::Configurator.build(:bigfoot, { bigfoot: { service: "aws", root: "path" } })
+          StorageTables::Services::Configurator.build(:bigfoot, { bigfoot: { service: "aws", root: "path" } })
         end
       end
 
       test "raises error when passing non-existent service name" do
         assert_raise RuntimeError do
-          StorageTables::Service::Configurator.build(:bigfoot, {})
+          StorageTables::Services::Configurator.build(:bigfoot, {})
         end
       end
     end

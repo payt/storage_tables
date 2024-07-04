@@ -4,7 +4,7 @@ require "test_helper"
 require "active_support/core_ext/securerandom"
 
 module StorageTables
-  module Service
+  module Services
     module SharedServiceTests
       extend ActiveSupport::Concern
 

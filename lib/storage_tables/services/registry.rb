@@ -10,7 +10,7 @@ module StorageTables
       private
 
       def configurator
-        @configurator ||= StorageTables::Service::Configurator.new(configurations)
+        @configurator ||= StorageTables::Services::Configurator.new(configurations)
       end
     end
   end
