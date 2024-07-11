@@ -37,6 +37,11 @@ module StorageTables
       super
     end
 
+    # Check if file exists on disk
+    def on_disk?
+      service.exist?(checksum)
+    end
+
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
         checksum = compute_checksum_in_chunks(io)
