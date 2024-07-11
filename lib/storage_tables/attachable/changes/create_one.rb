@@ -102,7 +102,7 @@ module StorageTables
 
         def from_hash(attachable)
           return attachable[:blob] if attachable[:blob]
-          return StorageTables::Blob.find_by_checksum(attachable[:checksum]) if attachable[:checksum]
+          return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
 
           StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
         end
