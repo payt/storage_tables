@@ -82,7 +82,7 @@ module StorageTables
               content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
+            from_hash(attachable)
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
@@ -98,6 +98,13 @@ module StorageTables
               "got #{attachable.inspect}"
             )
           end
+        end
+
+        def from_hash(attachable)
+          return attachable[:blob] if attachable[:blob]
+          return StorageTables::Blob.find_by_checksum(attachable[:checksum]) if attachable[:checksum]
+
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
         end
       end
     end

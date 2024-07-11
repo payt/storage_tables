@@ -91,6 +91,45 @@ module StorageTables
       assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
+    test "attach a existing blob from a Hash with the blob key" do
+      blob = create_blob
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg", blob: })
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "attach a existing blob from a Hash with the cehcksum key" do
+      blob = create_blob
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg",
+                            checksum: blob.checksum })
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "assign an existing blob from a Hash with the blob key" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", blob: }
+      @user.save!
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "assign an existing blob from a Hash with the cehcksum key" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", checksum: blob.checksum }
+      @user.save!
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
     test "attaching StringIO attachable to an existing record" do
       upload = Rack::Test::UploadedFile.new StringIO.new(""), original_filename: "test.txt"
 
