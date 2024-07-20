@@ -27,6 +27,13 @@ module StorageTables
       end
     end
 
+    initializer "storage_tables.configs" do
+      config.after_initialize do |app|
+        StorageTables.logger            = app.config.storage_tables.logger || Rails.logger
+        StorageTables.routes_prefix     = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
+      end
+    end
+
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
