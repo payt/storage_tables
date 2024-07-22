@@ -5,13 +5,13 @@ module StorageTables
   # This means using expiring, signed URLs that are meant for immediate access, not permanent linking.
   # Always go through the BlobsController, or your own authenticated controller, rather than directly
   # to the service URL.
-  class DiskController < ActionController::Base
+  class DiskController < ActiveStorage::BaseController
     include StorageTables::SetCurrent
 
     def update
       return head :not_found unless token
 
-      if  ?
+      if invalid_content_type?
         render json: { error: "Received Content-Type does not match the expected value. Expected " \
                               "'#{token[:content_type]}', but got '#{request.content_mime_type}'. Please ensure " \
                               "the request Content-Type is correct." },
