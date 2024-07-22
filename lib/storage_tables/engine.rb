@@ -44,7 +44,7 @@ module StorageTables
       end
     end
 
-    initializer "active_storage.reflection" do
+    initializer "storage_tables.reflection" do
       ActiveSupport.on_load(:active_record) do
         include Reflection::ActiveRecordExtensions
         ActiveRecord::Reflection.singleton_class.prepend(Reflection::ReflectionExtension)

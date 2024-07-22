@@ -36,6 +36,12 @@ module StorageTables
             purpose: :blob_token
           )
 
+          if url_options.blank?
+            raise ArgumentError,
+                  "Cannot generate URL for #{checksum} using Disk service, " \
+                  "please set StorageTables::Current.url_options."
+          end
+
           url_helpers.update_storage_tables_disk_service_url(verified_token_with_expiration,
                                                              url_options).tap do |generated_url|
             payload[:url] = generated_url
