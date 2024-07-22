@@ -37,11 +37,11 @@ Rails.configuration.active_storage.service = "local"
 module ActiveSupport
   class TestCase
     setup do
-      ActiveStorage::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
+      StorageTables::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
     end
 
     teardown do
-      ActiveStorage::Current.reset
+      StorageTables::Current.reset
     end
 
     private

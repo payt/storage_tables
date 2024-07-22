@@ -29,8 +29,7 @@ module StorageTables
 
     initializer "storage_tables.configs" do
       config.after_initialize do |app|
-        StorageTables.logger            = app.config.storage_tables.logger || Rails.logger
-        StorageTables.routes_prefix     = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
+        StorageTables.routes_prefix = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
       end
     end
 

@@ -65,6 +65,10 @@ module StorageTables
       def file_match?(checksum)
         OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
       end
+
+      def url_options
+        StorageTables::Current.url_options
+      end
     end
   end
 end
