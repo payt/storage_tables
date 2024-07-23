@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "storage_tables/services/disk_service"
+require "storage_tables/service/disk_service"
 require "service/shared_service_tests"
 
 module StorageTables
-  module Services
+  class Service
     class DiskServiceTest < ActiveSupport::TestCase
-      SERVICE = StorageTables::Services::DiskService.new(root: "/tmp")
+      SERVICE = StorageTables::Service::DiskService.new(root: "/tmp")
 
-      include StorageTables::Services::SharedServiceTests
+      include StorageTables::Service::SharedServiceTests
 
       test "path_for" do
         checksum = "1234567890abcde+f=="

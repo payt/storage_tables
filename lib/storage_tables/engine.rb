@@ -3,7 +3,7 @@
 require "rails/engine"
 
 require "storage_tables"
-require "storage_tables/services/registry"
+require "storage_tables/service/registry"
 require "storage_tables/reflection"
 
 module StorageTables
@@ -37,7 +37,7 @@ module StorageTables
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
         configs = Rails.configuration.active_storage.service_configurations
-        StorageTables::Blob.services = StorageTables::Services::Registry.new(configs)
+        StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
         config_choice = Rails.configuration.storage_tables.service
         StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
