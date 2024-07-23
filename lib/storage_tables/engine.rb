@@ -27,6 +27,12 @@ module StorageTables
       end
     end
 
+    initializer "storage_tables.configs" do
+      config.after_initialize do |app|
+        StorageTables.routes_prefix = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
+      end
+    end
+
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
@@ -38,7 +44,7 @@ module StorageTables
       end
     end
 
-    initializer "active_storage.reflection" do
+    initializer "storage_tables.reflection" do
       ActiveSupport.on_load(:active_record) do
         include Reflection::ActiveRecordExtensions
         ActiveRecord::Reflection.singleton_class.prepend(Reflection::ReflectionExtension)

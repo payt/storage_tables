@@ -6,6 +6,8 @@ module StorageTables
   # Always go through the BlobsController, or your own authenticated controller, rather than directly
   # to the service URL.
   class DiskController < ActiveStorage::BaseController
+    include StorageTables::SetCurrent
+
     def update
       return head :not_found unless token
 
