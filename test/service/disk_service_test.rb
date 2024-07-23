@@ -33,8 +33,7 @@ module StorageTables
         end
 
         assert_equal(
-          "Cannot generate URL for #{checksum} using Disk service, " \
-          "please set StorageTables::Current.url_options.", error.message
+          "Cannot generate URL using Disk service, please set StorageTables::Current.url_options.", error.message
         )
       end
 
