@@ -5,7 +5,7 @@ require "storage_tables/service/disk_service"
 require "service/shared_service_tests"
 
 module StorageTables
-  module Service
+  class Service
     class DiskServiceTest < ActiveSupport::TestCase
       SERVICE = StorageTables::Service::DiskService.new(root: "/tmp")
 

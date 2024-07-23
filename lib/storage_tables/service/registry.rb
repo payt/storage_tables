@@ -5,7 +5,7 @@ require "active_storage/service/registry"
 require "storage_tables/service/configurator"
 
 module StorageTables
-  module Service
+  class Service
     class Registry < ActiveStorage::Service::Registry # :nodoc:
       private
 
