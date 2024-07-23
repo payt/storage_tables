@@ -65,6 +65,14 @@ module StorageTables
       def file_match?(checksum)
         OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
       end
+
+      def url_options
+        if StorageTables::Current.url_options.blank?
+          raise ArgumentError, "Cannot generate URL using Disk service, please set StorageTables::Current.url_options."
+        end
+
+        StorageTables::Current.url_options
+      end
     end
   end
 end
