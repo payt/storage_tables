@@ -37,12 +37,12 @@ CREATE FUNCTION public.increment_attachment_counter() RETURNS trigger
 
 
 --
--- Name: partition_keys(); Type: FUNCTION; Schema: public; Owner: -
+-- Name: storage_tables_prevent_delete(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.partition_keys() RETURNS text[]
-    LANGUAGE plpgsql IMMUTABLE PARALLEL SAFE
-    AS $$ DECLARE list TEXT[] := '{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9,+,/}'; BEGIN RETURN list; END; $$;
+CREATE FUNCTION public.storage_tables_prevent_delete() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$ BEGIN IF OLD.attachments_count <> 0 THEN RAISE EXCEPTION 'can not delete blobs with attachments'; END IF; RETURN OLD; END; $$;
 
 
 SET default_tablespace = '';
@@ -198,7 +198,6 @@ CREATE TABLE public.storage_tables_blobs_partition_0 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_0 FOR VALUES IN ('A');
 
 
 --
@@ -214,7 +213,6 @@ CREATE TABLE public.storage_tables_blobs_partition_1 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_1 FOR VALUES IN ('B');
 
 
 --
@@ -230,7 +228,6 @@ CREATE TABLE public.storage_tables_blobs_partition_10 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_10 FOR VALUES IN ('K');
 
 
 --
@@ -246,7 +243,6 @@ CREATE TABLE public.storage_tables_blobs_partition_11 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_11 FOR VALUES IN ('L');
 
 
 --
@@ -262,7 +258,6 @@ CREATE TABLE public.storage_tables_blobs_partition_12 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_12 FOR VALUES IN ('M');
 
 
 --
@@ -278,7 +273,6 @@ CREATE TABLE public.storage_tables_blobs_partition_13 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_13 FOR VALUES IN ('N');
 
 
 --
@@ -294,7 +288,6 @@ CREATE TABLE public.storage_tables_blobs_partition_14 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_14 FOR VALUES IN ('O');
 
 
 --
@@ -310,7 +303,6 @@ CREATE TABLE public.storage_tables_blobs_partition_15 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_15 FOR VALUES IN ('P');
 
 
 --
@@ -326,7 +318,6 @@ CREATE TABLE public.storage_tables_blobs_partition_16 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_16 FOR VALUES IN ('Q');
 
 
 --
@@ -342,7 +333,6 @@ CREATE TABLE public.storage_tables_blobs_partition_17 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_17 FOR VALUES IN ('R');
 
 
 --
@@ -358,7 +348,6 @@ CREATE TABLE public.storage_tables_blobs_partition_18 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_18 FOR VALUES IN ('S');
 
 
 --
@@ -374,7 +363,6 @@ CREATE TABLE public.storage_tables_blobs_partition_19 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_19 FOR VALUES IN ('T');
 
 
 --
@@ -390,7 +378,6 @@ CREATE TABLE public.storage_tables_blobs_partition_2 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_2 FOR VALUES IN ('C');
 
 
 --
@@ -406,7 +393,6 @@ CREATE TABLE public.storage_tables_blobs_partition_20 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_20 FOR VALUES IN ('U');
 
 
 --
@@ -422,7 +408,6 @@ CREATE TABLE public.storage_tables_blobs_partition_21 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_21 FOR VALUES IN ('V');
 
 
 --
@@ -438,7 +423,6 @@ CREATE TABLE public.storage_tables_blobs_partition_22 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_22 FOR VALUES IN ('W');
 
 
 --
@@ -454,7 +438,6 @@ CREATE TABLE public.storage_tables_blobs_partition_23 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_23 FOR VALUES IN ('X');
 
 
 --
@@ -470,7 +453,6 @@ CREATE TABLE public.storage_tables_blobs_partition_24 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_24 FOR VALUES IN ('Y');
 
 
 --
@@ -486,7 +468,6 @@ CREATE TABLE public.storage_tables_blobs_partition_25 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_25 FOR VALUES IN ('Z');
 
 
 --
@@ -502,7 +483,6 @@ CREATE TABLE public.storage_tables_blobs_partition_26 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_26 FOR VALUES IN ('a');
 
 
 --
@@ -518,7 +498,6 @@ CREATE TABLE public.storage_tables_blobs_partition_27 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_27 FOR VALUES IN ('b');
 
 
 --
@@ -534,7 +513,6 @@ CREATE TABLE public.storage_tables_blobs_partition_28 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_28 FOR VALUES IN ('c');
 
 
 --
@@ -550,7 +528,6 @@ CREATE TABLE public.storage_tables_blobs_partition_29 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_29 FOR VALUES IN ('d');
 
 
 --
@@ -566,7 +543,6 @@ CREATE TABLE public.storage_tables_blobs_partition_3 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_3 FOR VALUES IN ('D');
 
 
 --
@@ -582,7 +558,6 @@ CREATE TABLE public.storage_tables_blobs_partition_30 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_30 FOR VALUES IN ('e');
 
 
 --
@@ -598,7 +573,6 @@ CREATE TABLE public.storage_tables_blobs_partition_31 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_31 FOR VALUES IN ('f');
 
 
 --
@@ -614,7 +588,6 @@ CREATE TABLE public.storage_tables_blobs_partition_32 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_32 FOR VALUES IN ('g');
 
 
 --
@@ -630,7 +603,6 @@ CREATE TABLE public.storage_tables_blobs_partition_33 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_33 FOR VALUES IN ('h');
 
 
 --
@@ -646,7 +618,6 @@ CREATE TABLE public.storage_tables_blobs_partition_34 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_34 FOR VALUES IN ('i');
 
 
 --
@@ -662,7 +633,6 @@ CREATE TABLE public.storage_tables_blobs_partition_35 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_35 FOR VALUES IN ('j');
 
 
 --
@@ -678,7 +648,6 @@ CREATE TABLE public.storage_tables_blobs_partition_36 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_36 FOR VALUES IN ('k');
 
 
 --
@@ -694,7 +663,6 @@ CREATE TABLE public.storage_tables_blobs_partition_37 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_37 FOR VALUES IN ('l');
 
 
 --
@@ -710,7 +678,6 @@ CREATE TABLE public.storage_tables_blobs_partition_38 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_38 FOR VALUES IN ('m');
 
 
 --
@@ -726,7 +693,6 @@ CREATE TABLE public.storage_tables_blobs_partition_39 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_39 FOR VALUES IN ('n');
 
 
 --
@@ -742,7 +708,6 @@ CREATE TABLE public.storage_tables_blobs_partition_4 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_4 FOR VALUES IN ('E');
 
 
 --
@@ -758,7 +723,6 @@ CREATE TABLE public.storage_tables_blobs_partition_40 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_40 FOR VALUES IN ('o');
 
 
 --
@@ -774,7 +738,6 @@ CREATE TABLE public.storage_tables_blobs_partition_41 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_41 FOR VALUES IN ('p');
 
 
 --
@@ -790,7 +753,6 @@ CREATE TABLE public.storage_tables_blobs_partition_42 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_42 FOR VALUES IN ('q');
 
 
 --
@@ -806,7 +768,6 @@ CREATE TABLE public.storage_tables_blobs_partition_43 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_43 FOR VALUES IN ('r');
 
 
 --
@@ -822,7 +783,6 @@ CREATE TABLE public.storage_tables_blobs_partition_44 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_44 FOR VALUES IN ('s');
 
 
 --
@@ -838,7 +798,6 @@ CREATE TABLE public.storage_tables_blobs_partition_45 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_45 FOR VALUES IN ('t');
 
 
 --
@@ -854,7 +813,6 @@ CREATE TABLE public.storage_tables_blobs_partition_46 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_46 FOR VALUES IN ('u');
 
 
 --
@@ -870,7 +828,6 @@ CREATE TABLE public.storage_tables_blobs_partition_47 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_47 FOR VALUES IN ('v');
 
 
 --
@@ -886,7 +843,6 @@ CREATE TABLE public.storage_tables_blobs_partition_48 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_48 FOR VALUES IN ('w');
 
 
 --
@@ -902,7 +858,6 @@ CREATE TABLE public.storage_tables_blobs_partition_49 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_49 FOR VALUES IN ('x');
 
 
 --
@@ -918,7 +873,6 @@ CREATE TABLE public.storage_tables_blobs_partition_5 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_5 FOR VALUES IN ('F');
 
 
 --
@@ -934,7 +888,6 @@ CREATE TABLE public.storage_tables_blobs_partition_50 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_50 FOR VALUES IN ('y');
 
 
 --
@@ -950,7 +903,6 @@ CREATE TABLE public.storage_tables_blobs_partition_51 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_51 FOR VALUES IN ('z');
 
 
 --
@@ -966,7 +918,6 @@ CREATE TABLE public.storage_tables_blobs_partition_52 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_52 FOR VALUES IN ('0');
 
 
 --
@@ -982,7 +933,6 @@ CREATE TABLE public.storage_tables_blobs_partition_53 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_53 FOR VALUES IN ('1');
 
 
 --
@@ -998,7 +948,6 @@ CREATE TABLE public.storage_tables_blobs_partition_54 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_54 FOR VALUES IN ('2');
 
 
 --
@@ -1014,7 +963,6 @@ CREATE TABLE public.storage_tables_blobs_partition_55 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_55 FOR VALUES IN ('3');
 
 
 --
@@ -1030,7 +978,6 @@ CREATE TABLE public.storage_tables_blobs_partition_56 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_56 FOR VALUES IN ('4');
 
 
 --
@@ -1046,7 +993,6 @@ CREATE TABLE public.storage_tables_blobs_partition_57 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_57 FOR VALUES IN ('5');
 
 
 --
@@ -1062,7 +1008,6 @@ CREATE TABLE public.storage_tables_blobs_partition_58 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_58 FOR VALUES IN ('6');
 
 
 --
@@ -1078,7 +1023,6 @@ CREATE TABLE public.storage_tables_blobs_partition_59 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_59 FOR VALUES IN ('7');
 
 
 --
@@ -1094,7 +1038,6 @@ CREATE TABLE public.storage_tables_blobs_partition_6 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_6 FOR VALUES IN ('G');
 
 
 --
@@ -1110,7 +1053,6 @@ CREATE TABLE public.storage_tables_blobs_partition_60 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_60 FOR VALUES IN ('8');
 
 
 --
@@ -1126,7 +1068,6 @@ CREATE TABLE public.storage_tables_blobs_partition_61 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_61 FOR VALUES IN ('9');
 
 
 --
@@ -1142,7 +1083,6 @@ CREATE TABLE public.storage_tables_blobs_partition_62 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_62 FOR VALUES IN ('+');
 
 
 --
@@ -1158,7 +1098,6 @@ CREATE TABLE public.storage_tables_blobs_partition_63 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_63 FOR VALUES IN ('/');
 
 
 --
@@ -1174,7 +1113,6 @@ CREATE TABLE public.storage_tables_blobs_partition_7 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_7 FOR VALUES IN ('H');
 
 
 --
@@ -1190,7 +1128,6 @@ CREATE TABLE public.storage_tables_blobs_partition_8 (
     content_type character varying,
     metadata jsonb
 );
-ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_8 FOR VALUES IN ('I');
 
 
 --
@@ -1206,6 +1143,453 @@ CREATE TABLE public.storage_tables_blobs_partition_9 (
     content_type character varying,
     metadata jsonb
 );
+
+
+--
+-- Name: storage_tables_blobs_partition_0; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_0 FOR VALUES IN ('A');
+
+
+--
+-- Name: storage_tables_blobs_partition_1; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_1 FOR VALUES IN ('B');
+
+
+--
+-- Name: storage_tables_blobs_partition_10; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_10 FOR VALUES IN ('K');
+
+
+--
+-- Name: storage_tables_blobs_partition_11; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_11 FOR VALUES IN ('L');
+
+
+--
+-- Name: storage_tables_blobs_partition_12; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_12 FOR VALUES IN ('M');
+
+
+--
+-- Name: storage_tables_blobs_partition_13; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_13 FOR VALUES IN ('N');
+
+
+--
+-- Name: storage_tables_blobs_partition_14; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_14 FOR VALUES IN ('O');
+
+
+--
+-- Name: storage_tables_blobs_partition_15; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_15 FOR VALUES IN ('P');
+
+
+--
+-- Name: storage_tables_blobs_partition_16; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_16 FOR VALUES IN ('Q');
+
+
+--
+-- Name: storage_tables_blobs_partition_17; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_17 FOR VALUES IN ('R');
+
+
+--
+-- Name: storage_tables_blobs_partition_18; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_18 FOR VALUES IN ('S');
+
+
+--
+-- Name: storage_tables_blobs_partition_19; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_19 FOR VALUES IN ('T');
+
+
+--
+-- Name: storage_tables_blobs_partition_2; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_2 FOR VALUES IN ('C');
+
+
+--
+-- Name: storage_tables_blobs_partition_20; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_20 FOR VALUES IN ('U');
+
+
+--
+-- Name: storage_tables_blobs_partition_21; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_21 FOR VALUES IN ('V');
+
+
+--
+-- Name: storage_tables_blobs_partition_22; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_22 FOR VALUES IN ('W');
+
+
+--
+-- Name: storage_tables_blobs_partition_23; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_23 FOR VALUES IN ('X');
+
+
+--
+-- Name: storage_tables_blobs_partition_24; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_24 FOR VALUES IN ('Y');
+
+
+--
+-- Name: storage_tables_blobs_partition_25; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_25 FOR VALUES IN ('Z');
+
+
+--
+-- Name: storage_tables_blobs_partition_26; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_26 FOR VALUES IN ('a');
+
+
+--
+-- Name: storage_tables_blobs_partition_27; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_27 FOR VALUES IN ('b');
+
+
+--
+-- Name: storage_tables_blobs_partition_28; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_28 FOR VALUES IN ('c');
+
+
+--
+-- Name: storage_tables_blobs_partition_29; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_29 FOR VALUES IN ('d');
+
+
+--
+-- Name: storage_tables_blobs_partition_3; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_3 FOR VALUES IN ('D');
+
+
+--
+-- Name: storage_tables_blobs_partition_30; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_30 FOR VALUES IN ('e');
+
+
+--
+-- Name: storage_tables_blobs_partition_31; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_31 FOR VALUES IN ('f');
+
+
+--
+-- Name: storage_tables_blobs_partition_32; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_32 FOR VALUES IN ('g');
+
+
+--
+-- Name: storage_tables_blobs_partition_33; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_33 FOR VALUES IN ('h');
+
+
+--
+-- Name: storage_tables_blobs_partition_34; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_34 FOR VALUES IN ('i');
+
+
+--
+-- Name: storage_tables_blobs_partition_35; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_35 FOR VALUES IN ('j');
+
+
+--
+-- Name: storage_tables_blobs_partition_36; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_36 FOR VALUES IN ('k');
+
+
+--
+-- Name: storage_tables_blobs_partition_37; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_37 FOR VALUES IN ('l');
+
+
+--
+-- Name: storage_tables_blobs_partition_38; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_38 FOR VALUES IN ('m');
+
+
+--
+-- Name: storage_tables_blobs_partition_39; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_39 FOR VALUES IN ('n');
+
+
+--
+-- Name: storage_tables_blobs_partition_4; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_4 FOR VALUES IN ('E');
+
+
+--
+-- Name: storage_tables_blobs_partition_40; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_40 FOR VALUES IN ('o');
+
+
+--
+-- Name: storage_tables_blobs_partition_41; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_41 FOR VALUES IN ('p');
+
+
+--
+-- Name: storage_tables_blobs_partition_42; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_42 FOR VALUES IN ('q');
+
+
+--
+-- Name: storage_tables_blobs_partition_43; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_43 FOR VALUES IN ('r');
+
+
+--
+-- Name: storage_tables_blobs_partition_44; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_44 FOR VALUES IN ('s');
+
+
+--
+-- Name: storage_tables_blobs_partition_45; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_45 FOR VALUES IN ('t');
+
+
+--
+-- Name: storage_tables_blobs_partition_46; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_46 FOR VALUES IN ('u');
+
+
+--
+-- Name: storage_tables_blobs_partition_47; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_47 FOR VALUES IN ('v');
+
+
+--
+-- Name: storage_tables_blobs_partition_48; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_48 FOR VALUES IN ('w');
+
+
+--
+-- Name: storage_tables_blobs_partition_49; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_49 FOR VALUES IN ('x');
+
+
+--
+-- Name: storage_tables_blobs_partition_5; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_5 FOR VALUES IN ('F');
+
+
+--
+-- Name: storage_tables_blobs_partition_50; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_50 FOR VALUES IN ('y');
+
+
+--
+-- Name: storage_tables_blobs_partition_51; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_51 FOR VALUES IN ('z');
+
+
+--
+-- Name: storage_tables_blobs_partition_52; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_52 FOR VALUES IN ('0');
+
+
+--
+-- Name: storage_tables_blobs_partition_53; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_53 FOR VALUES IN ('1');
+
+
+--
+-- Name: storage_tables_blobs_partition_54; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_54 FOR VALUES IN ('2');
+
+
+--
+-- Name: storage_tables_blobs_partition_55; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_55 FOR VALUES IN ('3');
+
+
+--
+-- Name: storage_tables_blobs_partition_56; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_56 FOR VALUES IN ('4');
+
+
+--
+-- Name: storage_tables_blobs_partition_57; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_57 FOR VALUES IN ('5');
+
+
+--
+-- Name: storage_tables_blobs_partition_58; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_58 FOR VALUES IN ('6');
+
+
+--
+-- Name: storage_tables_blobs_partition_59; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_59 FOR VALUES IN ('7');
+
+
+--
+-- Name: storage_tables_blobs_partition_6; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_6 FOR VALUES IN ('G');
+
+
+--
+-- Name: storage_tables_blobs_partition_60; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_60 FOR VALUES IN ('8');
+
+
+--
+-- Name: storage_tables_blobs_partition_61; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_61 FOR VALUES IN ('9');
+
+
+--
+-- Name: storage_tables_blobs_partition_62; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_62 FOR VALUES IN ('+');
+
+
+--
+-- Name: storage_tables_blobs_partition_63; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_63 FOR VALUES IN ('/');
+
+
+--
+-- Name: storage_tables_blobs_partition_7; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_7 FOR VALUES IN ('H');
+
+
+--
+-- Name: storage_tables_blobs_partition_8; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_8 FOR VALUES IN ('I');
+
+
+--
+-- Name: storage_tables_blobs_partition_9; Type: TABLE ATTACH; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.storage_tables_blobs ATTACH PARTITION public.storage_tables_blobs_partition_9 FOR VALUES IN ('J');
 
 
@@ -3618,6 +4002,454 @@ CREATE TRIGGER immutable_blob_key_and_checksum BEFORE UPDATE ON public.storage_t
 
 
 --
+-- Name: storage_tables_blobs_partition_0 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_0 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_1 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_1 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_10 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_10 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_11 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_11 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_12 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_12 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_13 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_13 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_14 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_14 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_15 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_15 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_16 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_16 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_17 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_17 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_18 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_18 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_19 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_19 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_2 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_2 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_20 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_20 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_21 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_21 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_22 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_22 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_23 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_23 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_24 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_24 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_25 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_25 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_26 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_26 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_27 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_27 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_28 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_28 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_29 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_29 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_3 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_3 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_30 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_30 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_31 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_31 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_32 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_32 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_33 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_33 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_34 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_34 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_35 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_35 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_36 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_36 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_37 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_37 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_38 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_38 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_39 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_39 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_4 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_4 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_40 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_40 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_41 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_41 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_42 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_42 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_43 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_43 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_44 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_44 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_45 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_45 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_46 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_46 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_47 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_47 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_48 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_48 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_49 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_49 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_5 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_5 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_50 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_50 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_51 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_51 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_52 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_52 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_53 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_53 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_54 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_54 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_55 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_55 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_56 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_56 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_57 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_57 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_58 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_58 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_59 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_59 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_6 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_6 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_60 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_60 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_61 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_61 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_62 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_62 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_63 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_63 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_7 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_7 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_8 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_8 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
+-- Name: storage_tables_blobs_partition_9 storage_tables_prevent_deletion; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER storage_tables_prevent_deletion BEFORE DELETE ON public.storage_tables_blobs_partition_9 FOR EACH ROW EXECUTE FUNCTION public.storage_tables_prevent_delete();
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3640,6 +4472,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240704135631'),
 ('20231005134835'),
 ('20230914102244'),
 ('20230914064811'),
