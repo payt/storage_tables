@@ -7,6 +7,21 @@ module StorageTables
   class Service
     # Set the storage service to be used by Storage Tables.
     class Configurator < ActiveStorage::Service::Configurator
+      def self.build(service_name, configurations)
+        new(configurations).build(service_name)
+      end
+
+      def initialize(configurations)
+        @configurations = configurations.deep_symbolize_keys
+      end
+
+      def build(service_name)
+        config = config_for(service_name.to_sym)
+        resolve(config.fetch(:service)).build(
+          **config, configurator: self, name: service_name
+        )
+      end
+
       private
 
       def resolve(class_name)
