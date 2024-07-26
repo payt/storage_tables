@@ -15,9 +15,7 @@ module StorageTables
     # specified in the Active Record class.
     class StoredManyAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro
-        # :nocov:
         :stored_many_attachments
-        # :nocov:
       end
     end
 
@@ -42,14 +40,14 @@ module StorageTables
       end
     end
 
-    module ActiveRecordExtensions
+    module ActiveRecordExtensions # :nodoc:
       extend ActiveSupport::Concern
 
       included do
         class_attribute :attachment_reflections, instance_writer: false, default: {}
       end
 
-      module ClassMethods
+      module ClassMethods # :nodoc:
         # Returns an array of reflection objects for all the attachments in the
         # class.
         def reflect_on_all_attachments
