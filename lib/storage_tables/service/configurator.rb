@@ -6,7 +6,9 @@ require "active_storage/service/configurator"
 module StorageTables
   class Service
     # Set the storage service to be used by Storage Tables.
-    class Configurator < ActiveStorage::Service::Configurator
+    class Configurator
+      attr_reader :configurations
+
       def self.build(service_name, configurations)
         new(configurations).build(service_name)
       end
@@ -23,6 +25,12 @@ module StorageTables
       end
 
       private
+
+      def config_for(name)
+        configurations.fetch name do
+          raise "Missing configuration for the #{name.inspect} Storage Storage service. Configurations available for #{configurations.keys.inspect}"
+        end
+      end
 
       def resolve(class_name)
         require "storage_tables/service/#{class_name.to_s.underscore}_service"
