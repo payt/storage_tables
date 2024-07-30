@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
+  spec.add_dependency "aws-sdk-s3", "~> 1.48"
   spec.add_dependency "rails", "7.1.3.4"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
