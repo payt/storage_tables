@@ -5,10 +5,10 @@ require "net/http"
 require "database/setup"
 
 if SERVICE_CONFIGURATIONS[:s3]
-  class ActiveStorage::Service::S3ServiceTest < ActiveSupport::TestCase
-    SERVICE = ActiveStorage::Service.configure(:s3, SERVICE_CONFIGURATIONS)
+  class StorageTables::Service::S3ServiceTest < ActiveSupport::TestCase
+    SERVICE = StorageTables::Service.configure(:s3, SERVICE_CONFIGURATIONS)
 
-    include ActiveStorage::Service::SharedServiceTests
+    include StorageTables::Service::SharedServiceTests
 
     test "name" do
       assert_equal :s3, @service.name

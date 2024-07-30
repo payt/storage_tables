@@ -28,16 +28,16 @@ module StorageTables
       @upload_options[:acl] = "public-read" if public?
     end
 
-    def upload(key, io, checksum: nil, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
+    def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
       instrument(:upload, key:, checksum:) do
         content_disposition = content_disposition_with(filename:, type: disposition) if disposition && filename
 
         if io.size < multipart_upload_threshold
-          upload_with_single_part(key, io, checksum:, content_type:,
-                                           content_disposition:, custom_metadata:)
+          upload_with_single_part(checksum, io, checksum, content_type:,
+                                                          content_disposition:, custom_metadata:)
         else
-          upload_with_multipart key, io, content_type:, content_disposition:,
-                                         custom_metadata:
+          upload_with_multipart checksum, io, content_type:, content_disposition:,
+                                              custom_metadata:
         end
       end
     end
@@ -137,8 +137,9 @@ module StorageTables
     MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
     MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-    def upload_with_single_part(key, io, checksum: nil, content_type: nil, content_disposition: nil,
+    def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                 custom_metadata: {})
+      md5_checksum = Digest::MD5.digest(io.read)
       object_for(key).put(body: io, content_md5: checksum, content_type:,
                           content_disposition:, metadata: custom_metadata, **upload_options)
     rescue Aws::S3::Errors::BadDigest
