@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
+# require_relative "service/configurator"
+
 module StorageTables
   # Loads and configures the Storage service to be used to store files.
   class Service
     extend ActiveSupport::Autoload
-
     autoload StorageTables::Service::Configurator
 
     class << self
@@ -12,7 +13,7 @@ module StorageTables
       # typically loaded from a YAML file. The Active Storage engine uses this
       # to set the global Active Storage service when the app boots.
       def configure(service_name, configurations)
-        StorageTables::Service::Configurator.build(service_name, configurations)
+        Configurator.build(service_name, configurations)
       end
 
       private
