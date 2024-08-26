@@ -29,7 +29,7 @@ module StorageTables
     end
 
     # Upload the +io+ to the +key+ specified. If a +checksum+ is provided, the service will
-    # ensure a match when the upload has completed or raise an ActiveStorage::IntegrityError.
+    # ensure a match when the upload has completed or raise an StorageTables::IntegrityError.
     def upload(checksum, io, **options)
       raise NotImplementedError
     end

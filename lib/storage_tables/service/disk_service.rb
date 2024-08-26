@@ -28,7 +28,7 @@ module StorageTables
       def download(checksum, &block)
         if block
           instrument(:streaming_download, checksum:) do
-            stream key, &block
+            stream checksum, &block
           end
         else
           instrument(:download, checksum:) do
@@ -52,7 +52,7 @@ module StorageTables
 
       def delete(checksum)
         instrument(:delete, checksum:) do
-          File.delete path_for(key)
+          File.delete path_for(checksum)
         rescue Errno::ENOENT
           # Ignore files already deleted
         end
@@ -123,7 +123,7 @@ module StorageTables
       end
 
       def make_path_for(checksum)
-        path_for(checksum).tap { |_path| FileUtils.mkdir_p File.dirname(checksum) }
+        path_for(checksum).tap { |path| FileUtils.mkdir_p File.dirname(path) }
       end
 
       def file_match?(checksum)
@@ -136,6 +136,16 @@ module StorageTables
         end
 
         StorageTables::Current.url_options
+      end
+
+      def stream(checksum)
+        File.open(path_for(checksum), "rb") do |file|
+          while data = file.read(5.megabytes)
+            yield data
+          end
+        end
+      rescue Errno::ENOENT
+        raise StorageTables::FileNotFoundError
       end
 
       def url_helpers
