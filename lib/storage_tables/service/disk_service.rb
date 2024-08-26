@@ -133,7 +133,7 @@ module StorageTables
 
       def stream(checksum)
         File.open(path_for(checksum), "rb") do |file|
-          while data = file.read(5.megabytes)
+          while (data = file.read(5.megabytes))
             yield data
           end
         end
