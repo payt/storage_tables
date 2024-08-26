@@ -20,7 +20,7 @@ module StorageTables
       def build(service_name)
         config = config_for(service_name.to_sym)
         resolve(config.fetch(:service)).build(
-          **config, name: service_name
+          **config.except(:service), name: service_name
         )
       end
 
@@ -28,7 +28,8 @@ module StorageTables
 
       def config_for(name)
         configurations.fetch name do
-          raise "Missing configuration for the #{name.inspect} Storage Storage service. Configurations available for #{configurations.keys.inspect}"
+          raise "Missing configuration for the #{name.inspect} Storage Storage service. " \
+                "Configurations available for #{configurations.keys.inspect}"
         end
       end
 

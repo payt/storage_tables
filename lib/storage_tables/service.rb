@@ -21,7 +21,7 @@ module StorageTables
       # Passes the configurator and all of the service's config as keyword args.
       #
       # See MirrorService for an example.
-      def build(name:, service: nil, **service_config) # :nodoc:
+      def build(name:, **service_config) # :nodoc:
         new(**service_config).tap do |service_instance|
           service_instance.name = name
         end
@@ -69,9 +69,9 @@ module StorageTables
     end
 
     # Returns the URL for the file at the +checksum+. This returns a permanent URL for public files, and returns a
-    # short-lived URL for private files. For private files you can provide the +disposition+ (+:inline+ or +:attachment+),
-    # +filename+, and +content_type+ that you wish the file to be served with on request. Additionally, you can also provide
-    # the amount of seconds the URL will be valid for, specified in +expires_in+.
+    # short-lived URL for private files. For private files you can provide the +disposition+ (+:inline+ or
+    # +:attachment+), +filename+, and +content_type+ that you wish the file to be served with on request. Additionally,
+    # you can also provide the amount of seconds the URL will be valid for, specified in +expires_in+.
     def url(checksum, **options)
       instrument(:url, checksum:) do |payload|
         generated_url =

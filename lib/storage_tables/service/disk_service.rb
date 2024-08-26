@@ -6,8 +6,8 @@ require "openssl"
 require "active_support/core_ext/numeric/bytes"
 
 module StorageTables
-  # Local disk storage service.
   class Service
+    # Local disk storage service.
     class DiskService < Service
       attr_accessor :root
 
@@ -16,13 +16,6 @@ module StorageTables
         @public = public
 
         super()
-      end
-
-      def upload(checksum, io, **)
-        instrument(:upload, checksum:) do
-          IO.copy_stream(io, make_path_for(checksum))
-          ensure_integrity_of(checksum)
-        end
       end
 
       def download(checksum, &block)
