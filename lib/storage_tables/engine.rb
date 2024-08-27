@@ -45,12 +45,10 @@ module StorageTables
             ActiveSupport::ConfigurationFile.parse(config_file)
           end
 
-        binding.pry
-
         StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
         config_choice = Rails.configuration.storage_tables.service
-        StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
+        StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice) if config_choice
       end
     end
 
