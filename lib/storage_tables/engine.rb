@@ -45,6 +45,8 @@ module StorageTables
             ActiveSupport::ConfigurationFile.parse(config_file)
           end
 
+        binding.pry
+
         StorageTables::Blob.services = StorageTables::Service::Registry.new(configs)
 
         config_choice = Rails.configuration.storage_tables.service
