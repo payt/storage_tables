@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "aws-sdk-s3", "~> 1.48"
-  spec.add_dependency "rails", "7.1.3.4"
+  spec.add_dependency "rails", "7.2.1"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
