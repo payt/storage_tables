@@ -1,11 +1,64 @@
 # frozen_string_literal: true
 
-require "active_storage/service/disk_service"
+require "fileutils"
+require "pathname"
+require "openssl"
+require "active_support/core_ext/numeric/bytes"
 
 module StorageTables
   class Service
     # Local disk storage service.
-    class DiskService < ActiveStorage::Service::DiskService
+    class DiskService < Service
+      attr_accessor :root
+
+      def initialize(root:, public: false)
+        @root = root
+        @public = public
+
+        super()
+      end
+
+      def download(checksum, &block)
+        if block
+          instrument(:streaming_download, checksum:) do
+            stream checksum, &block
+          end
+        else
+          instrument(:download, checksum:) do
+            File.binread path_for(checksum)
+          rescue Errno::ENOENT
+            raise StorageTables::FileNotFoundError
+          end
+        end
+      end
+
+      def download_chunk(checksum, range)
+        instrument(:download_chunk, checksum:, range:) do
+          File.open(path_for(checksum), "rb") do |file|
+            file.seek range.begin
+            file.read range.size
+          end
+        rescue Errno::ENOENT
+          raise StorageTables::FileNotFoundError
+        end
+      end
+
+      def delete(checksum)
+        instrument(:delete, checksum:) do
+          File.delete path_for(checksum)
+        rescue Errno::ENOENT
+          # Ignore files already deleted
+        end
+      end
+
+      def exist?(checksum)
+        instrument(:exist, checksum:) do |payload|
+          answer = File.exist? path_for(checksum)
+          payload[:exist] = answer
+          answer
+        end
+      end
+
       def path_for(checksum) # :nodoc:
         File.join root, folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
       end
@@ -62,6 +115,10 @@ module StorageTables
         raise StorageTables::IntegrityError
       end
 
+      def make_path_for(checksum)
+        path_for(checksum).tap { |path| FileUtils.mkdir_p File.dirname(path) }
+      end
+
       def file_match?(checksum)
         OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
       end
@@ -72,6 +129,20 @@ module StorageTables
         end
 
         StorageTables::Current.url_options
+      end
+
+      def stream(checksum)
+        File.open(path_for(checksum), "rb") do |file|
+          while (data = file.read(5.megabytes))
+            yield data
+          end
+        end
+      rescue Errno::ENOENT
+        raise StorageTables::FileNotFoundError
+      end
+
+      def url_helpers
+        @url_helpers ||= Rails.application.routes.url_helpers
       end
     end
   end
