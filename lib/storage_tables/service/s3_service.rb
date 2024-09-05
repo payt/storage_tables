@@ -85,8 +85,9 @@ module StorageTables
     def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, custom_metadata: {})
       instrument(:url, checksum:) do |payload|
         generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
-                                                                 content_type:, content_length:, content_md5: checksum,
-                                                                 metadata: custom_metadata, whitelist_headers: ["content-length"], **upload_options
+                                                                 content_type:, content_length:,
+                                                                 metadata: custom_metadata,
+                                                                 whitelist_headers: ["content-length"], **upload_options
 
         payload[:url] = generated_url
 
@@ -137,9 +138,8 @@ module StorageTables
 
     def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                 custom_metadata: {})
-      md5_checksum = Digest::MD5.digest(io.read)
-      object_for(checksum).put(body: io, content_md5: md5_checksum, content_type:,
-                               content_disposition:, metadata: custom_metadata, **upload_options)
+      res = object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
+                                     content_disposition:, metadata: custom_metadata, **upload_options)
     rescue Aws::S3::Errors::BadDigest
       raise StorageTables::IntegrityError
     end
@@ -164,7 +164,7 @@ module StorageTables
       chunk_size = 5.megabytes
       offset = 0
 
-      raise ActiveStorage::FileNotFoundError unless object.exists?
+      raise StorageTables::FileNotFoundError unless object.exists?
 
       while offset < object.content_length
         yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.string.force_encoding(Encoding::BINARY)
@@ -174,6 +174,17 @@ module StorageTables
 
     def custom_metadata_headers(metadata)
       metadata.transform_keys { |key| "x-amz-meta-#{key}" }
+    end
+
+    def compute_md5_checksum(io)
+      raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+
+      OpenSSL::Digest.new("MD5").tap do |checksum|
+        read_buffer = "".b
+        checksum << read_buffer while io.read(5.megabytes, read_buffer)
+
+        io.rewind
+      end.base64digest
     end
   end
 end

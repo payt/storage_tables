@@ -20,8 +20,8 @@ if SERVICE_CONFIGURATIONS[:s3]
           key      = SecureRandom.base58(24)
           data     = "Something else entirely!"
           checksum = OpenSSL::Digest::MD5.base64digest(data)
-          url      = @service.url_for_direct_upload(key, expires_in: 5.minutes, content_type: "text/plain",
-                                                         content_length: data.size, checksum:)
+          url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                              content_length: data.size)
 
           uri = URI.parse url
           request = Net::HTTP::Put.new uri.request_uri
@@ -32,7 +32,7 @@ if SERVICE_CONFIGURATIONS[:s3]
             http.request request
           end
 
-          assert_equal data, @service.download(key)
+          assert_equal data, @service.download(checksum)
         ensure
           @service.delete key
         end
@@ -41,14 +41,14 @@ if SERVICE_CONFIGURATIONS[:s3]
           key      = SecureRandom.base58(24)
           data     = "Something else entirely!"
           checksum = OpenSSL::Digest::MD5.base64digest(data)
-          url      = @service.url_for_direct_upload(key, expires_in: 5.minutes, content_type: "text/plain",
-                                                         content_length: data.size, checksum:)
+          url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                              content_length: data.size)
 
           uri = URI.parse url
           request = Net::HTTP::Put.new uri.request_uri
           request.body = data
           @service.headers_for_direct_upload(key, checksum:, content_type: "text/plain",
-                                                  filename: ActiveStorage::Filename.new("test.txt"), disposition: :attachment).each do |k, v|
+                                                  filename: StorageTables::Filename.new("test.txt"), disposition: :attachment).each do |k, v|
             request.add_field k, v
           end
           Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
@@ -56,9 +56,9 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           assert_equal("attachment; filename=\"test.txt\"; filename*=UTF-8''test.txt",
-                       @service.bucket.object(key).content_disposition)
+                       @service.bucket.object(checksum).content_disposition)
         ensure
-          @service.delete key
+          @service.delete checksum
         end
 
         test "directly uploading file larger than the provided content-length does not work" do
