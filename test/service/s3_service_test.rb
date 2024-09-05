@@ -8,7 +8,6 @@ if SERVICE_CONFIGURATIONS[:s3]
   module StorageTables
     class Service
       class S3ServiceTest < ActiveSupport::TestCase
-        binding.pry
         SERVICE = StorageTables::Service.configure(:s3, SERVICE_CONFIGURATIONS)
 
         include StorageTables::Service::SharedServiceTests

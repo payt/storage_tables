@@ -16,8 +16,6 @@ module StorageTables
     attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
     def initialize(bucket:, upload: {}, public: false, **)
-      super
-
       @client = Aws::S3::Resource.new(**)
       @bucket = @client.bucket(bucket)
 
@@ -29,12 +27,12 @@ module StorageTables
     end
 
     def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
-      instrument(:upload, key:, checksum:) do
+      instrument(:upload, checksum:) do
         content_disposition = content_disposition_with(filename:, type: disposition) if disposition && filename
 
         if io.size < multipart_upload_threshold
-          upload_with_single_part(checksum, io, checksum, content_type:,
-                                                          content_disposition:, custom_metadata:)
+          upload_with_single_part(checksum, io, content_type:,
+                                                content_disposition:, custom_metadata:)
         else
           upload_with_multipart checksum, io, content_type:, content_disposition:,
                                               custom_metadata:
@@ -42,31 +40,31 @@ module StorageTables
       end
     end
 
-    def download(key, &block)
+    def download(checksum, &block)
       if block
-        instrument(:streaming_download, key:) do
-          stream(key, &block)
+        instrument(:streaming_download, checksum:) do
+          stream(checksum, &block)
         end
       else
-        instrument(:download, key:) do
-          object_for(key).get.body.string.force_encoding(Encoding::BINARY)
+        instrument(:download, checksum:) do
+          object_for(checksum).get.body.string.force_encoding(Encoding::BINARY)
         rescue Aws::S3::Errors::NoSuchKey
-          raise ActiveStorage::FileNotFoundError
+          raise StorageTables::FileNotFoundError
         end
       end
     end
 
-    def download_chunk(key, range)
-      instrument(:download_chunk, key:, range:) do
-        object_for(key).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body.string.force_encoding(Encoding::BINARY)
+    def download_chunk(checksum, range)
+      instrument(:download_chunk, checksum:, range:) do
+        object_for(checksum).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body.string.force_encoding(Encoding::BINARY)
       rescue Aws::S3::Errors::NoSuchKey
-        raise ActiveStorage::FileNotFoundError
+        raise StorageTables::FileNotFoundError
       end
     end
 
-    def delete(key)
-      instrument(:delete, key:) do
-        object_for(key).delete
+    def delete(checksum)
+      instrument(:delete, checksum:) do
+        object_for(checksum).delete
       end
     end
 
@@ -76,19 +74,19 @@ module StorageTables
       end
     end
 
-    def exist?(key)
-      instrument(:exist, key:) do |payload|
-        answer = object_for(key).exists?
+    def exist?(checksum)
+      instrument(:exist, checksum:) do |payload|
+        answer = object_for(checksum).exists?
         payload[:exist] = answer
         answer
       end
     end
 
-    def url_for_direct_upload(key, expires_in:, content_type:, content_length:, checksum:, custom_metadata: {})
-      instrument(:url, key:) do |payload|
-        generated_url = object_for(key).presigned_url :put, expires_in: expires_in.to_i,
-                                                            content_type:, content_length:, content_md5: checksum,
-                                                            metadata: custom_metadata, whitelist_headers: ["content-length"], **upload_options
+    def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, custom_metadata: {})
+      instrument(:url, checksum:) do |payload|
+        generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
+                                                                 content_type:, content_length:, content_md5: checksum,
+                                                                 metadata: custom_metadata, whitelist_headers: ["content-length"], **upload_options
 
         payload[:url] = generated_url
 
@@ -96,7 +94,7 @@ module StorageTables
       end
     end
 
-    def headers_for_direct_upload(_key, content_type:, checksum:, filename: nil, disposition: nil, custom_metadata: {},
+    def headers_for_direct_upload(checksum, content_type:, filename: nil, disposition: nil, custom_metadata: {},
                                   **)
       content_disposition = content_disposition_with(type: disposition, filename:) if filename
 
@@ -124,14 +122,14 @@ module StorageTables
 
     private
 
-    def private_url(key, expires_in:, filename:, disposition:, content_type:, **client_opts)
-      object_for(key).presigned_url :get, expires_in: expires_in.to_i,
-                                          response_content_disposition: content_disposition_with(type: disposition, filename:),
-                                          response_content_type: content_type, **client_opts
+    def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts)
+      object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
+                                               response_content_disposition: content_disposition_with(type: disposition, filename:),
+                                               response_content_type: content_type, **client_opts
     end
 
-    def public_url(key, **client_opts)
-      object_for(key).public_url(**client_opts)
+    def public_url(checksum, **client_opts)
+      object_for(checksum).public_url(**client_opts)
     end
 
     MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
@@ -140,10 +138,10 @@ module StorageTables
     def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                 custom_metadata: {})
       md5_checksum = Digest::MD5.digest(io.read)
-      object_for(key).put(body: io, content_md5: checksum, content_type:,
-                          content_disposition:, metadata: custom_metadata, **upload_options)
+      object_for(checksum).put(body: io, content_md5: md5_checksum, content_type:,
+                               content_disposition:, metadata: custom_metadata, **upload_options)
     rescue Aws::S3::Errors::BadDigest
-      raise ActiveStorage::IntegrityError
+      raise StorageTables::IntegrityError
     end
 
     def upload_with_multipart(key, io, content_type: nil, content_disposition: nil, custom_metadata: {})
