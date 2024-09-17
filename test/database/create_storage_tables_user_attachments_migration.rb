@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.2]
+class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.1]
   def up
     create_table :storage_tables_user_avatar_attachments, primary_key: [:record_id, :blob_key, :checksum],
                                                           force: :cascade do |t|
