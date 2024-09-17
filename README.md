@@ -3,7 +3,7 @@
 
 | :exclamation: IN DEVELOPMENT   |
 |:-----------------------------------------|
-| This is still in development and should not be used in any production environment! |
+| This is still in development and should not be used in any production enviroment! |
 
 This is an idea after ActiveStorage from rails. We wanted to use separate models and tables for saving attachments.
 
