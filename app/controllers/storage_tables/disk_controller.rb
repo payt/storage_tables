@@ -6,6 +6,8 @@ module StorageTables
   # Always go through the BlobsController, or your own authenticated controller, rather than directly
   # to the service URL.
   class DiskController < BaseController
+    protect_from_forgery except: :update
+
     def update
       return head :not_found unless token
 

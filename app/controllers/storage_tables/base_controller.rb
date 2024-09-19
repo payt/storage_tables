@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# The base class for all Active Storage controllers.
 module StorageTables
+  # The base class for all StorageTables controllers.
   class BaseController < ActionController::Base # rubocop:disable Rails/ApplicationController
     include StorageTables::SetCurrent
 
