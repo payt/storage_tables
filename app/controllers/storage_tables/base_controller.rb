@@ -10,4 +10,3 @@ module StorageTables
     self.etag_with_template_digest = false
   end
 end
-        
