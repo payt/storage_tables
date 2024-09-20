@@ -6,8 +6,6 @@ module StorageTables
   # Always go through the BlobsController, or your own authenticated controller, rather than directly
   # to the service URL.
   class DiskController < BaseController
-    include ActiveStorage::FileServer
-
     skip_forgery_protection
 
     def update
