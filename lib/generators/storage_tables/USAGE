@@ -1,0 +1,9 @@
+Description:
+    Generates migration for a new attachment table
+
+Example:
+    bin/rails generate storage_tables [model] --record [record]
+
+    This will create:
+        - db/migrate/[timestamp]_create_storage_tables[model].rb
+        - models/storage_tables/model.rb

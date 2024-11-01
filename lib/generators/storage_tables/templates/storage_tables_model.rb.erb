@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+module StorageTables
+  class <%= @name %> < StorageTables::Attachment
+    self.table_name = "<%= @table_name %>"
+
+    belongs_to :record, class_name: "<%= @record.name %>"
+  end
+end
