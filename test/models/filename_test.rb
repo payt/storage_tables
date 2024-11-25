@@ -62,8 +62,9 @@ module StorageTables
     end
 
     test "#wrap" do
-        assert_equal StorageTables::Filename.new("foo.pdf"), StorageTables::Filename.wrap(StorageTables::Filename.new("foo.pdf"))
-        assert_equal StorageTables::Filename.new("foo.pdf"), StorageTables::Filename.wrap("foo.pdf")
+      assert_equal StorageTables::Filename.new("foo.pdf"),
+                   StorageTables::Filename.wrap(StorageTables::Filename.new("foo.pdf"))
+      assert_equal StorageTables::Filename.new("foo.pdf"), StorageTables::Filename.wrap("foo.pdf")
     end
   end
 end
