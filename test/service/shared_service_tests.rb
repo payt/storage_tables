@@ -12,9 +12,16 @@ module StorageTables
 
       included do
         setup do
-          @checksum = OpenSSL::Digest.new("SHA3-512").base64digest(FIXTURE_DATA)
+          @checksum = StorageTables::Checksum.generate_safe(StringIO.new(FIXTURE_DATA))
           @service = self.class.const_get(:SERVICE)
-          @service.upload @checksum, StringIO.new(FIXTURE_DATA)
+          binding.pry
+          if @service.name == :s3
+            VCR.use_cassette("s3/pre_upload") do
+              @service.upload @checksum, StringIO.new(FIXTURE_DATA)
+            end
+          else
+            @service.upload @checksum, StringIO.new(FIXTURE_DATA)
+          end
         end
 
         test "uploading without integrity" do

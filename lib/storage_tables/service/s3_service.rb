@@ -15,7 +15,7 @@ module StorageTables
 
     attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
-    def initialize(bucket:, upload: {}, public: false, **)
+    def initialize(bucket:, upload: {}, public: false, **) # rubocop:disable Lint/MissingSuper
       @client = Aws::S3::Resource.new(**)
       @bucket = @client.bucket(bucket)
 
@@ -124,6 +124,7 @@ module StorageTables
     private
 
     def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts)
+      binding.pry
       object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
                                                response_content_disposition: content_disposition_with(type: disposition, filename:),
                                                response_content_type: content_type, **client_opts

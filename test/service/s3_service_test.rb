@@ -9,7 +9,7 @@ if SERVICE_CONFIGURATIONS[:s3]
     class Service
       class S3ServiceTest < ActiveSupport::TestCase
         SERVICE = StorageTables::Service.configure(:s3, SERVICE_CONFIGURATIONS)
-
+        
         include StorageTables::Service::SharedServiceTests
 
         test "name" do
@@ -17,24 +17,29 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "direct upload" do
-          key      = SecureRandom.base58(24)
-          data     = "Something else entirely!"
-          checksum = OpenSSL::Digest::MD5.base64digest(data)
-          url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
-                                                              content_length: data.size)
+          VCR.use_cassette("s3/direct_upload", record: :all) do
+            key      = SecureRandom.base58(24)
+            data     = "Something else entirely!"
+            checksum = OpenSSL::Digest::MD5.base64digest(data)
+            url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                                content_length: data.size)
 
-          uri = URI.parse url
-          request = Net::HTTP::Put.new uri.request_uri
-          request.body = data
-          request.add_field "Content-Type", "text/plain"
-          request.add_field "Content-MD5", checksum
-          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-            http.request request
+            uri = URI.parse url
+            request = Net::HTTP::Put.new uri.request_uri
+            request.body = data
+            request.add_field "Content-Type", "text/plain"
+            request.add_field "Content-MD5", checksum
+            Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+              http.request request
+            end
+
+            assert_equal data, @service.download(checksum)
+          rescue StandardError => e
+            binding.pry
+          ensure
+            binding.pry
+            @service.delete key
           end
-
-          assert_equal data, @service.download(checksum)
-        ensure
-          @service.delete key
         end
 
         test "direct upload with content disposition" do
