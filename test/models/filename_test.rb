@@ -60,5 +60,10 @@ module StorageTables
       assert_equal '{"filename":"foo.pdf"}', { filename: StorageTables::Filename.new("foo.pdf") }.to_json
       assert_equal '{"filename":"foo.pdf"}', JSON.generate(filename: StorageTables::Filename.new("foo.pdf"))
     end
+
+    test "#wrap" do
+        assert_equal StorageTables::Filename.new("foo.pdf"), StorageTables::Filename.wrap(StorageTables::Filename.new("foo.pdf"))
+        assert_equal StorageTables::Filename.new("foo.pdf"), StorageTables::Filename.wrap("foo.pdf")
+    end
   end
 end
