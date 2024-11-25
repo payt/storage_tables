@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module StorageTables
-    # = StorageTables \Filename
-    #
-    # Encapsulates a string representing a filename to provide convenient access to parts of it and sanitization.
-    # A Filename instance is returned by StorageTables::Blob#filename, and is comparable so it can be used for sorting.
+  # = StorageTables \Filename
+  #
+  # Encapsulates a string representing a filename to provide convenient access to parts of it and sanitization.
+  # A Filename instance is returned by StorageTables::Blob#filename, and is comparable so it can be used for sorting.
   class Filename
     include Comparable
 
