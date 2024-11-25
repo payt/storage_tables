@@ -29,11 +29,11 @@ module StorageTables
       "#{blob_key}#{checksum}=="
     end
 
-    # Returns an ActiveStorage::Filename instance of the filename that can be
+    # Returns an StorageTables::Filename instance of the filename that can be
     # queried for basename, extension, and a sanitized version of the filename
     # that's safe to use in URLs.
     def filename
-      ActiveStorage::Filename.new(self[:filename])
+      StorageTables::Filename.new(self[:filename])
     end
   end
 end
