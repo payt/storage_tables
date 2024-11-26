@@ -12,14 +12,14 @@ module StorageTables
 
       included do
         setup do
-          @checksum = OpenSSL::Digest.new("SHA3-512").base64digest(FIXTURE_DATA)
+          @checksum = Checksum.from_io(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
           @service.upload @checksum, StringIO.new(FIXTURE_DATA)
         end
 
         test "uploading without integrity" do
           data = "Something else entirely!"
-          checksum = OpenSSL::Digest.new("SHA3-512").base64digest("FIXTURE_DATA")
+          checksum = Checksum.new("FIXTURE_DATA")
 
           assert_raises(StorageTables::IntegrityError) do
             @service.upload(checksum, StringIO.new(data))
@@ -44,7 +44,7 @@ module StorageTables
           expected_chunks = ["a" * 5.megabytes, "b"]
           actual_chunks = []
           io = StringIO.new(expected_chunks.join)
-          checksum = OpenSSL::Digest.new("SHA3-512").base64digest(expected_chunks.join)
+          checksum = Checksum.from_io(expected_chunks.join)
 
           begin
             @service.upload checksum, io

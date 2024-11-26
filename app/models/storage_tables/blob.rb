@@ -20,14 +20,16 @@ module StorageTables
     end
 
     def checksum=(value)
-      self[:partition_key] = value[0]
-      self[:checksum] = value[1..].chomp("==")
+      value = Checksum.wrap(value)
+
+      self[:partition_key] = value.partition_key
+      self[:checksum] = value.partition_checksum
     end
 
     def checksum
       return unless self[:checksum]
 
-      "#{partition_key}#{self[:checksum]}=="
+      Checksum.from_db(self[:partition_key], self[:checksum])
     end
 
     def destroy!
@@ -44,7 +46,7 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        checksum = compute_checksum_in_chunks(io)
+        checksum = Checksum.from_io(io)
         existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob
@@ -85,10 +87,14 @@ module StorageTables
       end
 
       def find_by_checksum(checksum)
-        find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+        checksum = Checksum.wrap(checksum)
+
+        find_by(partition_key: checksum.partition_key, checksum: checksum.partition_checksum)
       end
 
       def find_by_checksum!(checksum)
+        checksum = Checksum.wrap(checksum)
+        
         find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
       end
 

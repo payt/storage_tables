@@ -60,11 +60,12 @@ module StorageTables
       end
 
       def path_for(checksum) # :nodoc:
-        File.join root, folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
+        checksum = Checksum.wrap(checksum)
+        File.join root, folder_for(checksum.sanitized), checksum.sanitized
       end
 
       def relative_path_for(checksum)
-        File.join folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
+        File.join folder_for(checksum.sanitized), checksum.sanitized
       end
 
       def upload(checksum, io, **)
@@ -98,12 +99,6 @@ module StorageTables
 
       private
 
-      def refactored_checksum(checksum)
-        # Replace the forward slash with an underscore
-        # Replace the plus sign with a minus sign
-        checksum.tr("/+", "_-")
-      end
-
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end
@@ -120,7 +115,7 @@ module StorageTables
       end
 
       def file_match?(checksum)
-        OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
+        Checksum.from_file(path_for(checksum)) == checksum
       end
 
       def url_options
