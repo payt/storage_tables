@@ -101,10 +101,10 @@ module StorageTables
       def where_checksum(input)
         if input.is_a?(Array)
           where(primary_key => input.map { checksum_to_primary(_1) })
-        elsif input.is_a?(Checksum)
-          where(partition_key: input.partition_key, checksum: input.partition_checksum)
         else
-          where(partition_key: input[0], checksum: input[1..].chomp("=="))
+          Checksum.wrap(checksum).then do |wrapped|
+            where(partition_key: wrapped.partition_checksum, checksum: wrapped.partition_key)
+          end
         end
       end
 

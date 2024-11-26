@@ -129,7 +129,7 @@ module StorageTables
       assert_includes search, blob
       assert_not_includes search, blob2
     end
-
+    
     test "where_checksum with array" do
       blob = create_blob(data: "First blob")
       blob2 = create_blob(data: "Second blob")
@@ -144,6 +144,7 @@ module StorageTables
       assert_includes search, blob2
       assert_not_includes search, blob3
     end
+    
 
     ## StorageTables::Blob.find_by_checksum!
 
