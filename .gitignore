@@ -13,4 +13,5 @@
 .idea/
 Gemfile.lock
 .ruby-version
+.vscode/
 .env
