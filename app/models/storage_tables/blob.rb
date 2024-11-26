@@ -103,7 +103,7 @@ module StorageTables
           where(primary_key => input.map { checksum_to_primary(_1) })
         else
           Checksum.wrap(input).then do |wrapped|
-            where(partition_key: wrapped.partition_checksum, checksum: wrapped.partition_key)
+            where(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
           end
         end
       end
