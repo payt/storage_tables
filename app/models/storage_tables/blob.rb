@@ -94,13 +94,15 @@ module StorageTables
 
       def find_by_checksum!(checksum)
         checksum = Checksum.wrap(checksum)
-        
-        find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+
+        find_by!(partition_key: checksum.partition_key, checksum: checksum.partition_checksum)
       end
 
       def where_checksum(input)
         if input.is_a?(Array)
           where(primary_key => input.map { checksum_to_primary(_1) })
+        elsif input.is_a?(Checksum)
+          where(partition_key: input.partition_key, checksum: input.partition_checksum)
         else
           where(partition_key: input[0], checksum: input[1..].chomp("=="))
         end
@@ -120,7 +122,9 @@ module StorageTables
 
       # Cut the checksum into an Array to match the primary key
       def checksum_to_primary(checksum)
-        [checksum[1..].chomp("=="), checksum[0]]
+        Checksum.wrap(checksum).then do |wrapped|
+          [wrapped.partition_checksum, wrapped.partition_key]
+        end
       end
     end
 
