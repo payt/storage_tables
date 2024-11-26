@@ -87,15 +87,16 @@ module StorageTables
       end
 
       def find_by_checksum(checksum)
-        checksum = Checksum.wrap(checksum)
+        Checksum.wrap(checksum).then do |wrapped|
+          find_by(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
+        end
 
-        find_by(partition_key: checksum.partition_key, checksum: checksum.partition_checksum)
       end
 
       def find_by_checksum!(checksum)
-        checksum = Checksum.wrap(checksum)
-
-        find_by!(partition_key: checksum.partition_key, checksum: checksum.partition_checksum)
+        Checksum.wrap(checksum).then do |wrapped|
+          find_by!(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
+        end
       end
 
       def where_checksum(input)

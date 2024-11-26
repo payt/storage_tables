@@ -60,15 +60,15 @@ module StorageTables
       end
 
       def path_for(checksum) # :nodoc:
-        checksum = Checksum.wrap(checksum)
-
-        File.join root, folder_for(checksum.sanitized), checksum.sanitized
+        Checksum.wrap(checksum).then do |wrapped|
+          File.join root, folder_for(wrapped.sanitized), wrapped.sanitized
+        end
       end
 
       def relative_path_for(checksum)
-        checksum = Checksum.wrap(checksum)
-
-        File.join folder_for(checksum.sanitized), checksum.sanitized
+        Checksum.wrap(checksum).then do |wrapped|
+          File.join folder_for(wrapped.sanitized), wrapped.sanitized
+        end
       end
 
       def upload(checksum, io, **)
