@@ -52,7 +52,7 @@ module StorageTables
     end
 
     def initialize(checksum)
-      @checksum = checksum if checksum
+      @checksum = checksum
     end
 
     # Returns the checksum

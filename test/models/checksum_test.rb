@@ -32,5 +32,17 @@ module StorageTables
 
       assert_predicate checksum, :valid?
     end
+
+    test "when initialized with invalid checksum" do
+      checksum = Checksum.new("1234567890")
+
+      assert_not checksum.valid?
+    end
+
+    test "when initialized with nil value" do
+      checksum = Checksum.new(nil)
+
+      assert_not checksum.valid?
+    end
   end
 end
