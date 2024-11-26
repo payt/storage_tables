@@ -90,7 +90,6 @@ module StorageTables
         Checksum.wrap(checksum).then do |wrapped|
           find_by(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
         end
-
       end
 
       def find_by_checksum!(checksum)
@@ -103,7 +102,7 @@ module StorageTables
         if input.is_a?(Array)
           where(primary_key => input.map { checksum_to_primary(_1) })
         else
-          Checksum.wrap(checksum).then do |wrapped|
+          Checksum.wrap(input).then do |wrapped|
             where(partition_key: wrapped.partition_checksum, checksum: wrapped.partition_key)
           end
         end
