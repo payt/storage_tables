@@ -7,7 +7,7 @@ require:
 
 AllCops:
   TargetRubyVersion: 3.2
-  TargetRailsVersion: 7.1
+  TargetRailsVersion: 7.2
   NewCops: enable
   Exclude:
     - db/**/*
@@ -46,6 +46,10 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - test/**/*
+
 Metrics/CyclomaticComplexity:
   Max: 15
 
@@ -69,3 +73,9 @@ Rails/InverseOf:
   Enabled: true
   Exclude:
     - app/models/storage_tables/attachment.rb
+
+Rails/DynamicFindBy:
+  Enabled: true
+  Whitelist:
+    - find_by_checksum
+    - find_by_checksum!

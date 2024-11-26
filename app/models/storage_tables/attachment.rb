@@ -5,7 +5,7 @@ module StorageTables
   class Attachment < ApplicationRecord
     self.abstract_class = true
 
-    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, query_constraints: [:checksum, :blob_key]
+    belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, foreign_key: [:checksum, :blob_key]
 
     delegate :byte_size, :content_type, to: :blob
 
@@ -19,7 +19,13 @@ module StorageTables
       association(:blob).klass.service.path_for(full_checksum)
     end
 
+    def relative_path
+      association(:blob).klass.service.relative_path_for(full_checksum)
+    end
+
     def full_checksum
+      raise StorageTables::ActiveRecordError, "blob is nil" unless checksum
+
       "#{blob_key}#{checksum}=="
     end
 

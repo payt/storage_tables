@@ -20,4 +20,13 @@ module StorageTables
 
   autoload :Attached
   autoload :Service
+
+  mattr_accessor :verifier
+
+  mattr_accessor :routes_prefix, default: "/rails/storage_tables"
+  mattr_accessor :draw_routes, default: true
+
+  def self.deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new("0.2.0", "StorageTables")
+  end
 end

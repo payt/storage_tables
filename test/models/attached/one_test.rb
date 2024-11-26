@@ -27,6 +27,7 @@ module StorageTables
       @user.avatar.attach file_fixture("racecar.jpg").open
 
       assert_nothing_raised { @user.avatar.download }
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "uploads the file when set through setter" do
@@ -43,6 +44,7 @@ module StorageTables
       assert_nothing_raised { @user.save! }
       assert_equal "racecar.jpg", @user.avatar.filename.to_s
       assert StorageTables::Blob.service.exist?(@user.avatar.full_checksum)
+      assert_equal 1_124_062, @user.avatar.download.bytesize
     end
 
     test "when assigning a empty blob it cannot save" do
@@ -53,7 +55,9 @@ module StorageTables
         @user.save!
       end
 
-      assert_equal "File is not yet uploaded", error.message
+      assert_equal "No file exists with checksum 1B2M2Y8AsgTpgAmY7PhCfg==, try uploading the file first. " \
+                   "Use the `attach` or `attachment=` method to upload the file.",
+                   error.message
     end
 
     test "create a record with a ActiveStorage::Blob as attachable attribute" do
@@ -85,6 +89,45 @@ module StorageTables
 
       assert_not_nil @user.avatar_storage_attachment
       assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+    end
+
+    test "attach a existing blob from a Hash with the blob key" do
+      blob = create_blob
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg", blob: })
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "attach a existing blob from a Hash with the cehcksum key" do
+      blob = create_blob
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "avatar/jpeg", filename: "town.jpg",
+                            checksum: blob.checksum })
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "assign an existing blob from a Hash with the blob key" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", blob: }
+      @user.save!
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
+    test "assign an existing blob from a Hash with the cehcksum key" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", checksum: blob.checksum }
+      @user.save!
+
+      assert_not_nil @user.avatar_storage_attachment
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal blob, @user.avatar_storage_blob
     end
 
     test "attaching StringIO attachable to an existing record" do

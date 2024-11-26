@@ -23,7 +23,7 @@ module StorageTables
 
       assert_predicate(blob, :persisted?)
       # Check that the blob was uploaded to the service.
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "identify without byte size" do
@@ -37,7 +37,7 @@ module StorageTables
 
       assert_predicate(blob, :persisted?)
       # Check that the blob was uploaded to the service.
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "create_and_upload extracts content type from data" do
@@ -87,7 +87,7 @@ module StorageTables
       blob = create_blob(content_type: "text/html")
 
       assert_predicate blob, :persisted?
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "Destroying a blob also removes the file on disk" do
@@ -104,6 +104,68 @@ module StorageTables
 
       assert_raises(StorageTables::ActiveRecordError) do
         blob.reload.destroy!
+      end
+    end
+
+    ## ServiceUrl for direct upload
+    test "service_url_for_direct_upload" do
+      blob = create_blob
+
+      url = blob.service_url_for_direct_upload
+
+      assert_match(%r{/rails/storage_tables/disk/}, url)
+    end
+
+    ## StorageTables::Blob.where_checksum
+
+    test "where_checksum" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+
+      checksum = blob.checksum
+
+      search = Blob.where_checksum(checksum)
+
+      assert_includes search, blob
+      assert_not_includes search, blob2
+    end
+
+    test "where_checksum with array" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+      blob3 = create_blob(data: "Third blob")
+
+      checksum = blob.checksum
+      checksum2 = blob2.checksum
+
+      search = Blob.where_checksum([checksum, checksum2])
+
+      assert_includes search, blob
+      assert_includes search, blob2
+      assert_not_includes search, blob3
+    end
+
+    ## StorageTables::Blob.find_by_checksum!
+
+    test "find_by_checksum!" do
+      blob = create_blob(data: "First blob")
+
+      search = Blob.find_by_checksum!(blob.checksum)
+
+      assert_equal blob, search
+    end
+
+    test "find_by_checksum! with non-existing checksum" do
+      assert_raises(ActiveRecord::RecordNotFound) do
+        Blob.find_by_checksum!("non-existing-checksum")
+      end
+    end
+
+    ## StorageTables::Blob.existing_blob()
+
+    test "existing_blob is deprecated" do
+      assert_deprecated("StorageTables", StorageTables.deprecator) do
+        Blob.existing_blob("non-existing-checksum")
       end
     end
   end

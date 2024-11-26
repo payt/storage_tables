@@ -9,11 +9,12 @@ module StorageTables
 
         attr_reader :name, :record, :attachable, :filename
 
-        def initialize(name, record, attachable, filename)
+        def initialize(name, record, attachable, filename = nil)
           @name = name
           @record = record
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
+
           blob.identify_without_saving
         end
 
@@ -27,11 +28,23 @@ module StorageTables
 
         def save
           unless StorageTables::Blob.service.exist?(attachment.full_checksum)
-            raise StorageTables::ActiveRecordError, "File is not yet uploaded"
+            raise StorageTables::ActiveRecordError,
+                  "No file exists with checksum #{attachment.full_checksum}, try uploading the file first. " \
+                  "Use the `attach` or `attachment=` method to upload the file."
           end
 
+          if attachment.persisted?
+            # Do not change anything if nothing has changed
+            return if attachment.filename == filename
+
+            # Set the filename on the attachment
+            attachment.filename = filename
+          else
+            # Delete the old attachment if it exists
+            attachment.class.where(record:).delete_all
+            record.public_send(:"#{name}_storage_blob=", blob)
+          end
           record.public_send(:"#{name}_storage_attachment=", attachment)
-          record.public_send(:"#{name}_storage_blob=", blob)
         end
 
         private
@@ -69,7 +82,7 @@ module StorageTables
               content_type: attachable.content_type
             )
           when Hash
-            StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
+            from_hash(attachable)
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
@@ -85,6 +98,13 @@ module StorageTables
               "got #{attachable.inspect}"
             )
           end
+        end
+
+        def from_hash(attachable)
+          return attachable[:blob] if attachable[:blob]
+          return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
+
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
         end
       end
     end

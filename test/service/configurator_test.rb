@@ -3,7 +3,7 @@
 # require "service/shared_service_tests"
 
 module StorageTables
-  module Service
+  class Service
     class ConfiguratorTest < ActiveSupport::TestCase
       test "builds correct service instance based on service name" do
         service = StorageTables::Service::Configurator.build(:foo, foo: { service: "Disk", root: "path" })
