@@ -33,7 +33,7 @@ module StorageTables
 
         new(checksum)
       end
-      
+
       def from_db(partition_key, partition_checksum)
         new("#{partition_key}#{partition_checksum}==")
       end
