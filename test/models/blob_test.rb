@@ -60,7 +60,7 @@ module StorageTables
 
       assert_predicate blob, :persisted?
       assert_equal data.length, blob.byte_size
-      assert_equal OpenSSL::Digest.new("SHA3-512").base64digest(data), blob.checksum
+      assert_equal StorageTables::Checksum.from_io(data), StorageTables::Checksum.wrap(blob.checksum)
     end
 
     test "create_and_upload! the same file twice" do

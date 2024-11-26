@@ -108,16 +108,6 @@ module StorageTables
         end
       end
 
-      def compute_checksum_in_chunks(io)
-        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-          while (chunk = io.read(5.megabytes))
-            checksum << chunk
-          end
-
-          io.rewind
-        end.base64digest
-      end
-
       private
 
       # Cut the checksum into an Array to match the primary key
