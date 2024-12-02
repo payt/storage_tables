@@ -29,7 +29,7 @@ module StorageTables
     def checksum
       return unless self[:checksum]
 
-      Checksum.from_db(self[:partition_key], self[:checksum]).to_s
+      Checksum.new(self[:partition_key], self[:checksum]).to_s
     end
 
     def destroy!
@@ -46,7 +46,7 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        checksum = Checksum.from_io(io)
+        checksum = Checksum.new(io)
         existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob

@@ -21,38 +21,28 @@ module StorageTables
         checksum.is_a?(self) ? checksum : new(checksum)
       end
 
-      def from_io(io)
-        io = StringIO.new(io) if io.is_a?(String)
-        checksum = calculate_checksum(io)
-
-        new(checksum)
-      end
-
-      def from_file(path)
+      def from_path(path)
         checksum = OpenSSL::Digest.new("SHA3-512").file(path).base64digest
-
-        new(checksum)
-      end
-
-      def from_db(partition_key, partition_checksum)
-        new("#{partition_key}#{partition_checksum}==")
-      end
-
-      private
-
-      def calculate_checksum(io)
-        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-          while (chunk = io.read(5.megabytes))
-            checksum << chunk
-          end
-
-          io.rewind
-        end.base64digest
+        
+        Checksum.new(checksum)
       end
     end
 
-    def initialize(checksum)
-      @checksum = checksum
+    def initialize(*input)
+      @checksum = case input
+                  when self.class
+                    input.to_s
+                  when String
+                    determine_checksum_from_string(input)
+                  when StringIO
+                    calculate_checksum(input)
+                  when Array
+                    determine_checksum_from_string(input.join)
+                  when Pathname, ActionDispatch::Http::UploadedFile
+                    OpenSSL::Digest.new("SHA3-512").file(input).base64digest
+                  else
+                    raise ArgumentError, "Invalid checksum class: #{input.inspect}"
+      end
     end
 
     # Returns the checksum
@@ -76,6 +66,28 @@ module StorageTables
 
     def partition_checksum
       checksum[1..].chomp("==")
+    end
+
+    private
+
+    def determine_checksum_from_string(checksum)
+      if checksum.match?(/\A[A-Za-z0-9_-]{86}==\z/)
+        checksum
+      elsif checksum.match?(/\A[A-Za-z0-9_-]{86}\z/)
+        "#{checksum}=="
+      else
+        calculate_checksum(StringIO.new(checksum))
+      end
+    end
+
+    def calculate_checksum(io)
+      OpenSSL::Digest.new("SHA3-512").tap do |checksum|
+        while (chunk = io.read(5.megabytes))
+          checksum << chunk
+        end
+
+        io.rewind
+      end.base64digest
     end
   end
 end

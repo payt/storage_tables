@@ -13,30 +13,46 @@ module StorageTables
 
     test "from_io" do
       io = StringIO.new("Hello world!")
-      checksum = Checksum.from_io(io)
+      checksum = Checksum.new(io)
 
       assert_predicate checksum, :valid?
     end
 
     test "from_file" do
       file = file_fixture("report.pdf")
-      checksum = Checksum.from_file(file)
+      checksum = Checksum.new(file)
 
       assert_predicate checksum, :valid?
     end
 
-    test "from_db" do
+    test "from_array" do
       partition_key = "1"
       partition_checksum = "0" * 85
-      checksum = Checksum.from_db(partition_key, partition_checksum)
+      checksum = Checksum.new(partition_key, partition_checksum)
 
       assert_predicate checksum, :valid?
     end
 
-    test "when initialized with invalid checksum" do
+    test "when initialized with string not like a checksum" do
       checksum = Checksum.new("1234567890")
 
-      assert_not checksum.valid?
+      assert_not_equal checksum.to_s, "1234567890"
+    end
+
+    test "when initialized with checksum like string" do
+      string = ("0" * 86) << "==" # 86 characters + 2 padding
+      checksum = Checksum.new(string)
+
+      assert_predicate checksum, :valid?
+      assert_equal checksum.to_s, string
+    end
+
+    test "when initialized with checksum like string without padding" do
+      string = "0" * 86 # 86 characters
+      checksum = Checksum.new(string)
+
+      assert_predicate checksum, :valid?
+      assert_equal checksum.to_s, "#{string}=="
     end
 
     test "when initialized with nil value" do

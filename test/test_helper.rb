@@ -61,7 +61,7 @@ module ActiveSupport
     def directly_upload_file_blob(filename: "racecar.jpg", content_type: "image/jpeg")
       file = file_fixture(filename)
       byte_size = file.size
-      checksum = StorageTables::Checksum.from_file(file)
+      checksum = StorageTables::Checksum.new(file)
 
       create_blob_before_direct_upload(byte_size:, checksum:, content_type:).tap do |_blob|
         service = StorageTables::Blob.service.try(:primary) || StorageTables::Blob.service

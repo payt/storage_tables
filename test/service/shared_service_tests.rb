@@ -12,7 +12,7 @@ module StorageTables
 
       included do
         setup do
-          @checksum = Checksum.from_io(FIXTURE_DATA)
+          @checksum = Checksum.new(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
           @service.upload @checksum, StringIO.new(FIXTURE_DATA)
         end
@@ -44,7 +44,7 @@ module StorageTables
           expected_chunks = ["a" * 5.megabytes, "b"]
           actual_chunks = []
           io = StringIO.new(expected_chunks.join)
-          checksum = Checksum.from_io(expected_chunks.join)
+          checksum = Checksum.new(expected_chunks.join)
 
           begin
             @service.upload checksum, io
