@@ -13,14 +13,14 @@ module StorageTables
 
     test "from_io" do
       io = StringIO.new("Hello world!")
-      checksum = Checksum.new(io)
+      checksum = Checksum.from_io(io)
 
       assert_predicate checksum, :valid?
     end
 
-    test "from_file" do
+    test "from_path" do
       file = file_fixture("report.pdf")
-      checksum = Checksum.new(file)
+      checksum = Checksum.from_path(file)
 
       assert_predicate checksum, :valid?
     end

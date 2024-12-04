@@ -61,7 +61,7 @@ module StorageTables
 
       def path_for(checksum) # :nodoc:
         Checksum.wrap(checksum).then do |wrapped|
-          Pathname.new(File.join(root, folder_for(wrapped.sanitized), wrapped.sanitized))
+          File.join(root, folder_for(wrapped.sanitized), wrapped.sanitized)
         end
       end
 

@@ -30,7 +30,7 @@ module StorageTables
 
     test "upload a pdf" do
       file = file_fixture("report.pdf")
-      checksum = StorageTables::Checksum.new(file)
+      checksum = StorageTables::Checksum.from_path(file)
 
       blob = create_blob_before_direct_upload(byte_size: file.size, checksum:, content_type: "application/pdf")
 
@@ -38,7 +38,7 @@ module StorageTables
 
       assert_response :no_content
       assert blob.service.exist?(blob.checksum)
-      assert_equal checksum, StorageTables::Checksum.new(blob.download)
+      assert_equal checksum, StorageTables::Checksum.from_io(blob.download)
     end
 
     test "directly uploading blob without integrity" do
@@ -109,7 +109,7 @@ module StorageTables
     end
 
     def create_checksum(data)
-      StorageTables::Checksum.new(data)
+      StorageTables::Checksum.from_string(data)
     end
   end
 end

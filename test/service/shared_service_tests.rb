@@ -12,14 +12,14 @@ module StorageTables
 
       included do
         setup do
-          @checksum = Checksum.new(FIXTURE_DATA)
+          @checksum = Checksum.from_string(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
           @service.upload @checksum, StringIO.new(FIXTURE_DATA)
         end
 
         test "uploading without integrity" do
           data = "Something else entirely!"
-          checksum = Checksum.new("FIXTURE_DATA")
+          checksum = Checksum.from_string("FIXTURE_DATA")
 
           assert_raises(StorageTables::IntegrityError) do
             @service.upload(checksum, StringIO.new(data))
@@ -36,7 +36,7 @@ module StorageTables
 
         test "downloading a nonexistent file" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download(SecureRandom.base58(24))
+            @service.download(Checksum.from_string(SecureRandom.base58(24)))
           end
         end
 
@@ -44,7 +44,7 @@ module StorageTables
           expected_chunks = ["a" * 5.megabytes, "b"]
           actual_chunks = []
           io = StringIO.new(expected_chunks.join)
-          checksum = Checksum.new(expected_chunks.join)
+          checksum = Checksum.from_io(expected_chunks.join)
 
           begin
             @service.upload checksum, io

@@ -20,10 +20,10 @@ module StorageTables
     end
 
     def checksum=(value)
-      value = Checksum.wrap(value)
-
-      self[:partition_key] = value.partition_key
-      self[:checksum] = value.partition_checksum
+      Checksum.wrap(value).then do |wrapped|
+        self[:partition_key] = wrapped.partition_key
+        self[:checksum] = wrapped.partition_checksum
+      end
     end
 
     def checksum
@@ -46,7 +46,7 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        checksum = Checksum.new(io)
+        checksum = Checksum.from_io(io)
         existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob

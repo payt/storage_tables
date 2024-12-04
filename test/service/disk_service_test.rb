@@ -11,20 +11,24 @@ module StorageTables
 
       include StorageTables::Service::SharedServiceTests
 
-      test "path_for" do
-        checksum = "1234567890abcde+f=="
+      before do
+        @fake_checksum = "#{"a" * 86}==" # 86 characters + 2 padding
+      end
 
-        assert_equal "/tmp/1/23/45/1234567890abcde-f==", @service.path_for(checksum)
+      test "path_for" do
+        checksum = "#{"a" * 86}=="
+
+        assert_equal "/tmp/a/aa/aa/#{"a" * 86}==", @service.path_for(checksum)
       end
 
       test "relative_path_for" do
-        checksum = "1234567890abcde+f=="
+        checksum = "#{"a" * 86}=="
 
-        assert_equal "1/23/45/1234567890abcde-f==", @service.relative_path_for(checksum)
+        assert_equal "a/aa/aa/#{"a" * 86}==", @service.relative_path_for(checksum)
       end
 
       test "URL generation without StorageTables::Current.url_options set" do
-        checksum = "1234567890abcde+f=="
+        checksum = "#{"a" * 86}=="
         StorageTables::Current.url_options = nil
 
         error = assert_raises ArgumentError do
@@ -38,7 +42,7 @@ module StorageTables
       end
 
       test "URL generation keeps working with StorageTables::Current.host set" do
-        checksum = "1234567890abcde+f=="
+        checksum = "#{"a" * 86}=="
         StorageTables::Current.url_options = { host: "https://example.com" }
 
         original_url_options = Rails.application.routes.default_url_options.dup
