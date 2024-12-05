@@ -53,8 +53,6 @@ module StorageTables
                     input.to_s
                   when Array
                     determine_checksum_from_string(input.join)
-                  when Pathname, ActionDispatch::Http::UploadedFile
-                    OpenSSL::Digest.new("SHA3-512").file(input).base64digest
                   when String
                     determine_checksum_from_string(input)
                   else

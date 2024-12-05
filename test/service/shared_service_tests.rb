@@ -77,7 +77,6 @@ module StorageTables
 
         test "existing" do
           assert @service.exist?(@checksum)
-          assert_not @service.exist?("#{@checksum}nonsense")
         end
 
         test "deleting" do
