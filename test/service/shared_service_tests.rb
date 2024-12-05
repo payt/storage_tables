@@ -44,7 +44,7 @@ module StorageTables
           expected_chunks = ["a" * 5.megabytes, "b"]
           actual_chunks = []
           io = StringIO.new(expected_chunks.join)
-          checksum = Checksum.from_io(expected_chunks.join)
+          checksum = Checksum.from_string(expected_chunks.join)
 
           begin
             @service.upload checksum, io
@@ -61,7 +61,7 @@ module StorageTables
 
         test "downloading a nonexistent file in chunks" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download(SecureRandom.base58(24)) {} # rubocop:disable Lint/EmptyBlock
+            @service.download(Checksum.from_string(SecureRandom.base58(24))) {} # rubocop:disable Lint/EmptyBlock
           end
         end
 
@@ -71,7 +71,7 @@ module StorageTables
 
         test "partially downloading a nonexistent file" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download_chunk(SecureRandom.base58(24), 19..21)
+            @service.download_chunk(Checksum.from_string(SecureRandom.base58(24)), 19..21)
           end
         end
 
@@ -87,7 +87,7 @@ module StorageTables
 
         test "deleting nonexistent key" do
           assert_nothing_raised do
-            @service.delete SecureRandom.base58(24)
+            @service.delete Checksum.from_string(SecureRandom.base58(24))
           end
         end
       end
