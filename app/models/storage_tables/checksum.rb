@@ -55,7 +55,7 @@ module StorageTables
                   when String
                     determine_checksum_from_string(input)
                   else
-                    raise ArgumentError, "Invalid checksum class: #{input.inspect}"
+                    raise ArgumentError, "Invalid checksum: #{input.inspect}"
       end
     end
 
