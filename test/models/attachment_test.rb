@@ -5,8 +5,11 @@ require "database/setup"
 
 module StorageTables
   class AttachmentTest < ActiveSupport::TestCase
+    attr_reader :fake_checksum
+
     setup do
       @user = User.create!(name: "Post")
+      @fake_checksum = "#{"a" * 86}==" # 86 characters + 2 padding
     end
 
     # TODO: Signed_IDS do not support composite primary keys.
@@ -121,19 +124,21 @@ module StorageTables
     end
 
     test "can create a path from attachment without touching a blob" do
-      attachment = UserAvatarAttachment.new(checksum: "123456", blob_key: "a")
-      full_checksum = attachment.full_checksum
+      attachment = Checksum.wrap(fake_checksum).then do |checksum|
+        UserAvatarAttachment.new(checksum: checksum.partition_checksum, blob_key: checksum.partition_key)
+      end
 
-      expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
+      expected_path = "#{fake_checksum[0]}/#{fake_checksum[1..2]}/#{fake_checksum[3..4]}/#{fake_checksum}"
 
       assert attachment.path.end_with?(expected_path)
     end
 
     test "can create a relative path from attachment without touching a blob" do
-      attachment = UserAvatarAttachment.new(checksum: "123456", blob_key: "a")
-      full_checksum = attachment.full_checksum
+      attachment = Checksum.wrap(fake_checksum).then do |checksum|
+        UserAvatarAttachment.new(checksum: checksum.partition_checksum, blob_key: checksum.partition_key)
+      end
 
-      expected_path = "#{full_checksum[0]}/#{full_checksum[1..2]}/#{full_checksum[3..4]}/#{full_checksum}"
+      expected_path = "#{fake_checksum[0]}/#{fake_checksum[1..2]}/#{fake_checksum[3..4]}/#{fake_checksum}"
 
       assert_equal attachment.relative_path, expected_path
     end
