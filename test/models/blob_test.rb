@@ -14,7 +14,7 @@ module StorageTables
       blob = create_blob
 
       assert_raises(ActiveRecord::StatementInvalid) do
-        blob.update!(checksum: "1234567890")
+        blob.update!(checksum: Checksum.from_string("1234567890").to_s)
       end
     end
 

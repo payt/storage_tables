@@ -38,7 +38,7 @@ module StorageTables
 
       assert_response :no_content
       assert blob.service.exist?(blob.checksum)
-      assert_equal checksum, StorageTables::Checksum.from_io(blob.download)
+      assert_equal checksum, StorageTables::Checksum.from_string(blob.download)
     end
 
     test "directly uploading blob without integrity" do
