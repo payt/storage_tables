@@ -5,10 +5,10 @@ require "test_helper"
 module StorageTables
   class ChecksumTest < ActiveSupport::TestCase
     test "wrap" do
-      checksum = Checksum.new("1234567890")
+      checksum = Checksum.new("0" * 86)
 
       assert_equal checksum, Checksum.wrap(checksum)
-      assert_equal checksum, Checksum.wrap("1234567890")
+      assert_equal checksum, Checksum.wrap("0" * 86)
     end
 
     test "from_io" do
@@ -32,13 +32,6 @@ module StorageTables
 
       assert_predicate checksum, :valid?
     end
-
-    test "when initialized with string not like a checksum" do
-      checksum = Checksum.new("1234567890")
-
-      assert_not_equal checksum.to_s, "1234567890"
-    end
-
     test "when initialized with checksum like string" do
       string = ("0" * 86) << "==" # 86 characters + 2 padding
       checksum = Checksum.new(string)
@@ -56,9 +49,9 @@ module StorageTables
     end
 
     test "when initialized with nil value" do
-      checksum = Checksum.new(nil)
+      error = assert_raises(ArgumentError) { Checksum.new(nil) }
 
-      assert_not checksum.valid?
+      assert_equal "Invalid checksum: ", error.message
     end
   end
 end

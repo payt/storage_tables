@@ -94,15 +94,5 @@ module StorageTables
         raise ArgumentError, "Invalid checksum: #{checksum}"
       end
     end
-
-    def calculate_checksum(io)
-      OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-        while (chunk = io.read(5.megabytes))
-          checksum << chunk
-        end
-
-        io.rewind
-      end.base64digest
-    end
   end
 end
