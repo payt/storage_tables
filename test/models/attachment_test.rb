@@ -124,7 +124,7 @@ module StorageTables
     end
 
     test "can create a path from attachment without touching a blob" do
-      attachment = Checksum.wrap(fake_checksum).then do |checksum|
+      attachment = Checksum.wrap(fake_checksum) do |checksum|
         UserAvatarAttachment.new(checksum: checksum.partition_checksum, blob_key: checksum.partition_key)
       end
 
@@ -134,7 +134,7 @@ module StorageTables
     end
 
     test "can create a relative path from attachment without touching a blob" do
-      attachment = Checksum.wrap(fake_checksum).then do |checksum|
+      attachment = Checksum.wrap(fake_checksum) do |checksum|
         UserAvatarAttachment.new(checksum: checksum.partition_checksum, blob_key: checksum.partition_key)
       end
 

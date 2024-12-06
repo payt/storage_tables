@@ -20,7 +20,7 @@ module StorageTables
     end
 
     def checksum=(value)
-      Checksum.wrap(value).then do |wrapped|
+      Checksum.wrap(value) do |wrapped|
         self[:partition_key] = wrapped.partition_key
         self[:checksum] = wrapped.partition_checksum
       end
@@ -87,13 +87,13 @@ module StorageTables
       end
 
       def find_by_checksum(checksum)
-        Checksum.wrap(checksum).then do |wrapped|
+        Checksum.wrap(checksum) do |wrapped|
           find_by(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
         end
       end
 
       def find_by_checksum!(checksum)
-        Checksum.wrap(checksum).then do |wrapped|
+        Checksum.wrap(checksum) do |wrapped|
           find_by!(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
         end
       end
@@ -102,7 +102,7 @@ module StorageTables
         if input.is_a?(Array)
           where(primary_key => input.map { checksum_to_primary(_1) })
         else
-          Checksum.wrap(input).then do |wrapped|
+          Checksum.wrap(input) do |wrapped|
             where(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
           end
         end
@@ -112,7 +112,7 @@ module StorageTables
 
       # Cut the checksum into an Array to match the primary key
       def checksum_to_primary(checksum)
-        Checksum.wrap(checksum).then do |wrapped|
+        Checksum.wrap(checksum) do |wrapped|
           [wrapped.partition_checksum, wrapped.partition_key]
         end
       end

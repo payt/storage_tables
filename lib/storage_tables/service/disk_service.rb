@@ -60,19 +60,19 @@ module StorageTables
       end
 
       def path_for(checksum) # :nodoc:
-        Checksum.wrap(checksum).then do |wrapped|
+        Checksum.wrap(checksum) do |wrapped|
           File.join(root, folder_for(wrapped.sanitized), wrapped.sanitized)
         end
       end
 
       def relative_path_for(checksum)
-        Checksum.wrap(checksum).then do |wrapped|
+        Checksum.wrap(checksum) do |wrapped|
           File.join folder_for(wrapped.sanitized), wrapped.sanitized
         end
       end
 
       def upload(checksum, io, **)
-        checksum = Checksum.wrap(checksum)
+        checksum = Checksum.new(checksum)
         # Prevent uploading the same file twice
         return if exist?(checksum) && file_match?(checksum)
 

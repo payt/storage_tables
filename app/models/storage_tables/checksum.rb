@@ -17,7 +17,7 @@ module StorageTables
       # Returns a Checksum instance based on the given checksum. If the checksum is a Checksum Class, it is
       # returned unmodified. If it is a String, it is passed to StorageTables::Checksum.new.
       def wrap(checksum)
-        new(checksum)
+        yield(new(checksum))
       end
 
       def from_path(path)

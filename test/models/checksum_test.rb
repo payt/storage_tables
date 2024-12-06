@@ -5,10 +5,10 @@ require "test_helper"
 module StorageTables
   class ChecksumTest < ActiveSupport::TestCase
     test "wrap" do
-      checksum = Checksum.new("0" * 86)
-
-      assert_equal checksum, Checksum.wrap(checksum)
-      assert_equal checksum, Checksum.wrap("0" * 86)
+      Checksum.wrap("0" * 86) do |checksum|
+        assert_equal checksum, Checksum.new(checksum)
+        assert_equal checksum, Checksum.new("0" * 86)
+      end
     end
 
     test "from_io" do
