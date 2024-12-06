@@ -20,14 +20,16 @@ module StorageTables
     end
 
     def checksum=(value)
-      self[:partition_key] = value[0]
-      self[:checksum] = value[1..].chomp("==")
+      Checksum.wrap(value) do |wrapped|
+        self[:partition_key] = wrapped.partition_key
+        self[:checksum] = wrapped.partition_checksum
+      end
     end
 
     def checksum
       return unless self[:checksum]
 
-      "#{partition_key}#{self[:checksum]}=="
+      Checksum.new([self[:partition_key], self[:checksum]]).to_s
     end
 
     def destroy!
@@ -44,7 +46,7 @@ module StorageTables
 
     class << self
       def build_after_unfurling(io:, content_type: nil, metadata: nil)
-        checksum = compute_checksum_in_chunks(io)
+        checksum = Checksum.from_io(io)
         existing_blob = find_by_checksum(checksum)
 
         return existing_blob if existing_blob
@@ -85,36 +87,34 @@ module StorageTables
       end
 
       def find_by_checksum(checksum)
-        find_by(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+        Checksum.wrap(checksum) do |wrapped|
+          find_by(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
+        end
       end
 
       def find_by_checksum!(checksum)
-        find_by!(partition_key: checksum[0], checksum: checksum[1..].chomp("=="))
+        Checksum.wrap(checksum) do |wrapped|
+          find_by!(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
+        end
       end
 
       def where_checksum(input)
         if input.is_a?(Array)
           where(primary_key => input.map { checksum_to_primary(_1) })
         else
-          where(partition_key: input[0], checksum: input[1..].chomp("=="))
-        end
-      end
-
-      def compute_checksum_in_chunks(io)
-        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
-          while (chunk = io.read(5.megabytes))
-            checksum << chunk
+          Checksum.wrap(input) do |wrapped|
+            where(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)
           end
-
-          io.rewind
-        end.base64digest
+        end
       end
 
       private
 
       # Cut the checksum into an Array to match the primary key
       def checksum_to_primary(checksum)
-        [checksum[1..].chomp("=="), checksum[0]]
+        Checksum.wrap(checksum) do |wrapped|
+          [wrapped.partition_checksum, wrapped.partition_key]
+        end
       end
     end
 
