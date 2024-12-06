@@ -12,7 +12,6 @@ module StorageTables
     attr_reader :checksum
 
     validates :checksum, presence: true
-    validates :checksum, length: { is: 88 }
 
     class << self
       # Returns a Checksum instance based on the given checksum. If the checksum is a Checksum Class, it is

@@ -53,5 +53,11 @@ module StorageTables
 
       assert_equal "Invalid checksum class: nil", error.message
     end
+
+    test "when initialized with invalid checksum" do
+      error = assert_raises(ArgumentError) { Checksum.new("invalid") }
+
+      assert_equal "Invalid checksum: invalid", error.message
+    end
   end
 end
