@@ -28,7 +28,7 @@ module StorageTables
     test "from_array" do
       partition_key = "1"
       partition_checksum = "0" * 85
-      checksum = Checksum.new(partition_key, partition_checksum)
+      checksum = Checksum.new([partition_key, partition_checksum])
 
       assert_predicate checksum, :valid?
     end
@@ -51,7 +51,7 @@ module StorageTables
     test "when initialized with nil value" do
       error = assert_raises(ArgumentError) { Checksum.new(nil) }
 
-      assert_equal "Invalid checksum: ", error.message
+      assert_equal "Invalid checksum class: nil", error.message
     end
   end
 end

@@ -18,7 +18,7 @@ module StorageTables
       # Returns a Checksum instance based on the given checksum. If the checksum is a Checksum Class, it is
       # returned unmodified. If it is a String, it is passed to StorageTables::Checksum.new.
       def wrap(checksum)
-        checksum.is_a?(self) ? checksum : new(checksum)
+        new(checksum)
       end
 
       def from_path(path)
@@ -47,7 +47,7 @@ module StorageTables
       end
     end
 
-    def initialize(*input)
+    def initialize(input)
       @checksum = case input
                   when self.class
                     input.to_s

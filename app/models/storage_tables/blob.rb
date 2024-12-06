@@ -29,7 +29,7 @@ module StorageTables
     def checksum
       return unless self[:checksum]
 
-      Checksum.new(self[:partition_key], self[:checksum]).to_s
+      Checksum.new([self[:partition_key], self[:checksum]]).to_s
     end
 
     def destroy!
