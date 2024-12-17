@@ -3,43 +3,52 @@
 require "service/shared_service_tests"
 require "net/http"
 require "database/setup"
+require "minitest/hooks/test"
 
 if SERVICE_CONFIGURATIONS[:s3]
   module StorageTables
     class Service
       class S3ServiceTest < ActiveSupport::TestCase
+        include Minitest::Hooks
+
         SERVICE = StorageTables::Service.configure(:s3, SERVICE_CONFIGURATIONS)
-        
+
+        # VCR.use_cassette("services/s3", record: :all) do
+        # end
+
         include StorageTables::Service::SharedServiceTests
+
+        around do |&block|
+          VCR.use_cassette("services/s3/#{name}", record: :all) do
+            super(&block)
+          end
+        end
 
         test "name" do
           assert_equal :s3, @service.name
         end
 
         test "direct upload" do
-          VCR.use_cassette("s3/direct_upload", record: :all) do
-            key      = SecureRandom.base58(24)
-            data     = "Something else entirely!"
-            checksum = OpenSSL::Digest::MD5.base64digest(data)
-            url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
-                                                                content_length: data.size)
+          data = "Something else entirely!"
+          checksum = generate_safe(data)
+          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                         content_md5: checksum, content_length: data.size)
 
-            uri = URI.parse url
-            request = Net::HTTP::Put.new uri.request_uri
-            request.body = data
-            request.add_field "Content-Type", "text/plain"
-            request.add_field "Content-MD5", checksum
-            Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-              http.request request
-            end
-
-            assert_equal data, @service.download(checksum)
-          rescue StandardError => e
-            binding.pry
-          ensure
-            binding.pry
-            @service.delete key
+          uri = URI.parse url
+          request = Net::HTTP::Put.new uri.request_uri
+          request.body = data
+          request.add_field "Content-Type", "text/plain"
+          request.add_field "Content-MD5", content_md5
+          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+            http.request request
           end
+
+          assert_equal data, @service.download(checksum)
+        rescue StandardError => e
+          binding.pry
+        ensure
+          @service.delete checksum
         end
 
         test "direct upload with content disposition" do

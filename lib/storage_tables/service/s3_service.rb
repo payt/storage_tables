@@ -82,10 +82,11 @@ module StorageTables
       end
     end
 
-    def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, custom_metadata: {})
+    def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, content_md5:, custom_metadata: {})
       instrument(:url, checksum:) do |payload|
         generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
                                                                  content_type:, content_length:,
+                                                                 content_md5:,
                                                                  metadata: custom_metadata,
                                                                  whitelist_headers: ["content-length"], **upload_options
 
