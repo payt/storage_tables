@@ -16,15 +16,13 @@ module StorageTables
 
       attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
-      def initialize(bucket:, upload: {}, public: false, **) # rubocop:disable Lint/MissingSuper
+      def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
         @bucket = @client.bucket(bucket)
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
-        @public = public
 
         @upload_options = upload
-        @upload_options[:acl] = "public-read" if public?
       end
 
       def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)

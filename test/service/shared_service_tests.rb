@@ -70,6 +70,7 @@ module StorageTables
 
         test "downloading partially" do
           assert_equal "aaa", @service.download_chunk(@checksum, 19..21)
+          assert_equal "aa", @service.download_chunk(@checksum, 19...21)
         end
 
         test "partially downloading a nonexistent file" do
