@@ -13,13 +13,10 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         SERVICE = StorageTables::Service.configure(:s3, SERVICE_CONFIGURATIONS)
 
-        # VCR.use_cassette("services/s3", record: :all) do
-        # end
-
         include StorageTables::Service::SharedServiceTests
 
         around do |&block|
-          VCR.use_cassette("services/s3/#{name}", record: :all) do
+          VCR.use_cassette("services/s3/#{name}") do
             super(&block)
           end
         end
@@ -33,7 +30,7 @@ if SERVICE_CONFIGURATIONS[:s3]
           checksum = generate_safe(data)
           content_md5 = OpenSSL::Digest::MD5.base64digest(data)
           url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
-                                                         content_md5: checksum, content_length: data.size)
+                                                         content_md5:, content_length: data.size)
 
           uri = URI.parse url
           request = Net::HTTP::Put.new uri.request_uri
@@ -45,24 +42,22 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           assert_equal data, @service.download(checksum)
-        rescue StandardError => e
-          binding.pry
         ensure
           @service.delete checksum
         end
 
         test "direct upload with content disposition" do
-          key      = SecureRandom.base58(24)
           data     = "Something else entirely!"
-          checksum = OpenSSL::Digest::MD5.base64digest(data)
-          url      = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
-                                                              content_length: data.size)
+          checksum = generate_safe(data)
+          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                         content_length: data.size, content_md5:)
 
           uri = URI.parse url
           request = Net::HTTP::Put.new uri.request_uri
           request.body = data
-          @service.headers_for_direct_upload(key, checksum:, content_type: "text/plain",
-                                                  filename: StorageTables::Filename.new("test.txt"), disposition: :attachment).each do |k, v|
+          @service.headers_for_direct_upload(content_md5:, content_type: "text/plain",
+                                             filename: StorageTables::Filename.new("test.txt"), disposition: :attachment).each do |k, v|
             request.add_field k, v
           end
           Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
@@ -76,27 +71,27 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "directly uploading file larger than the provided content-length does not work" do
-          key      = SecureRandom.base58(24)
           data     = "Some text that is longer than the specified content length"
-          checksum = OpenSSL::Digest::MD5.base64digest(data)
-          url      = @service.url_for_direct_upload(key, expires_in: 5.minutes, content_type: "text/plain",
-                                                         content_length: data.size - 1, checksum:)
+          checksum = generate_safe(data)
+          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                         content_length: data.size - 1, content_md5:)
 
           uri = URI.parse url
           request = Net::HTTP::Put.new uri.request_uri
           request.body = data
           request.add_field "Content-Type", "text/plain"
-          request.add_field "Content-MD5", checksum
+          request.add_field "Content-MD5", content_md5
           upload_result = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
             http.request request
           end
 
           assert_equal "403", upload_result.code
-          assert_raises ActiveStorage::FileNotFoundError do
-            @service.download(key)
+          assert_raises StorageTables::FileNotFoundError do
+            @service.download(checksum)
           end
         ensure
-          @service.delete key
+          @service.delete checksum
         end
 
         test "upload a zero byte file" do
@@ -121,86 +116,84 @@ if SERVICE_CONFIGURATIONS[:s3]
           service = build_service(upload: { server_side_encryption: "AES256" })
 
           begin
-            key  = SecureRandom.base58(24)
             data = "Something else entirely!"
-            service.upload key, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
+            checksum = generate_safe(data)
+            service.upload checksum, StringIO.new(data)
 
-            assert_equal "AES256", service.bucket.object(key).server_side_encryption
+            assert_equal "AES256", service.bucket.object(checksum).server_side_encryption
           ensure
-            service.delete key
+            service.delete checksum
           end
         end
 
         test "upload with content type" do
-          key          = SecureRandom.base58(24)
-          data         = "Something else entirely!"
+          data = "Something else entirely!"
+          checksum = generate_safe(data)
           content_type = "text/plain"
 
           @service.upload(
-            key,
+            checksum,
             StringIO.new(data),
-            checksum: OpenSSL::Digest::MD5.base64digest(data),
             filename: "cool_data.txt",
             content_type:
           )
 
-          assert_equal content_type, @service.bucket.object(key).content_type
+          assert_equal content_type, @service.bucket.object(checksum).content_type
         ensure
-          @service.delete key
+          @service.delete checksum
         end
 
         test "upload with custom_metadata" do
-          key      = SecureRandom.base58(24)
           data     = "Something else entirely!"
+          checksum = generate_safe(data)
           @service.upload(
-            key,
+            checksum,
             StringIO.new(data),
-            checksum: Digest::MD5.base64digest(data),
             content_type: "text/plain",
             custom_metadata: { "foo" => "baz" },
             filename: "custom_metadata.txt"
           )
 
-          url = @service.url(key, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
-                                  filename: ActiveStorage::Filename.new("test.html"))
+          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
+                                       filename: StorageTables::Filename.new("test.html"))
 
           response = Net::HTTP.get_response(URI(url))
 
           assert_equal("baz", response["x-amz-meta-foo"])
         ensure
-          @service.delete key
+          @service.delete checksum
         end
 
         test "upload with content disposition" do
-          key  = SecureRandom.base58(24)
           data = "Something else entirely!"
+          checksum = generate_safe(data)
 
           @service.upload(
-            key,
+            checksum,
             StringIO.new(data),
             checksum: OpenSSL::Digest::MD5.base64digest(data),
-            filename: ActiveStorage::Filename.new("cool_data.txt"),
+            filename: StorageTables::Filename.new("cool_data.txt"),
             disposition: :attachment
           )
 
           assert_equal("attachment; filename=\"cool_data.txt\"; filename*=UTF-8''cool_data.txt",
-                       @service.bucket.object(key).content_disposition)
+                       @service.bucket.object(checksum).content_disposition)
         ensure
-          @service.delete key
+          @service.delete checksum
         end
 
         test "uploading a large object in multiple parts" do
           service = build_service(upload: { multipart_threshold: 5.megabytes })
 
           begin
-            key  = SecureRandom.base58(24)
-            data = SecureRandom.bytes(8.megabytes)
+            data = SecureRandom.bytes(6.megabytes)
+            checksum = generate_safe(data)
 
-            service.upload key, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
+            service.upload checksum, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
 
-            assert_equal data, service.download(key)
+            assert_equal data, service.download(checksum)
           ensure
-            service.delete key
+            service.delete checksum
           end
         end
 
@@ -208,14 +201,14 @@ if SERVICE_CONFIGURATIONS[:s3]
           service = build_service(upload: { multipart_threshold: 5.megabytes })
 
           begin
-            key  = SecureRandom.base58(24)
             data = SecureRandom.bytes(3.megabytes)
+            checksum = generate_safe(data)
 
-            service.upload key, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
+            service.upload checksum, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
 
-            assert_equal data, service.download(key)
+            assert_equal data, service.download(checksum)
           ensure
-            service.delete key
+            service.delete checksum
           end
         end
 

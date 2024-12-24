@@ -16,10 +16,7 @@ module StorageTables
         setup do
           @checksum = generate_safe(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
-          VCR.use_cassette("services/#{service.name}/setup") do
-            @service.upload @checksum, StringIO.new(FIXTURE_DATA)
-          end
-
+          @service.upload @checksum, StringIO.new(FIXTURE_DATA)
           @non_existing_checksum = generate_safe("nonexisting")
         end
 
@@ -99,7 +96,7 @@ module StorageTables
         end
 
         def generate_safe(string)
-          OpenSSL::Digest.new("SHA3-512").base64digest(string).tr("/+", "_-")
+          OpenSSL::Digest.new("SHA3-512").base64digest(string)
         end
       end
     end

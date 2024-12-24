@@ -6,187 +6,207 @@ require "aws-sdk-s3"
 require "active_support/core_ext/numeric/bytes"
 
 module StorageTables
-  # = StorageTables \S3 \Service
-  #
-  # Wraps the Amazon Simple Storage Service (S3) as an Storage Tables service.
-  # See StorageTables::Service for the generic API documentation that applies to all services.
-  class Service::S3Service < Service
-    MULTIPART_THRESHOLD = 100.megabytes
+  class Service
+    # = StorageTables \S3 \Service
+    #
+    # Wraps the Amazon Simple Storage Service (S3) as an Storage Tables service.
+    # See StorageTables::Service for the generic API documentation that applies to all services.
+    class S3Service < Service
+      MULTIPART_THRESHOLD = 100.megabytes
 
-    attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
+      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
-    def initialize(bucket:, upload: {}, public: false, **) # rubocop:disable Lint/MissingSuper
-      @client = Aws::S3::Resource.new(**)
-      @bucket = @client.bucket(bucket)
+      def initialize(bucket:, upload: {}, public: false, **) # rubocop:disable Lint/MissingSuper
+        @client = Aws::S3::Resource.new(**)
+        @bucket = @client.bucket(bucket)
 
-      @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
-      @public = public
+        @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
+        @public = public
 
-      @upload_options = upload
-      @upload_options[:acl] = "public-read" if public?
-    end
+        @upload_options = upload
+        @upload_options[:acl] = "public-read" if public?
+      end
 
-    def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
-      instrument(:upload, checksum:) do
-        content_disposition = content_disposition_with(filename:, type: disposition) if disposition && filename
+      def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
+        ensure_integrity_of(checksum, io)
 
-        if io.size < multipart_upload_threshold
-          upload_with_single_part(checksum, io, content_type:,
-                                                content_disposition:, custom_metadata:)
-        else
-          upload_with_multipart checksum, io, content_type:, content_disposition:,
-                                              custom_metadata:
+        instrument(:upload, checksum:) do
+          content_disposition = content_disposition_with(filename:, type: disposition) if disposition && filename
+
+          if io.size < multipart_upload_threshold
+            upload_with_single_part(checksum, io, content_type:,
+                                                  content_disposition:, custom_metadata:)
+          else
+            upload_with_multipart checksum, io, content_type:, content_disposition:,
+                                                custom_metadata:
+          end
         end
       end
-    end
 
-    def download(checksum, &block)
-      if block
-        instrument(:streaming_download, checksum:) do
-          stream(checksum, &block)
+      def download(checksum, &block)
+        if block
+          instrument(:streaming_download, checksum:) do
+            stream(checksum, &block)
+          end
+        else
+          instrument(:download, checksum:) do
+            object_for(checksum).get.body.string.force_encoding(Encoding::BINARY)
+          rescue Aws::S3::Errors::NoSuchKey
+            raise StorageTables::FileNotFoundError
+          end
         end
-      else
-        instrument(:download, checksum:) do
-          object_for(checksum).get.body.string.force_encoding(Encoding::BINARY)
+      end
+
+      def download_chunk(checksum, range)
+        instrument(:download_chunk, checksum:, range:) do
+          object_for(checksum).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body.string.force_encoding(Encoding::BINARY)
         rescue Aws::S3::Errors::NoSuchKey
           raise StorageTables::FileNotFoundError
         end
       end
-    end
 
-    def download_chunk(checksum, range)
-      instrument(:download_chunk, checksum:, range:) do
-        object_for(checksum).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body.string.force_encoding(Encoding::BINARY)
-      rescue Aws::S3::Errors::NoSuchKey
-        raise StorageTables::FileNotFoundError
+      def delete(checksum)
+        instrument(:delete, checksum:) do
+          object_for(checksum).delete
+        end
       end
-    end
 
-    def delete(checksum)
-      instrument(:delete, checksum:) do
-        object_for(checksum).delete
+      def delete_prefixed(prefix)
+        instrument(:delete_prefixed, prefix:) do
+          bucket.objects(prefix:).batch_delete!
+        end
       end
-    end
 
-    def delete_prefixed(prefix)
-      instrument(:delete_prefixed, prefix:) do
-        bucket.objects(prefix:).batch_delete!
+      def exist?(checksum)
+        instrument(:exist, checksum:) do |payload|
+          answer = object_for(checksum).exists?
+          payload[:exist] = answer
+          answer
+        end
       end
-    end
 
-    def exist?(checksum)
-      instrument(:exist, checksum:) do |payload|
-        answer = object_for(checksum).exists?
-        payload[:exist] = answer
-        answer
+      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, content_md5:,
+                                custom_metadata: {})
+        instrument(:url, checksum:) do |payload|
+          generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
+                                                                   content_type:, content_length:,
+                                                                   content_md5:,
+                                                                   metadata: custom_metadata,
+                                                                   whitelist_headers: ["content-length"], **upload_options
+
+          payload[:url] = generated_url
+
+          generated_url
+        end
       end
-    end
 
-    def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, content_md5:, custom_metadata: {})
-      instrument(:url, checksum:) do |payload|
-        generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
-                                                                 content_type:, content_length:,
-                                                                 content_md5:,
-                                                                 metadata: custom_metadata,
-                                                                 whitelist_headers: ["content-length"], **upload_options
+      def headers_for_direct_upload(content_md5:, content_type:, filename: nil, disposition: nil, custom_metadata: {},
+                                    **)
+        content_disposition = content_disposition_with(type: disposition, filename:) if filename
 
-        payload[:url] = generated_url
-
-        generated_url
+        { "Content-Type" => content_type, "Content-MD5" => content_md5, "Content-Disposition" => content_disposition,
+          **custom_metadata_headers(custom_metadata) }
       end
-    end
 
-    def headers_for_direct_upload(checksum, content_type:, filename: nil, disposition: nil, custom_metadata: {},
-                                  **)
-      content_disposition = content_disposition_with(type: disposition, filename:) if filename
+      def compose(source_keys, destination_key, filename: nil, content_type: nil, disposition: nil, custom_metadata: {})
+        content_disposition = content_disposition_with(type: disposition, filename:) if disposition && filename
 
-      { "Content-Type" => content_type, "Content-MD5" => checksum, "Content-Disposition" => content_disposition,
-        **custom_metadata_headers(custom_metadata) }
-    end
-
-    def compose(source_keys, destination_key, filename: nil, content_type: nil, disposition: nil, custom_metadata: {})
-      content_disposition = content_disposition_with(type: disposition, filename:) if disposition && filename
-
-      object_for(destination_key).upload_stream(
-        content_type:,
-        content_disposition:,
-        part_size: MINIMUM_UPLOAD_PART_SIZE,
-        metadata: custom_metadata,
-        **upload_options
-      ) do |out|
-        source_keys.each do |source_key|
-          stream(source_key) do |chunk|
-            IO.copy_stream(StringIO.new(chunk), out)
+        object_for(destination_key).upload_stream(
+          content_type:,
+          content_disposition:,
+          part_size: MINIMUM_UPLOAD_PART_SIZE,
+          metadata: custom_metadata,
+          **upload_options
+        ) do |out|
+          source_keys.each do |source_key|
+            stream(source_key) do |chunk|
+              IO.copy_stream(StringIO.new(chunk), out)
+            end
           end
         end
       end
-    end
 
-    private
+      private
 
-    def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts)
-      binding.pry
-      object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
-                                               response_content_disposition: content_disposition_with(type: disposition, filename:),
-                                               response_content_type: content_type, **client_opts
-    end
-
-    def public_url(checksum, **client_opts)
-      object_for(checksum).public_url(**client_opts)
-    end
-
-    MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
-    MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
-
-    def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
-                                custom_metadata: {})
-      res = object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
-                                     content_disposition:, metadata: custom_metadata, **upload_options)
-    rescue Aws::S3::Errors::BadDigest
-      raise StorageTables::IntegrityError
-    end
-
-    def upload_with_multipart(key, io, content_type: nil, content_disposition: nil, custom_metadata: {})
-      part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
-
-      object_for(key).upload_stream(content_type:, content_disposition:,
-                                    part_size:, metadata: custom_metadata, **upload_options) do |out|
-        IO.copy_stream(io, out)
+      def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts)
+        object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
+                                                 response_content_disposition: content_disposition_with(
+                                                   type: disposition, filename:
+                                                 ), response_content_type: content_type, **client_opts
       end
-    end
 
-    def object_for(key)
-      bucket.object(key)
-    end
-
-    # Reads the object for the given key in chunks, yielding each to the block.
-    def stream(key)
-      object = object_for(key)
-
-      chunk_size = 5.megabytes
-      offset = 0
-
-      raise StorageTables::FileNotFoundError unless object.exists?
-
-      while offset < object.content_length
-        yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.string.force_encoding(Encoding::BINARY)
-        offset += chunk_size
+      def public_url(checksum, **client_opts)
+        object_for(checksum).public_url(**client_opts)
       end
-    end
 
-    def custom_metadata_headers(metadata)
-      metadata.transform_keys { |key| "x-amz-meta-#{key}" }
-    end
+      MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
+      MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-    def compute_md5_checksum(io)
-      raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+      def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
+                                  custom_metadata: {})
+        object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
+                                 content_disposition:, metadata: custom_metadata, **upload_options)
+      rescue Aws::S3::Errors::BadDigest
+        raise StorageTables::IntegrityError
+      end
 
-      OpenSSL::Digest.new("MD5").tap do |checksum|
-        read_buffer = "".b
-        checksum << read_buffer while io.read(5.megabytes, read_buffer)
+      def upload_with_multipart(key, io, content_type: nil, content_disposition: nil, custom_metadata: {})
+        part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
 
-        io.rewind
-      end.base64digest
+        object_for(key).upload_stream(content_type:, content_disposition:,
+                                      part_size:, metadata: custom_metadata, **upload_options) do |out|
+          IO.copy_stream(io, out)
+        end
+      end
+
+      def object_for(key)
+        bucket.object(key)
+      end
+
+      def ensure_integrity_of(checksum, io)
+        raise StorageTables::IntegrityError unless checksum == compute_checksum(io)
+      end
+
+      # Reads the object for the given key in chunks, yielding each to the block.
+      def stream(key)
+        object = object_for(key)
+
+        chunk_size = 5.megabytes
+        offset = 0
+
+        raise StorageTables::FileNotFoundError unless object.exists?
+
+        while offset < object.content_length
+          yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.string.force_encoding(Encoding::BINARY)
+          offset += chunk_size
+        end
+      end
+
+      def custom_metadata_headers(metadata)
+        metadata.transform_keys { |key| "x-amz-meta-#{key}" }
+      end
+
+      def compute_md5_checksum(io)
+        raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+
+        OpenSSL::Digest.new("MD5").tap do |checksum|
+          read_buffer = "".b
+          checksum << read_buffer while io.read(5.megabytes, read_buffer)
+
+          io.rewind
+        end.base64digest
+      end
+
+      def compute_checksum(io)
+        raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+
+        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
+          read_buffer = "".b
+          checksum << read_buffer while io.read(5.megabytes, read_buffer)
+
+          io.rewind
+        end.base64digest
+      end
     end
   end
 end
