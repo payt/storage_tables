@@ -27,7 +27,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "direct upload" do
           data = "Something else entirely!"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
           content_md5 = OpenSSL::Digest::MD5.base64digest(data)
           url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
                                                          content_md5:, content_length: data.size)
@@ -48,7 +48,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "direct upload with content disposition" do
           data     = "Something else entirely!"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
           content_md5 = OpenSSL::Digest::MD5.base64digest(data)
           url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
                                                          content_length: data.size, content_md5:)
@@ -65,14 +65,14 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           assert_equal("attachment; filename=\"test.txt\"; filename*=UTF-8''test.txt",
-                       @service.bucket.object(checksum).content_disposition)
+                       @service.bucket.object(safe_checksum(checksum)).content_disposition)
         ensure
           @service.delete checksum
         end
 
         test "directly uploading file larger than the provided content-length does not work" do
           data     = "Some text that is longer than the specified content length"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
           content_md5 = OpenSSL::Digest::MD5.base64digest(data)
           url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
                                                          content_length: data.size - 1, content_md5:)
@@ -117,10 +117,10 @@ if SERVICE_CONFIGURATIONS[:s3]
 
           begin
             data = "Something else entirely!"
-            checksum = generate_safe(data)
+            checksum = generate_checksum(data)
             service.upload checksum, StringIO.new(data)
 
-            assert_equal "AES256", service.bucket.object(checksum).server_side_encryption
+            assert_equal "AES256", service.bucket.object(checksum.tr("/+", "_-")).server_side_encryption
           ensure
             service.delete checksum
           end
@@ -128,7 +128,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "upload with content type" do
           data = "Something else entirely!"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
           content_type = "text/plain"
 
           @service.upload(
@@ -138,14 +138,14 @@ if SERVICE_CONFIGURATIONS[:s3]
             content_type:
           )
 
-          assert_equal content_type, @service.bucket.object(checksum).content_type
+          assert_equal content_type, @service.bucket.object(safe_checksum(checksum)).content_type
         ensure
           @service.delete checksum
         end
 
         test "upload with custom_metadata" do
           data     = "Something else entirely!"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
           @service.upload(
             checksum,
             StringIO.new(data),
@@ -166,18 +166,17 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "upload with content disposition" do
           data = "Something else entirely!"
-          checksum = generate_safe(data)
+          checksum = generate_checksum(data)
 
           @service.upload(
             checksum,
             StringIO.new(data),
-            checksum: OpenSSL::Digest::MD5.base64digest(data),
             filename: StorageTables::Filename.new("cool_data.txt"),
             disposition: :attachment
           )
 
           assert_equal("attachment; filename=\"cool_data.txt\"; filename*=UTF-8''cool_data.txt",
-                       @service.bucket.object(checksum).content_disposition)
+                       @service.bucket.object(safe_checksum(checksum)).content_disposition)
         ensure
           @service.delete checksum
         end
@@ -186,8 +185,8 @@ if SERVICE_CONFIGURATIONS[:s3]
           service = build_service(upload: { multipart_threshold: 5.megabytes })
 
           begin
-            data = SecureRandom.bytes(6.megabytes)
-            checksum = generate_safe(data)
+            data = ("a" * 6.megabytes)
+            checksum = generate_checksum(data)
 
             service.upload checksum, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
 
@@ -201,8 +200,8 @@ if SERVICE_CONFIGURATIONS[:s3]
           service = build_service(upload: { multipart_threshold: 5.megabytes })
 
           begin
-            data = SecureRandom.bytes(3.megabytes)
-            checksum = generate_safe(data)
+            data = ("a" * 3.megabytes)
+            checksum = generate_checksum(data)
 
             service.upload checksum, StringIO.new(data), checksum: OpenSSL::Digest::MD5.base64digest(data)
 

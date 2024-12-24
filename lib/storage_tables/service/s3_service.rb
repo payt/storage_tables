@@ -144,32 +144,33 @@ module StorageTables
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                   custom_metadata: {})
+
         object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
                                  content_disposition:, metadata: custom_metadata, **upload_options)
       rescue Aws::S3::Errors::BadDigest
         raise StorageTables::IntegrityError
       end
 
-      def upload_with_multipart(key, io, content_type: nil, content_disposition: nil, custom_metadata: {})
+      def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
 
-        object_for(key).upload_stream(content_type:, content_disposition:,
-                                      part_size:, metadata: custom_metadata, **upload_options) do |out|
+        object_for(checksum).upload_stream(content_type:, content_disposition:,
+                                           part_size:, metadata: custom_metadata, **upload_options) do |out|
           IO.copy_stream(io, out)
         end
       end
 
-      def object_for(key)
-        bucket.object(key)
+      def object_for(checksum)
+        bucket.object(refactored_checksum(checksum))
       end
 
       def ensure_integrity_of(checksum, io)
         raise StorageTables::IntegrityError unless checksum == compute_checksum(io)
       end
 
-      # Reads the object for the given key in chunks, yielding each to the block.
-      def stream(key)
-        object = object_for(key)
+      # Reads the object for the given checksum in chunks, yielding each to the block.
+      def stream(checksum)
+        object = object_for(checksum)
 
         chunk_size = 5.megabytes
         offset = 0

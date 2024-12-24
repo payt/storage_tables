@@ -115,6 +115,12 @@ module StorageTables
       )
     end
 
+    def refactored_checksum(checksum)
+      # Replace the forward slash with an underscore
+      # Replace the plus sign with a minus sign
+      checksum.tr("/+", "_-")
+    end
+
     def content_disposition_with(filename:, type: "inline")
       disposition = type.to_s.presence_in(["attachment", "inline"]) || "inline"
       ActionDispatch::Http::ContentDisposition.format(disposition:, filename: filename.sanitized)

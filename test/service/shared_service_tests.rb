@@ -14,10 +14,10 @@ module StorageTables
 
       included do
         setup do
-          @checksum = generate_safe(FIXTURE_DATA)
+          @checksum = generate_checksum(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
           @service.upload @checksum, StringIO.new(FIXTURE_DATA)
-          @non_existing_checksum = generate_safe("nonexisting")
+          @non_existing_checksum = generate_checksum("nonexisting")
         end
 
         test "uploading without integrity" do
@@ -95,8 +95,12 @@ module StorageTables
           end
         end
 
-        def generate_safe(string)
+        def generate_checksum(string)
           OpenSSL::Digest.new("SHA3-512").base64digest(string)
+        end
+
+        def safe_checksum(checksum)
+          checksum.tr("+/", "-_")
         end
       end
     end
