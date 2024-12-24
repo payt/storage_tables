@@ -1,0 +1,162 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/DAAWVMC7apQidxM1jiLi8osM
+    body:
+      encoding: UTF-8
+      string: Something else entirely!
+    headers:
+      Accept-Encoding:
+      - ''
+      Amz-Sdk-Invocation-Id:
+      - cd920c05-21f3-422a-9c4a-2a05216cd440
+      Content-Disposition:
+      - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
+      Content-Md5:
+      - sijgElrNmNQBpuz2xn8X7Q==
+      Expect:
+      - 100-continue
+      Content-Type:
+      - application/octet-stream
+      User-Agent:
+      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,D
+      Host:
+      - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
+      X-Amz-Date:
+      - 20241224T110948Z
+      X-Amz-Content-Sha256:
+      - def6629d9a2dad4c0234ef217cf870ea14696c4ed16371aa9d1fe716a808238e
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;content-disposition;content-md5;content-type;host;x-amz-content-sha256;x-amz-date,
+        Signature=61ad440b0f936b22adb44054c7b08318eee04f4855a3ab057d8a88d28dfaa12d
+      Content-Length:
+      - '24'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amz-Id-2:
+      - FPq1gYdsPzIYpaaXIujG/ZsQEk04RftbMo3ucqm14kgPtXGk/eAxPe8FmS9iqwloXACx7tDwlA0=
+      X-Amz-Request-Id:
+      - 6X5WBGB633333K7G
+      Date:
+      - Tue, 24 Dec 2024 11:09:50 GMT
+      X-Amz-Server-Side-Encryption:
+      - AES256
+      Etag:
+      - '"b228e0125acd98d401a6ecf6c67f17ed"'
+      Content-Length:
+      - '0'
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Tue, 24 Dec 2024 11:09:48 GMT
+- request:
+    method: head
+    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/DAAWVMC7apQidxM1jiLi8osM
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - ''
+      Amz-Sdk-Invocation-Id:
+      - 910b2313-6c26-4f3e-a5a7-1d49068c5356
+      User-Agent:
+      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,D
+      Host:
+      - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
+      X-Amz-Date:
+      - 20241224T110948Z
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
+        Signature=4a6c03f87fe80bee2e5ae5b528b7c7cbdf220484b4981b1534431c5c775fa5f9
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amz-Id-2:
+      - Jgg/2fyyEwDnDqQfObf7OH0MTNutMJapIl5bJmYPDpXkRYju1eud0m6Fs54N8nsogDGX54absx0=
+      X-Amz-Request-Id:
+      - 6X5P86HCEZP2C31Q
+      Date:
+      - Tue, 24 Dec 2024 11:09:50 GMT
+      Last-Modified:
+      - Tue, 24 Dec 2024 11:09:50 GMT
+      Etag:
+      - '"b228e0125acd98d401a6ecf6c67f17ed"'
+      X-Amz-Server-Side-Encryption:
+      - AES256
+      Content-Disposition:
+      - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
+      Accept-Ranges:
+      - bytes
+      Content-Type:
+      - application/octet-stream
+      Content-Length:
+      - '24'
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Tue, 24 Dec 2024 11:09:48 GMT
+- request:
+    method: delete
+    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/DAAWVMC7apQidxM1jiLi8osM
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - ''
+      Amz-Sdk-Invocation-Id:
+      - 1d1853fe-6fc5-4f4e-a702-a09729717cdb
+      User-Agent:
+      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,D
+      Host:
+      - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
+      X-Amz-Date:
+      - 20241224T110948Z
+      X-Amz-Content-Sha256:
+      - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
+        Signature=16a10b2f18d28400e8f6f533a2fc58efc4f24f89b9c55fe5c200d68650fb4f2b
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      X-Amz-Id-2:
+      - bEXPlzaTVktsuntIymcr4+1a/aqsvODwRXbe36IoLKNpc6vJgNxbAO1HGxD6Oze98mVpgRsjgG0=
+      X-Amz-Request-Id:
+      - 6X5RBJV54AHJGH39
+      Date:
+      - Tue, 24 Dec 2024 11:09:50 GMT
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Tue, 24 Dec 2024 11:09:48 GMT
+recorded_with: VCR 6.2.0
