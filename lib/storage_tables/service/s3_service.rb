@@ -25,7 +25,7 @@ module StorageTables
         @upload_options = upload
       end
 
-      def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **)
+      def upload(checksum, io, filename: nil, content_type: nil, disposition: nil, custom_metadata: {}, **) # rubocop:disable Metrics/ParameterLists
         ensure_integrity_of(checksum, io)
 
         instrument(:upload, checksum:) do
@@ -107,10 +107,6 @@ module StorageTables
                                                  response_content_disposition: content_disposition_with(
                                                    type: disposition, filename:
                                                  ), response_content_type: content_type, **client_opts
-      end
-
-      def public_url(checksum, **client_opts)
-        object_for(checksum).public_url(**client_opts)
       end
 
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
