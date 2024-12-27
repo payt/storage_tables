@@ -69,12 +69,6 @@ module StorageTables
         end
       end
 
-      def delete_prefixed(prefix)
-        instrument(:delete_prefixed, prefix:) do
-          bucket.objects(prefix:).batch_delete!
-        end
-      end
-
       def exist?(checksum)
         instrument(:exist, checksum:) do |payload|
           answer = object_for(checksum).exists?
@@ -104,25 +98,7 @@ module StorageTables
 
         { "Content-Type" => content_type, "Content-MD5" => content_md5, "Content-Disposition" => content_disposition,
           **custom_metadata_headers(custom_metadata) }
-      end
-
-      def compose(source_keys, destination_key, filename: nil, content_type: nil, disposition: nil, custom_metadata: {})
-        content_disposition = content_disposition_with(type: disposition, filename:) if disposition && filename
-
-        object_for(destination_key).upload_stream(
-          content_type:,
-          content_disposition:,
-          part_size: MINIMUM_UPLOAD_PART_SIZE,
-          metadata: custom_metadata,
-          **upload_options
-        ) do |out|
-          source_keys.each do |source_key|
-            stream(source_key) do |chunk|
-              IO.copy_stream(StringIO.new(chunk), out)
-            end
-          end
-        end
-      end
+      end     
 
       private
 
