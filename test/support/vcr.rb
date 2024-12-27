@@ -8,5 +8,6 @@ VCR.configure do |config|
 
   config.default_cassette_options = { match_requests_on: [:method,
                                                           VCR.request_matchers.uri_without_param("X-Amz-Date",
+                                                                                                 "X-Amz-Credential",
                                                                                                  "X-Amz-Signature")] }
 end

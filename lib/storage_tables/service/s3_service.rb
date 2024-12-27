@@ -77,7 +77,7 @@ module StorageTables
         end
       end
 
-      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, content_md5:,
+      def url_for_direct_upload(checksum, expires_in:, content_type:, content_length:, content_md5:, # rubocop:disable Metrics/ParameterLists
                                 custom_metadata: {})
         instrument(:url, checksum:) do |payload|
           generated_url = object_for(checksum).presigned_url :put, expires_in: expires_in.to_i,
@@ -92,7 +92,7 @@ module StorageTables
         end
       end
 
-      def headers_for_direct_upload(content_md5:, content_type:, filename: nil, disposition: nil, custom_metadata: {},
+      def headers_for_direct_upload(content_md5:, content_type:, filename: nil, disposition: nil, custom_metadata: {}, # rubocop:disable Metrics/ParameterLists
                                     **)
         content_disposition = content_disposition_with(type: disposition, filename:) if filename
 
@@ -102,7 +102,7 @@ module StorageTables
 
       private
 
-      def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts)
+      def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts) # rubocop:disable Metrics/ParameterLists
         object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
                                                  response_content_disposition: content_disposition_with(
                                                    type: disposition, filename:
