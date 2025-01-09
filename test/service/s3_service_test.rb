@@ -211,6 +211,14 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
+        test "uploading an io that is not rewindable" do
+          error = assert_raises ArgumentError do
+            @service.upload checksum, 1
+          end
+
+          assert_equal "io must be rewindable", error.message
+        end
+
         private
 
         def build_service(configuration)

@@ -158,8 +158,6 @@ module StorageTables
       end
 
       def compute_md5_checksum(io)
-        raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
-
         OpenSSL::Digest.new("MD5").tap do |checksum|
           read_buffer = "".b
           checksum << read_buffer while io.read(5.megabytes, read_buffer)
