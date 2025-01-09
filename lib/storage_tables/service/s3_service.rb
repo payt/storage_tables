@@ -120,8 +120,10 @@ module StorageTables
         object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
                                  content_disposition:, metadata: custom_metadata, **upload_options)
       rescue Aws::S3::Errors::BadDigest
-        # This should not be possible in out integration as we calculate the digest ourself
-        raise StorageTables::IntegrityError # :nocov:
+        # This should not be possible in our integration as we calculate the digest ourself
+        # :nocov:
+        raise StorageTables::IntegrityError
+        # :nocov:
       end
 
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
