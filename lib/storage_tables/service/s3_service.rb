@@ -57,7 +57,8 @@ module StorageTables
 
       def download_chunk(checksum, range)
         instrument(:download_chunk, checksum:, range:) do
-          object_for(checksum).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body.string.force_encoding(Encoding::BINARY)
+          object_for(checksum).get(range: "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}")
+                              .body.string.force_encoding(Encoding::BINARY)
         rescue Aws::S3::Errors::NoSuchKey
           raise StorageTables::FileNotFoundError
         end
@@ -84,7 +85,8 @@ module StorageTables
                                                                    content_type:, content_length:,
                                                                    content_md5:,
                                                                    metadata: custom_metadata,
-                                                                   whitelist_headers: ["content-length"], **upload_options
+                                                                   whitelist_headers: ["content-length"],
+                                                                   **upload_options
 
           payload[:url] = generated_url
 
@@ -118,7 +120,8 @@ module StorageTables
         object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
                                  content_disposition:, metadata: custom_metadata, **upload_options)
       rescue Aws::S3::Errors::BadDigest
-        raise StorageTables::IntegrityError
+        # This should not be possible in out integration as we calculate the digest ourself
+        raise StorageTables::IntegrityError # :nocov:
       end
 
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
@@ -148,7 +151,8 @@ module StorageTables
         raise StorageTables::FileNotFoundError unless object.exists?
 
         while offset < object.content_length
-          yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.string.force_encoding(Encoding::BINARY)
+          yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.string
+                      .force_encoding(Encoding::BINARY)
           offset += chunk_size
         end
       end

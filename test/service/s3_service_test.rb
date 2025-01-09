@@ -57,7 +57,8 @@ if SERVICE_CONFIGURATIONS[:s3]
           request = Net::HTTP::Put.new uri.request_uri
           request.body = data
           @service.headers_for_direct_upload(content_md5:, content_type: "text/plain",
-                                             filename: StorageTables::Filename.new("test.txt"), disposition: :attachment).each do |k, v|
+                                             filename: StorageTables::Filename.new("test.txt"),
+                                             disposition: :attachment).each do |k, v|
             request.add_field k, v
           end
           Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
@@ -127,10 +128,11 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: ActiveStorage::Filename.new("avatar.png"), content_type: "image/png")
+                                       disposition: :inline, filename: ActiveStorage::Filename.new("avatar.png"),
+                                       content_type: "image/png")
 
           assert_match(
-            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*avatar\.png.*response-content-type=image%2Fpng/, url
+            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*avatar\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
           )
           assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
         end
