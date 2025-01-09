@@ -58,6 +58,10 @@ module StorageTables
       end
     end
 
+    def valid?
+      checksum.match?(%r{\A[A-Za-z0-9\/+]{86}==\z})
+    end
+
     # Returns the checksum
     def to_s
       checksum
