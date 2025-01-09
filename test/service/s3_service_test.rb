@@ -70,6 +70,29 @@ if SERVICE_CONFIGURATIONS[:s3]
           @service.delete checksum
         end
 
+        test "direct upload without content disposition" do
+          data     = "Something else entirely!"
+          checksum = generate_checksum(data)
+          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                         content_length: data.size, content_md5:)
+
+          uri = URI.parse url
+          request = Net::HTTP::Put.new uri.request_uri
+          request.body = data
+          @service.headers_for_direct_upload(content_md5:, content_type: "text/plain",
+                                             disposition: :attachment).each do |k, v|
+            request.add_field k, v
+          end
+          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+            http.request request
+          end
+
+          assert_equal("", @service.bucket.object(safe_checksum(checksum)).content_disposition)
+        ensure
+          @service.delete checksum
+        end
+
         test "directly uploading file larger than the provided content-length does not work" do
           data     = "Some text that is longer than the specified content length"
           checksum = generate_checksum(data)
