@@ -59,5 +59,11 @@ module StorageTables
 
       assert_equal "Invalid checksum: invalid", error.message
     end
+
+    test "io must be rewindable" do
+      error = assert_raises(ArgumentError) { Checksum.from_io("Hello world!") }
+
+      assert_equal "IO object must be rewindable", error.message
+    end
   end
 end

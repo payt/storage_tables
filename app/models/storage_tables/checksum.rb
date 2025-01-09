@@ -33,6 +33,8 @@ module StorageTables
       end
 
       def calculate_checksum(io)
+        raise ArgumentError, "IO object must be rewindable" unless io.respond_to?(:rewind)
+
         OpenSSL::Digest.new("SHA3-512").tap do |checksum|
           while (chunk = io.read(5.megabytes))
             checksum << chunk
