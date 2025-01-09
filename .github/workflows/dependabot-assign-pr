@@ -1,0 +1,33 @@
+name: DependaBot Assign Reviewer
+
+on:
+  pull_request:
+    types:
+      - opened
+  workflow_dispatch:
+    inputs:
+      reviewers:
+        description: Comma separated list of GitHub user names to sample from.
+        required: false
+        type: string
+        default: bobvanoorschot
+      pullRequestNumber:
+        description: The number of the PR to be assigned.
+        required: true
+        type: string
+
+jobs:
+  assign-reviewer:
+    permissions:
+      pull-requests: write
+    if: github.actor == 'dependabot[bot]' || github.event.inputs.pullRequestNumber
+    runs-on: ubuntu-latest
+    name: Assign Dependabot PR to a random developer
+    steps:
+      - id: assign-pr-randomly
+        name: Assign PR randomly
+        uses: payt/assign-pr-randomly-action@main
+        with:
+          reviewers: ${{ github.event.inputs.reviewers || 'bobvanoorschot' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pullRequestNumber: ${{ github.event.pull_request.number || github.event.inputs.pullRequestNumber }}
