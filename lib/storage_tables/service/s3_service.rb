@@ -116,7 +116,6 @@ module StorageTables
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                   custom_metadata: {})
-
         object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
                                  content_disposition:, metadata: custom_metadata, **upload_options)
       rescue Aws::S3::Errors::BadDigest
