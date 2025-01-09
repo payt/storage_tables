@@ -7,11 +7,8 @@ module StorageTables
   # Convenience class for generating checksums and sanitizing them.
   class Checksum
     include Comparable
-    include ActiveModel::Validations
 
     attr_reader :checksum
-
-    validates :checksum, presence: true
 
     class << self
       # Returns a Checksum instance based on the given checksum. If the checksum is a Checksum Class, it is
