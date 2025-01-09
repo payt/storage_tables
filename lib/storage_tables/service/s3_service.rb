@@ -98,7 +98,7 @@ module StorageTables
 
         { "Content-Type" => content_type, "Content-MD5" => content_md5, "Content-Disposition" => content_disposition,
           **custom_metadata_headers(custom_metadata) }
-      end     
+      end
 
       private
 
@@ -161,17 +161,6 @@ module StorageTables
         raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
 
         OpenSSL::Digest.new("MD5").tap do |checksum|
-          read_buffer = "".b
-          checksum << read_buffer while io.read(5.megabytes, read_buffer)
-
-          io.rewind
-        end.base64digest
-      end
-
-      def compute_checksum(io)
-        raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
-
-        OpenSSL::Digest.new("SHA3-512").tap do |checksum|
           read_buffer = "".b
           checksum << read_buffer while io.read(5.megabytes, read_buffer)
 

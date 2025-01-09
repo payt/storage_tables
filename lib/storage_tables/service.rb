@@ -125,5 +125,16 @@ module StorageTables
       disposition = type.to_s.presence_in(["attachment", "inline"]) || "inline"
       ActionDispatch::Http::ContentDisposition.format(disposition:, filename: filename.sanitized)
     end
+
+    def compute_checksum(io)
+      raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+
+      OpenSSL::Digest.new("SHA3-512").tap do |checksum|
+        read_buffer = "".b
+        checksum << read_buffer while io.read(5.megabytes, read_buffer)
+
+        io.rewind
+      end.base64digest
+    end
   end
 end
