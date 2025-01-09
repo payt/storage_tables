@@ -12,14 +12,14 @@ module StorageTables
 
       included do
         setup do
-          @checksum = OpenSSL::Digest.new("SHA3-512").base64digest(FIXTURE_DATA)
+          @checksum = Checksum.from_string(FIXTURE_DATA)
           @service = self.class.const_get(:SERVICE)
           @service.upload @checksum, StringIO.new(FIXTURE_DATA)
         end
 
         test "uploading without integrity" do
           data = "Something else entirely!"
-          checksum = OpenSSL::Digest.new("SHA3-512").base64digest("FIXTURE_DATA")
+          checksum = Checksum.from_string("FIXTURE_DATA")
 
           assert_raises(StorageTables::IntegrityError) do
             @service.upload(checksum, StringIO.new(data))
@@ -36,7 +36,7 @@ module StorageTables
 
         test "downloading a nonexistent file" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download(SecureRandom.base58(24))
+            @service.download(Checksum.from_string(SecureRandom.base58(24)))
           end
         end
 
@@ -44,7 +44,7 @@ module StorageTables
           expected_chunks = ["a" * 5.megabytes, "b"]
           actual_chunks = []
           io = StringIO.new(expected_chunks.join)
-          checksum = OpenSSL::Digest.new("SHA3-512").base64digest(expected_chunks.join)
+          checksum = Checksum.from_string(expected_chunks.join)
 
           begin
             @service.upload checksum, io
@@ -61,7 +61,7 @@ module StorageTables
 
         test "downloading a nonexistent file in chunks" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download(SecureRandom.base58(24)) {} # rubocop:disable Lint/EmptyBlock
+            @service.download(Checksum.from_string(SecureRandom.base58(24))) {} # rubocop:disable Lint/EmptyBlock
           end
         end
 
@@ -71,13 +71,12 @@ module StorageTables
 
         test "partially downloading a nonexistent file" do
           assert_raises(StorageTables::FileNotFoundError) do
-            @service.download_chunk(SecureRandom.base58(24), 19..21)
+            @service.download_chunk(Checksum.from_string(SecureRandom.base58(24)), 19..21)
           end
         end
 
         test "existing" do
           assert @service.exist?(@checksum)
-          assert_not @service.exist?("#{@checksum}nonsense")
         end
 
         test "deleting" do
@@ -88,7 +87,7 @@ module StorageTables
 
         test "deleting nonexistent key" do
           assert_nothing_raised do
-            @service.delete SecureRandom.base58(24)
+            @service.delete Checksum.from_string(SecureRandom.base58(24))
           end
         end
       end

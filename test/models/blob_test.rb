@@ -14,7 +14,7 @@ module StorageTables
       blob = create_blob
 
       assert_raises(ActiveRecord::StatementInvalid) do
-        blob.update!(checksum: "1234567890")
+        blob.update!(checksum: Checksum.from_string("1234567890").to_s)
       end
     end
 
@@ -60,7 +60,7 @@ module StorageTables
 
       assert_predicate blob, :persisted?
       assert_equal data.length, blob.byte_size
-      assert_equal OpenSSL::Digest.new("SHA3-512").base64digest(data), blob.checksum
+      assert_equal StorageTables::Checksum.from_string(data), StorageTables::Checksum.new(blob.checksum)
     end
 
     test "create_and_upload! the same file twice" do
@@ -157,7 +157,7 @@ module StorageTables
 
     test "find_by_checksum! with non-existing checksum" do
       assert_raises(ActiveRecord::RecordNotFound) do
-        Blob.find_by_checksum!("non-existing-checksum")
+        Blob.find_by_checksum!(Checksum.from_string("non-existing-checksum"))
       end
     end
 
@@ -165,7 +165,7 @@ module StorageTables
 
     test "existing_blob is deprecated" do
       assert_deprecated("StorageTables", StorageTables.deprecator) do
-        Blob.existing_blob("non-existing-checksum")
+        Blob.existing_blob(Checksum.from_string("non-existing-checksum"))
       end
     end
   end

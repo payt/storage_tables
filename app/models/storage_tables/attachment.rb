@@ -26,7 +26,7 @@ module StorageTables
     def full_checksum
       raise StorageTables::ActiveRecordError, "blob is nil" unless checksum
 
-      "#{blob_key}#{checksum}=="
+      Checksum.new([blob_key, checksum]).to_s
     end
 
     # Returns an StorageTables::Filename instance of the filename that can be

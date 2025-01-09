@@ -30,7 +30,7 @@ module StorageTables
 
     test "upload a pdf" do
       file = file_fixture("report.pdf")
-      checksum = OpenSSL::Digest.new("SHA3-512").file(file).base64digest
+      checksum = StorageTables::Checksum.from_path(file)
 
       blob = create_blob_before_direct_upload(byte_size: file.size, checksum:, content_type: "application/pdf")
 
@@ -38,7 +38,7 @@ module StorageTables
 
       assert_response :no_content
       assert blob.service.exist?(blob.checksum)
-      assert_equal checksum, OpenSSL::Digest.new("SHA3-512").base64digest(blob.download)
+      assert_equal checksum, StorageTables::Checksum.from_string(blob.download)
     end
 
     test "directly uploading blob without integrity" do
@@ -109,7 +109,7 @@ module StorageTables
     end
 
     def create_checksum(data)
-      OpenSSL::Digest.new("SHA3-512").base64digest(data)
+      StorageTables::Checksum.from_string(data)
     end
   end
 end

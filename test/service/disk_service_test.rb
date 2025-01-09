@@ -11,25 +11,26 @@ module StorageTables
 
       include StorageTables::Service::SharedServiceTests
 
-      test "path_for" do
-        checksum = "1234567890abcde+f=="
+      attr_reader :fake_checksum
 
-        assert_equal "/tmp/1/23/45/1234567890abcde-f==", @service.path_for(checksum)
+      setup do
+        @fake_checksum = "#{"a" * 86}==" # 86 characters + 2 padding
+      end
+
+      test "path_for" do
+        assert_equal "/tmp/a/aa/aa/#{fake_checksum}", @service.path_for(fake_checksum)
       end
 
       test "relative_path_for" do
-        checksum = "1234567890abcde+f=="
-
-        assert_equal "1/23/45/1234567890abcde-f==", @service.relative_path_for(checksum)
+        assert_equal "a/aa/aa/#{fake_checksum}", @service.relative_path_for(fake_checksum)
       end
 
       test "URL generation without StorageTables::Current.url_options set" do
-        checksum = "1234567890abcde+f=="
         StorageTables::Current.url_options = nil
 
         error = assert_raises ArgumentError do
-          @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "image/png",
-                                                   content_length: 123)
+          @service.url_for_direct_upload(fake_checksum, expires_in: 5.minutes, content_type: "image/png",
+                                                        content_length: 123)
         end
 
         assert_equal(
@@ -38,15 +39,14 @@ module StorageTables
       end
 
       test "URL generation keeps working with StorageTables::Current.host set" do
-        checksum = "1234567890abcde+f=="
         StorageTables::Current.url_options = { host: "https://example.com" }
 
         original_url_options = Rails.application.routes.default_url_options.dup
         Rails.application.routes.default_url_options.merge!(protocol: "http", host: "test.example.com", port: 3001)
         begin
           assert_match(%r{^http://example.com:3001/rails/storage_tables/disk/.*$},
-                       @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "image/png",
-                                                                content_length: 123))
+                       @service.url_for_direct_upload(fake_checksum, expires_in: 5.minutes, content_type: "image/png",
+                                                                     content_length: 123))
         ensure
           Rails.application.routes.default_url_options = original_url_options
         end
