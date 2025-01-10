@@ -249,6 +249,10 @@ if SERVICE_CONFIGURATIONS[:s3]
         def build_service(configuration)
           StorageTables::Service.configure :s3, SERVICE_CONFIGURATIONS.deep_merge(s3: configuration)
         end
+
+        def safe_checksum(checksum)
+          checksum.tr("+/", "-_")
+        end
       end
     end
   end
