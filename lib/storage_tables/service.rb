@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require_relative "service/configurator"
-
 module StorageTables
   # Loads and configures the Storage service to be used to store files.
   class Service

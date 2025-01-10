@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-gem "aws-sdk-s3", "~> 1.48"
-
 require "aws-sdk-s3"
 require "active_support/core_ext/numeric/bytes"
 
