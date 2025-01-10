@@ -47,7 +47,7 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "direct upload with content disposition" do
-          data     = "Something else entirely!"
+          data = "Something else entirely!"
           checksum = generate_checksum(data)
           content_md5 = OpenSSL::Digest::MD5.base64digest(data)
           url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",

@@ -99,10 +99,6 @@ module StorageTables
         def generate_checksum(string)
           OpenSSL::Digest.new("SHA3-512").base64digest(string)
         end
-
-        def safe_checksum(checksum)
-          checksum.tr("+/", "-_")
-        end
       end
     end
   end
