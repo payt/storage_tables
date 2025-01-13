@@ -41,25 +41,25 @@ module StorageTables
         )
       end
 
-      # Upload the +io+ to the +key+ specified to all services. The upload to the primary service is done synchronously
-      # whereas the upload to the mirrors is done asynchronously. If a +checksum+ is provided, all services will
-      # ensure a match when the upload has completed or raise an ActiveStorage::IntegrityError.
+      # Upload the +io+ to the +checksum+ specified to all services. The upload to the primary service is done
+      # synchronously whereas the upload to the mirrors is done asynchronously. If a +checksum+ is provided, all
+      # services will ensure a match when the upload has completed or raise an StorageTables::IntegrityError.
       def upload(checksum, io, **)
         io.rewind
-        primary.upload(checksum, io, checksum:, **)
+        primary.upload(checksum, io, **)
         mirror_later checksum
       end
 
-      # Delete the file at the +key+ on all services.
+      # Delete the file at the +checksum+ on all services.
       def delete(checksum)
         perform_across_services :delete, checksum
       end
 
-      def mirror_later(checksum) # :nodoc:
+      def mirror_later(checksum)
         StorageTables::MirrorJob.perform_later checksum
       end
 
-      # Copy the file at the +key+ from the primary service to each of the mirrors where it doesn't already exist.
+      # Copy the file at the +checksum+ from the primary service to each of the mirrors where it doesn't already exist.
       def mirror(checksum)
         instrument(:mirror, checksum) do
           if (mirrors_in_need_of_mirroring = mirrors.reject { |service| service.exist?(checksum) }).any?
