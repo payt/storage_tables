@@ -7,6 +7,8 @@ module StorageTables
       class CreateMany
         include ManyHelper
 
+        attr_reader :name, :record, :attachables, :pending_uploads
+
         def initialize(name, record, attachables, pending_uploads: [])
           @name = name
           @record = record
