@@ -77,17 +77,6 @@ module StorageTables
         assert_equal data, @service.mirrors.third.download(checksum)
       end
 
-      # test "URL generation in primary service" do
-      #   filename = StorageTables::Filename.new("test.txt")
-
-      #   freeze_time do
-      #     assert_equal @service.primary.url(@checksum, expires_in: 2.minutes, disposition: :inline, filename:,
-      #                                                  content_type: "text/plain"),
-      #                  @service.url(@checksum, expires_in: 2.minutes, disposition: :inline, filename:,
-      #                                          content_type: "text/plain")
-      #   end
-      # end
-
       test "path for file in primary service" do
         assert_equal @service.primary.path_for(@checksum), @service.path_for(@checksum)
       end
