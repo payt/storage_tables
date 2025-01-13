@@ -98,12 +98,6 @@ module StorageTables
 
       private
 
-      def refactored_checksum(checksum)
-        # Replace the forward slash with an underscore
-        # Replace the plus sign with a minus sign
-        checksum.tr("/+", "_-")
-      end
-
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end

@@ -112,5 +112,27 @@ module StorageTables
         payload, &
       )
     end
+
+    def refactored_checksum(checksum)
+      # Replace the forward slash with an underscore
+      # Replace the plus sign with a minus sign
+      checksum.tr("/+", "_-")
+    end
+
+    def content_disposition_with(filename:, type: "inline")
+      disposition = type.to_s.presence_in(["attachment", "inline"]) || "inline"
+      ActionDispatch::Http::ContentDisposition.format(disposition:, filename: filename.sanitized)
+    end
+
+    def compute_checksum(io)
+      raise ArgumentError, "io must be rewindable" unless io.respond_to?(:rewind)
+
+      OpenSSL::Digest.new("SHA3-512").tap do |checksum|
+        read_buffer = "".b
+        checksum << read_buffer while io.read(5.megabytes, read_buffer)
+
+        io.rewind
+      end.base64digest
+    end
   end
 end

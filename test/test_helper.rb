@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require "simplecov"
+require "dotenv/load"
 
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
 require_relative "../test/dummy/config/environment"
 require "rails/test_help"
+require_relative "support/vcr"
 
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../test/dummy/db/migrate", __dir__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __dir__)
