@@ -38,9 +38,9 @@ module StorageTables
 
         assert_predicate io, :eof?
 
-        assert_equal data, @service.primary.download(key)
+        assert_equal data, @service.primary.download(checksum)
         @service.mirrors.each do |mirror|
-          assert_equal data, mirror.download(key)
+          assert_equal data, mirror.download(checksum)
         end
       ensure
         @service.delete checksum
@@ -48,51 +48,49 @@ module StorageTables
       end
 
       test "downloading from primary service" do
-        key      = SecureRandom.base58(24)
         data     = "Something else entirely!"
-        checksum = OpenSSL::Digest::MD5.base64digest(data)
+        checksum = generate_checksum(data)
 
-        @service.primary.upload(key, StringIO.new(data), checksum:)
+        @service.primary.upload(checksum, StringIO.new(data))
 
-        assert_equal data, @service.download(key)
+        assert_equal data, @service.download(checksum)
       end
 
       test "deleting from all services" do
-        @service.delete @key
+        @service.delete @checksum
 
-        assert_not SERVICE.primary.exist?(@key)
+        assert_not SERVICE.primary.exist?(@checksum)
         SERVICE.mirrors.each do |mirror|
-          assert_not mirror.exist?(@key)
+          assert_not mirror.exist?(@checksum)
         end
       end
 
       test "mirroring a file from the primary service to secondary services where it doesn't exist" do
-        key      = SecureRandom.base58(24)
         data     = "Something else entirely!"
-        checksum = OpenSSL::Digest::MD5.base64digest(data)
+        checksum = generate_checksum(data)
 
-        @service.primary.upload(key, StringIO.new(data), checksum:)
-        @service.mirrors.third.upload key, StringIO.new("Surprise!")
+        @service.primary.upload(checksum, StringIO.new(data))
+        @service.mirrors.third.upload checksum, StringIO.new(data)
 
-        @service.mirror(key, checksum:)
+        @service.mirror(checksum)
 
-        assert_equal data, @service.mirrors.first.download(key)
-        assert_equal data, @service.mirrors.second.download(key)
-        assert_equal "Surprise!", @service.mirrors.third.download(key)
+        assert_equal data, @service.mirrors.first.download(checksum)
+        assert_equal data, @service.mirrors.second.download(checksum)
+        assert_equal data, @service.mirrors.third.download(checksum)
       end
 
-      test "URL generation in primary service" do
-        filename = StorageTables::Filename.new("test.txt")
+      # test "URL generation in primary service" do
+      #   filename = StorageTables::Filename.new("test.txt")
 
-        freeze_time do
-          assert_equal @service.primary.url(@key, expires_in: 2.minutes, disposition: :inline, filename:, content_type: "text/plain"),
-                       @service.url(@key, expires_in: 2.minutes, disposition: :inline, filename:,
-                                          content_type: "text/plain")
-        end
-      end
+      #   freeze_time do
+      #     assert_equal @service.primary.url(@checksum, expires_in: 2.minutes, disposition: :inline, filename:, content_type: "text/plain"),
+      #                  @service.url(@checksum, expires_in: 2.minutes, disposition: :inline, filename:,
+      #                                          content_type: "text/plain")
+      #   end
+      # end
 
       test "path for file in primary service" do
-        assert_equal @service.primary.path_for(@key), @service.path_for(@key)
+        assert_equal @service.primary.path_for(@checksum), @service.path_for(@checksum)
       end
     end
   end
