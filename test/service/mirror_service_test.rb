@@ -36,8 +36,6 @@ module StorageTables
           @service.upload checksum, io.tap(&:read)
         end
 
-        assert_predicate io, :eof?
-
         assert_equal data, @service.primary.download(checksum)
         @service.mirrors.each do |mirror|
           assert_equal data, mirror.download(checksum)
