@@ -50,7 +50,7 @@ module StorageTables
     end
 
     def open(...)
-      ActiveStorage::Downloader.new(self).open(...)
+      StorageTables::Downloader.new(self).open(...)
     end
 
     # Concatenate multiple files into a single "composed" file.
