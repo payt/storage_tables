@@ -11,7 +11,7 @@ module StorageTables
     class DiskService < Service
       attr_accessor :root
 
-      def initialize(root:, public: false)
+      def initialize(root:, public: false, **)
         @root = root
         @public = public
 

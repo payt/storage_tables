@@ -2,9 +2,9 @@
 
 require "active_support/core_ext/object/try"
 
-# Provides asynchronous mirroring of directly-uploaded blobs.
 module StorageTables
-  class StorageTables::MirrorJob < ActiveJob::Base #
+  # Provides asynchronous mirroring of directly-uploaded blobs.
+  class MirrorJob < ActiveJob::Base # rubocop:disable Rails/ApplicationJob
     queue_as { StorageTables.queues[:mirror] }
 
     discard_on StorageTables::FileNotFoundError
