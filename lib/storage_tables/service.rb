@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "storage_tables/downloader"
+
 module StorageTables
   # Loads and configures the Storage service to be used to store files.
   class Service
@@ -50,7 +52,7 @@ module StorageTables
     end
 
     def open(...)
-      ActiveStorage::Downloader.new(self).open(...)
+      StorageTables::Downloader.new(self).open(...)
     end
 
     # Concatenate multiple files into a single "composed" file.
