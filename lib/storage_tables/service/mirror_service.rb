@@ -3,16 +3,16 @@
 require "active_support/core_ext/module/delegation"
 
 module StorageTables
-  # = Storage Tables Mirror \Service
-  #
-  # Wraps a set of mirror services and provides a single StorageTables::Service object that will all
-  # have the files uploaded to them. A +primary+ service is designated to answer calls to:
-  # * +download+
-  # * +exists?+
-  # * +url+
-  # * +url_for_direct_upload+
-  # * +headers_for_direct_upload+
   class Service
+    # = Storage Tables Mirror \Service
+    #
+    # Wraps a set of mirror services and provides a single StorageTables::Service object that will all
+    # have the files uploaded to them. A +primary+ service is designated to answer calls to:
+    # * +download+
+    # * +exists?+
+    # * +url+
+    # * +url_for_direct_upload+
+    # * +headers_for_direct_upload+
     class MirrorService < Service
       attr_reader :primary, :mirrors
 
@@ -20,7 +20,7 @@ module StorageTables
                :url_for_direct_upload, :headers_for_direct_upload, :path_for, :compose, to: :primary
 
       # Stitch together from named services.
-      def self.build(primary:, mirrors:, name:, configurator:, **options) # :nodoc:
+      def self.build(primary:, mirrors:, name:, configurator:, **) # :nodoc:
         new(
           primary: configurator.build(primary),
           mirrors: mirrors.collect { |mirror_name| configurator.build mirror_name }

@@ -23,7 +23,7 @@ module StorageTables
       # Passes the configurator and all of the service's config as keyword args.
       #
       # See MirrorService for an example.
-      def build(configurator:, name:, **service_config) # :nodoc:
+      def build(configurator:, name:, **service_config) # rubocop:disable Lint/UnusedMethodArgument
         new(**service_config).tap do |service_instance|
           service_instance.name = name
         end
