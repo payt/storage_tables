@@ -4,17 +4,39 @@ module StorageTables
   module Attachable
     module Changes
       # Class used to create many attachments from an attachable blob.
-      class CreateMany < Attached::Changes::CreateMany
+      class CreateMany
         include ManyHelper
+
+        def initialize(name, record, attachables, pending_uploads: [])
+          @name = name
+          @record = record
+          @attachables = Array(attachables)
+          blobs.each(&:identify_without_saving)
+          @pending_uploads = Array(pending_uploads) + subchanges_without_blobs
+          attachments
+        end
 
         def save
           ActiveRecord::Base.transaction do
             delete_old_attachments(removable_attachments)
-            super
+            assign_associated_attachments
+            reset_associated_blobs
           end
         end
 
+        def attachments
+          @attachments ||= subchanges.collect(&:attachment)
+        end
+
+        def blobs
+          @blobs ||= subchanges.collect(&:blob)
+        end
+
         private
+
+        def subchanges
+          @subchanges ||= attachables.collect { |attachable| build_subchange_from(attachable) }
+        end
 
         def build_subchange_from(attachable)
           StorageTables::Attachable::Changes::CreateOneOfMany.new(name, record, attachable)
@@ -34,6 +56,10 @@ module StorageTables
 
         def removable_attachments
           original_attachments - persisted_or_new_attachments
+        end
+
+        def persisted_or_new_attachments
+          attachments.select { |attachment| attachment.persisted? || attachment.new_record? }
         end
       end
     end
