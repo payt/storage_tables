@@ -7,11 +7,17 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        ruby: ['3.3.3']
+        postgres: ['15', '16', '17']
+    runs-on: ${{ matrix.os }}
 
     services:
       postgres:
-        image: postgres:12
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
         ports: ["5432:5432"]
