@@ -10,9 +10,9 @@ module StorageTables
     attr_accessor :name
 
     class << self
-      # Configure an Active Storage service by name from a set of configurations,
-      # typically loaded from a YAML file. The Active Storage engine uses this
-      # to set the global Active Storage service when the app boots.
+      # Configure an Storage Tables service by name from a set of configurations,
+      # typically loaded from a YAML file. The Storage Tables engine uses this
+      # to set the global Storage Tables service when the app boots.
       def configure(service_name, configurations)
         Configurator.build(service_name, configurations)
       end
@@ -23,7 +23,7 @@ module StorageTables
       # Passes the configurator and all of the service's config as keyword args.
       #
       # See MirrorService for an example.
-      def build(name:, **service_config) # :nodoc:
+      def build(configurator:, name:, **service_config) # rubocop:disable Lint/UnusedMethodArgument
         new(**service_config).tap do |service_instance|
           service_instance.name = name
         end
