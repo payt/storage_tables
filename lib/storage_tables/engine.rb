@@ -44,6 +44,12 @@ module StorageTables
       end
     end
 
+    initializer "storage_tables.queues" do
+      config.after_initialize do |app|
+        StorageTables.queues = app.config.storage_tables.queues || {}
+      end
+    end
+
     initializer "storage_tables.reflection" do
       ActiveSupport.on_load(:active_record) do
         include Reflection::ActiveRecordExtensions
