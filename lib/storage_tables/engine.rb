@@ -12,6 +12,7 @@ module StorageTables
     isolate_namespace StorageTables
 
     config.storage_tables = ActiveSupport::OrderedOptions.new
+    config.storage_tables.queues = ActiveSupport::InheritableOptions.new
 
     initializer "storage_tables.attached" do
       require "storage_tables/attached"
