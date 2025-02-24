@@ -91,6 +91,15 @@ module StorageTables
         assert_equal data, @service.mirrors.third.download(checksum)
       end
 
+      test "when file doesn't exist on primary when mirroring" do
+        data     = "Something else entirely!"
+        checksum = generate_checksum(data)
+
+        assert_raises StorageTables::FileNotFoundError do
+          @service.mirror(checksum)
+        end
+      end
+
       test "path for file in primary service" do
         assert_equal @service.primary.path_for(@checksum), @service.path_for(@checksum)
       end
