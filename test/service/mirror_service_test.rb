@@ -92,8 +92,7 @@ module StorageTables
       end
 
       test "when file doesn't exist on primary when mirroring" do
-        data     = "Something else entirely!"
-        checksum = generate_checksum(data)
+        checksum = generate_checksum(name)
 
         assert_raises StorageTables::FileNotFoundError do
           @service.mirror(checksum)
