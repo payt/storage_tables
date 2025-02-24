@@ -61,7 +61,7 @@ module StorageTables
 
       # Copy the file at the +checksum+ from the primary service to each of the mirrors where it doesn't already exist.
       def mirror(checksum)
-        instrument(:mirror, checksum) do
+        instrument(:mirror, checksum:) do
           if (mirrors_in_need_of_mirroring = mirrors.reject { |service| service.exist?(checksum) }).any?
             primary.open(checksum) do |io|
               mirrors_in_need_of_mirroring.each do |service|

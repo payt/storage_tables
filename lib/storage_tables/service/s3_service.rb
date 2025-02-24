@@ -11,6 +11,8 @@ module StorageTables
     # See StorageTables::Service for the generic API documentation that applies to all services.
     class S3Service < Service
       MULTIPART_THRESHOLD = 100.megabytes
+      MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
+      MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
       attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
@@ -108,9 +110,6 @@ module StorageTables
                                                    type: disposition, filename:
                                                  ), response_content_type: content_type, **client_opts
       end
-
-      MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
-      MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                   custom_metadata: {})
