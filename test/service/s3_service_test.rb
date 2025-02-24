@@ -4,6 +4,7 @@ require "service/shared_service_tests"
 require "net/http"
 require "database/setup"
 require "minitest/hooks/test"
+require "active_support/testing/method_call_assertions"
 
 if SERVICE_CONFIGURATIONS[:s3]
   module StorageTables
@@ -242,6 +243,21 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           assert_equal "io must be rewindable", error.message
+        end
+
+        test "when destroying a blob from database fails" do
+          Rails.configuration.storage_tables.service = "s3"
+          blob = StorageTables::Blob.create!(checksum:, byte_size: FIXTURE_DATA.size)
+
+          assert service.exist?(checksum)
+
+          assert_raises StandardError do
+            blob.stub :destroy_row, ->(*) { raise StandardError } do
+              blob.destroy!
+            end
+          end
+
+          assert service.exist?(checksum)
         end
 
         private

@@ -102,6 +102,12 @@ module StorageTables
           **custom_metadata_headers(custom_metadata) }
       end
 
+      def restore(checksum, version)
+        instrument(:exist, version.to_h.merge(checksum:)) do
+          object_for(checksum).delete(version_id: version.version_id)
+        end
+      end
+
       private
 
       def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts) # rubocop:disable Metrics/ParameterLists

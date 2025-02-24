@@ -33,8 +33,15 @@ module StorageTables
     def destroy!
       raise StorageTables::ActiveRecordError, "Cannot delete blob attached to a record" if attachments_count.positive?
 
-      service.delete(checksum)
-      super
+      begin
+        last_version = service.delete(checksum)
+
+        super
+      rescue StandardError
+        service.restore(checksum, last_version) if last_version.delete_marker
+
+        raise
+      end
     end
 
     # Check if file exists on disk
