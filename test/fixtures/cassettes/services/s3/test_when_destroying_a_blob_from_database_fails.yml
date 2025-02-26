@@ -249,7 +249,7 @@ http_interactions:
       - Mon, 24 Feb 2025 14:59:25 GMT
       Last-Modified:
       - Mon, 24 Feb 2025 14:59:24 GMT
-      Etag:3
+      Etag:
       - '"2d61aa54b58c2e94403fb092cdbc027"'
       X-Amz-Server-Side-Encryption:
       - AES256
