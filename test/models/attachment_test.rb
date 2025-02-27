@@ -188,7 +188,7 @@ module StorageTables
       assert_equal "blob is nil", error.message
     end
 
-    ## StorageTables::Blob.where_checksum
+    ## StorageTables::Attachment.where_checksum
 
     test "where_checksum" do
       blob = create_blob(data: "First blob")
@@ -222,7 +222,7 @@ module StorageTables
       assert_not_includes search, attachment3
     end
 
-    ## StorageTables::Blob.find_by_checksum!
+    ## StorageTables::Attachment.find_by_checksum!
 
     test "find_by_checksum!" do
       blob = create_blob(data: "First blob")
