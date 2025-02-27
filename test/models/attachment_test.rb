@@ -239,6 +239,12 @@ module StorageTables
       end
     end
 
+    test "find_by_checksum with non-existing checksum does not raise" do
+      result = UserAvatarAttachment.find_by_checksum("non-existing-checksum")
+
+      assert_nil result
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)
