@@ -35,5 +35,30 @@ module StorageTables
     def filename
       StorageTables::Filename.new(self[:filename])
     end
+
+    class << self
+      def find_by_checksum(checksum)
+        find_by(blob_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
+      def find_by_checksum!(checksum)
+        find_by!(blob_key: checksum[0], checksum: checksum[1..].chomp("=="))
+      end
+
+      def where_checksum(input)
+        if input.is_a?(Array)
+          where([:blob_key, :checksum] => input.map { checksum_to_primary(_1) })
+        else
+          where(blob_key: input[0], checksum: input[1..].chomp("=="))
+        end
+      end
+
+      private
+
+      # Cut the checksum into an Array to match the primary key
+      def checksum_to_primary(checksum)
+        [checksum[1..].chomp("=="), checksum[0]]
+      end
+    end
   end
 end
