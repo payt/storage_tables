@@ -57,7 +57,7 @@ module StorageTables
 
       # Cut the checksum into an Array to match the primary key
       def checksum_to_primary(checksum)
-        [checksum[1..].chomp("=="), checksum[0]]
+        [checksum[0], checksum[1..].chomp("==")]
       end
     end
   end
