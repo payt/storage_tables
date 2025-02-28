@@ -247,7 +247,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "when destroying a blob from database fails" do
           Rails.configuration.storage_tables.service = "s3"
-          blob = StorageTables::Blob.create!(checksum:, byte_size: FIXTURE_DATA.size)
+          blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
 
           assert blob.service.exist?(blob.checksum)
           assert_kind_of StorageTables::Service::S3Service, blob.service
