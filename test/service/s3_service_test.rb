@@ -246,19 +246,19 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "when destroying a blob from database fails" do
-          Rails.configuration.storage_tables.service = "s3"
           blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+          blob.stub :service, -> { @service } do
+            assert blob.service.exist?(blob.checksum)
+            assert_kind_of StorageTables::Service::S3Service, blob.service
 
-          assert blob.service.exist?(blob.checksum)
-          assert_kind_of StorageTables::Service::S3Service, blob.service
-
-          assert_raises StorageTables::ActiveRecordError do
-            blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
-              blob.destroy!
+            assert_raises StorageTables::ActiveRecordError do
+              blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
+                blob.destroy!
+              end
             end
-          end
 
-          assert_predicate blob, :on_disk?
+            assert_predicate blob, :on_disk?
+          end
         end
 
         private
