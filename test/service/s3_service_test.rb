@@ -249,7 +249,7 @@ if SERVICE_CONFIGURATIONS[:s3]
           Rails.configuration.storage_tables.service = "s3"
           blob = StorageTables::Blob.create!(checksum:, byte_size: FIXTURE_DATA.size)
 
-          assert_predicate blob, :on_disk?
+          assert blob.service.exist?(blob.checksum)
           assert_kind_of StorageTables::Service::S3Service, blob.service
 
           assert_raises StorageTables::ActiveRecordError do
