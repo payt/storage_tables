@@ -38,7 +38,7 @@ module StorageTables
 
         super
       rescue StandardError
-        service.restore(checksum, version) if version.respond_to?(:delete_marker)
+        service.restore(checksum, version:) if version.respond_to?(:delete_marker)
 
         raise
       end
