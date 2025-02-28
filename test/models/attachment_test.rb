@@ -188,6 +188,63 @@ module StorageTables
       assert_equal "blob is nil", error.message
     end
 
+    ## StorageTables::Attachment.where_checksum
+
+    test "where_checksum" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+      attachment = UserPhotoAttachment.create!(record: @user, blob: blob, filename: "test.txt")
+      attachment2 = UserPhotoAttachment.create!(record: @user, blob: blob2, filename: "test.txt")
+
+      checksum = blob.checksum
+
+      search = UserPhotoAttachment.where_checksum(checksum)
+
+      assert_includes search, attachment
+      assert_not_includes search, attachment2
+    end
+
+    test "where_checksum with array" do
+      blob = create_blob(data: "First blob")
+      blob2 = create_blob(data: "Second blob")
+      blob3 = create_blob(data: "Third blob")
+      attachment = UserPhotoAttachment.create!(record: @user, blob: blob, filename: "test.txt")
+      attachment2 = UserPhotoAttachment.create!(record: @user, blob: blob2, filename: "test.txt")
+      attachment3 = UserPhotoAttachment.create!(record: @user, blob: blob3, filename: "test.txt")
+
+      checksum = blob.checksum
+      checksum2 = blob2.checksum
+
+      search = UserPhotoAttachment.where_checksum([checksum, checksum2])
+
+      assert_includes search, attachment
+      assert_includes search, attachment2
+      assert_not_includes search, attachment3
+    end
+
+    ## StorageTables::Attachment.find_by_checksum!
+
+    test "find_by_checksum!" do
+      blob = create_blob(data: "First blob")
+      attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "test.txt")
+
+      search = UserAvatarAttachment.find_by_checksum!(blob.checksum)
+
+      assert_equal attachment, search
+    end
+
+    test "find_by_checksum! with non-existing checksum" do
+      assert_raises(ActiveRecord::RecordNotFound) do
+        UserAvatarAttachment.find_by_checksum!("non-existing-checksum")
+      end
+    end
+
+    test "find_by_checksum with non-existing checksum does not raise" do
+      result = UserAvatarAttachment.find_by_checksum("non-existing-checksum")
+
+      assert_nil result
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)

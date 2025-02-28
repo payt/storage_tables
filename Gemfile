@@ -21,4 +21,10 @@ gem "rubocop-performance"
 gem "rubocop-rails"
 gem "rubocop-rake"
 
+gem "dotenv", groups: [:development, :test]
+
 gem "simplecov", require: false
+
+gem "minitest-hooks"
+gem "vcr"
+gem "webmock"
