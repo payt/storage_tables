@@ -3,6 +3,7 @@
 require "test_helper"
 require "storage_tables/service/disk_service"
 require "service/shared_service_tests"
+require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class Service
@@ -57,11 +58,11 @@ module StorageTables
 
         assert_predicate blob, :on_disk?
 
-        # assert_raises StandardError do
-        # blob.stub :destroy, ->(*) { raise StandardError } do
-        blob.destroy!
-        # end
-        # end
+        assert_raises StorageTables::ActiveRecordError do
+          blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
+            blob.destroy!
+          end
+        end
 
         assert_not blob.on_disk?
       end

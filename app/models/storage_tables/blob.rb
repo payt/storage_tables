@@ -34,11 +34,11 @@ module StorageTables
       raise StorageTables::ActiveRecordError, "Cannot delete blob attached to a record" if attachments_count.positive?
 
       begin
-        delete_marker = service.delete(checksum)
+        version = service.delete(checksum)
 
         super
       rescue StandardError
-        service.restore(checksum, delete_marker) if delete_marker
+        service.restore(checksum, version) if version.respond_to?(:delete_marker)
 
         raise
       end

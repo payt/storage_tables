@@ -251,8 +251,8 @@ if SERVICE_CONFIGURATIONS[:s3]
 
           assert service.exist?(checksum)
 
-          assert_raises StandardError do
-            blob.stub :destroy, ->(*) { raise StandardError } do
+          assert_raises StorageTables::ActiveRecordError do
+            blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
               blob.destroy!
             end
           end
