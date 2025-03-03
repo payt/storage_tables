@@ -261,7 +261,7 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
-        test "when destroying a blob and record is still in database" do
+        test "when destroying a blob and record is removed from database" do
           blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
           blob.stub :service, -> { @service } do
             assert blob.service.exist?(blob.checksum)
@@ -269,14 +269,14 @@ if SERVICE_CONFIGURATIONS[:s3]
 
             assert_raises StorageTables::ActiveRecordError do
               blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
-                StorageTables::Blob.stub :exists?, ->(*) { true } do
+                StorageTables::Blob.stub :exists?, ->(*) { false } do
                   blob.destroy!
                 end
               end
             end
+
+            assert_not blob.on_disk?
           end
-          assert_predicate blob, :on_disk?
-          assert_predicate StorageTables::Blob.where_checksum(blob.checksum), :exists?
         end
 
         private
