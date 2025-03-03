@@ -279,6 +279,14 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
+        test "when calling restore on a blob with a version that has not a delete marker" do
+          blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+
+          @service.restore(blob.checksum, version: OpenStruct.new(delete_marker: false))
+
+          assert_predicate blob, :on_disk?
+        end
+
         private
 
         def build_service(configuration)
