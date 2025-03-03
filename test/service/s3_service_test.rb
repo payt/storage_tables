@@ -5,6 +5,7 @@ require "net/http"
 require "database/setup"
 require "minitest/hooks/test"
 require "active_support/testing/method_call_assertions"
+require "ostruct"
 
 if SERVICE_CONFIGURATIONS[:s3]
   module StorageTables
