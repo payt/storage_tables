@@ -282,7 +282,7 @@ if SERVICE_CONFIGURATIONS[:s3]
         test "when calling restore on a blob with a version that has not a delete marker" do
           blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
 
-          @service.restore(blob.checksum, version: OpenStruct.new(delete_marker: false))
+          @service.restore(blob.checksum, version: ::OpenStruct.new(delete_marker: false)) # rubocop:disable Style/OpenStructUse
 
           assert_predicate blob, :on_disk?
         end
