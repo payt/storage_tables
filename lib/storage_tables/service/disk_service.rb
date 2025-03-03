@@ -11,7 +11,7 @@ module StorageTables
     class DiskService < Service
       attr_accessor :root
 
-      def initialize(root:, public: false)
+      def initialize(root:, public: false, **)
         @root = root
         @public = public
 
@@ -94,6 +94,10 @@ module StorageTables
             payload[:url] = generated_url
           end
         end
+      end
+
+      def restore(_checksum, *_args)
+        nil
       end
 
       private

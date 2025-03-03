@@ -11,6 +11,8 @@ module StorageTables
     # See StorageTables::Service for the generic API documentation that applies to all services.
     class S3Service < Service
       MULTIPART_THRESHOLD = 100.megabytes
+      MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
+      MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
       attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
@@ -100,6 +102,15 @@ module StorageTables
           **custom_metadata_headers(custom_metadata) }
       end
 
+      def restore(checksum, version)
+        return unless version.delete_marker
+        return unless StorageTables::Blob.where_checksum(checksum).exists?
+
+        instrument(:exist, version.to_h.merge(checksum:)) do
+          object_for(checksum).delete(version_id: version.version_id)
+        end
+      end
+
       private
 
       def private_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts) # rubocop:disable Metrics/ParameterLists
@@ -108,9 +119,6 @@ module StorageTables
                                                    type: disposition, filename:
                                                  ), response_content_type: content_type, **client_opts
       end
-
-      MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
-      MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                   custom_metadata: {})

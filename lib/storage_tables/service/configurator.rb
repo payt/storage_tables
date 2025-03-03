@@ -20,7 +20,7 @@ module StorageTables
       def build(service_name)
         config = config_for(service_name.to_sym)
         resolve(config.fetch(:service)).build(
-          **config.except(:service), name: service_name
+          **config.except(:service), name: service_name, configurator: self
         )
       end
 
