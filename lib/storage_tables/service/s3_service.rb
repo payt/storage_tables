@@ -102,7 +102,7 @@ module StorageTables
           **custom_metadata_headers(custom_metadata) }
       end
 
-      def restore(checksum, version:)
+      def restore(checksum, version)
         return unless version.delete_marker
         return unless StorageTables::Blob.where_checksum(checksum).exists?
 

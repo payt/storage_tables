@@ -265,13 +265,13 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "when restore a blob and blob is not in database" do
-          @service.restore("not-existing", version: ::OpenStruct.new(delete_marker: true)) # rubocop:disable Style/OpenStructUse
+          @service.restore("not-existing", ::OpenStruct.new(delete_marker: true)) # rubocop:disable Style/OpenStructUse
         end
 
         test "when calling restore on a blob with a version that has not a delete marker" do
           blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
 
-          @service.restore(blob.checksum, version: ::OpenStruct.new(delete_marker: false)) # rubocop:disable Style/OpenStructUse
+          @service.restore(blob.checksum, ::OpenStruct.new(delete_marker: false)) # rubocop:disable Style/OpenStructUse
 
           assert_predicate blob, :on_disk?
         end
