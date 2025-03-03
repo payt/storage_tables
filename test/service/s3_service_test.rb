@@ -4,6 +4,8 @@ require "service/shared_service_tests"
 require "net/http"
 require "database/setup"
 require "minitest/hooks/test"
+require "active_support/testing/method_call_assertions"
+require "ostruct"
 
 if SERVICE_CONFIGURATIONS[:s3]
   module StorageTables
@@ -242,6 +244,36 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           assert_equal "io must be rewindable", error.message
+        end
+
+        test "when destroying a blob from database fails" do
+          blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+          blob.stub :service, -> { @service } do
+            assert blob.service.exist?(blob.checksum)
+            assert_kind_of StorageTables::Service::S3Service, blob.service
+
+            assert_raises StorageTables::ActiveRecordError do
+              blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
+                StorageTables::Blob.stub :exists?, ->(*) { true } do
+                  blob.destroy!
+                end
+              end
+            end
+
+            assert_predicate blob, :on_disk?
+          end
+        end
+
+        test "when restore a blob and blob is not in database" do
+          @service.restore("not-existing", ::OpenStruct.new(delete_marker: true)) # rubocop:disable Style/OpenStructUse
+        end
+
+        test "when calling restore on a blob with a version that has not a delete marker" do
+          blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+
+          @service.restore(blob.checksum, ::OpenStruct.new(delete_marker: false)) # rubocop:disable Style/OpenStructUse
+
+          assert_predicate blob, :on_disk?
         end
 
         private

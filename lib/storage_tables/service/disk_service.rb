@@ -96,6 +96,10 @@ module StorageTables
         end
       end
 
+      def restore(_checksum, *_args)
+        nil
+      end
+
       private
 
       def folder_for(checksum)
