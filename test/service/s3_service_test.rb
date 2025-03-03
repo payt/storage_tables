@@ -254,7 +254,9 @@ if SERVICE_CONFIGURATIONS[:s3]
 
             assert_raises StorageTables::ActiveRecordError do
               blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
-                blob.destroy!
+                StorageTables::Blob.stub :exists?, ->(*) { true } do
+                  blob.destroy!
+                end
               end
             end
 
@@ -262,22 +264,12 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
-        test "when destroying a blob and record is removed from database" do
+        test "when restore a blob and blob is still in database" do
           blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
-          blob.stub :service, -> { @service } do
-            assert blob.service.exist?(blob.checksum)
-            assert_kind_of StorageTables::Service::S3Service, blob.service
 
-            assert_raises StorageTables::ActiveRecordError do
-              blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
-                StorageTables::Blob.stub :exists?, ->(*) { false } do
-                  blob.destroy!
-                end
-              end
-            end
+          @service.restore(blob.checksum, version: ::OpenStruct.new(delete_marker: false)) # rubocop:disable Style/OpenStructUse
 
-            assert_not blob.on_disk?
-          end
+          assert_predicate blob, :on_disk?
         end
 
         test "when calling restore on a blob with a version that has not a delete marker" do
