@@ -10,7 +10,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - dfaadae4-c634-42ca-b3e7-0a883614e78b
+      - afc9d06c-3912-4682-9e4f-e4a040b198a9
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
@@ -23,13 +23,13 @@ http_interactions:
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20250303T103321Z
+      - 20250303T104244Z
       X-Amz-Content-Sha256:
       - bf718b6f653bebc184e1479f1935b8da974d701b893afcf49e701f3e2f9f9c5a
       Authorization:
       - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250303/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;content-md5;content-type;host;x-amz-content-sha256;x-amz-date,
-        Signature=d0bbbbac9a48845c30bd3d2a49fb1032b6c13442786fe92db76679e9e341c73b
+        Signature=7938a32a7242eaa1ef19cd3b1061c16eb01f379ee7cfceba679cfe2bfd304d74
       Content-Length:
       - '65536'
       Accept:
@@ -40,13 +40,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - Li5gmneaLdi3MDTvoQ+JdGdpfFKWgplpNxIv096dHJlryKZlXHb4JwVOj+BplaNeYkpK1d1Rj50=
+      - vjgB1GWKRl6Vr2pxrQ47xPhor3nMfCLu2FiH6Gvvm/Dlk9cSq5ZXWOFP6kDcDzaKwr6uziWZU1Q=
       X-Amz-Request-Id:
-      - 4F62SRKSDPMDMJ5R
+      - KZ98R72M26ETJZSC
       Date:
-      - Mon, 03 Mar 2025 10:33:22 GMT
+      - Mon, 03 Mar 2025 10:42:45 GMT
       X-Amz-Version-Id:
-      - bNKFLzWdhAJTSFvKeQc08e_5M1hqbCkw
+      - kgasXilNpMRzzW3eDMxAr4mbZrYuRfsG
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
@@ -58,5 +58,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Mon, 03 Mar 2025 10:33:22 GMT
+  recorded_at: Mon, 03 Mar 2025 10:42:44 GMT
 recorded_with: VCR 6.3.1
