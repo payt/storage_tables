@@ -103,6 +103,9 @@ module StorageTables
       end
 
       def restore(checksum, version:)
+        return unless version.delete_marker
+        return if StorageTables::Blob.where_checksum(checksum).exists?
+
         instrument(:exist, version.to_h.merge(checksum:)) do
           object_for(checksum).delete(version_id: version.version_id)
         end

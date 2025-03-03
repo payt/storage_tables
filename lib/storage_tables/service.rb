@@ -70,7 +70,7 @@ module StorageTables
       raise NotImplementedError
     end
 
-    # Return +true+ if a file exists at the +key+.
+    # Restore the file at the +key+ from the storage service.
     def restore(checksum, **args)
       raise NotImplementedError
     end

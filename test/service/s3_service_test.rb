@@ -261,6 +261,24 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
+        test "when destroying a blob and record is still in database" do
+          blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+          blob.stub :service, -> { @service } do
+            assert blob.service.exist?(blob.checksum)
+            assert_kind_of StorageTables::Service::S3Service, blob.service
+
+            assert_raises StorageTables::ActiveRecordError do
+              blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
+                StorageTables::Blob.stub :exists?, ->(*) { true } do
+                  blob.destroy!
+                end
+              end
+            end
+          end
+          assert_predicate blob, :on_disk?
+          assert_predicate StorageTables::Blob.where_checksum(blob.checksum), :exists?
+        end
+
         private
 
         def build_service(configuration)
