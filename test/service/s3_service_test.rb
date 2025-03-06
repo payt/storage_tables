@@ -130,7 +130,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: ActiveStorage::Filename.new("avatar.png"),
+                                       disposition: :inline, filename: StorageTables::Filename.new("avatar.png"),
                                        content_type: "image/png")
 
           assert_match(
