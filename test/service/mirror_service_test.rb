@@ -68,7 +68,6 @@ module StorageTables
         checksum = generate_checksum(data)
 
         @service.primary.upload(checksum, StringIO.new(data))
-        @service.mirrors.third.upload checksum, StringIO.new(data)
 
         @service.mirror(checksum)
 
