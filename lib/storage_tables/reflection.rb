@@ -30,10 +30,8 @@ module StorageTables
         case macro
         when :stored_one_attachment
           StoredOneAttachmentReflection
-        # :nocov:
         when :stored_many_attachments
           StoredManyAttachmentsReflection
-        # :nocov:
         else
           super
         end
