@@ -12,6 +12,7 @@ module StorageTables
     isolate_namespace StorageTables
 
     config.storage_tables = ActiveSupport::OrderedOptions.new
+    config.storage_tables.queues = ActiveSupport::InheritableOptions.new
 
     initializer "storage_tables.attached" do
       require "storage_tables/attached"
@@ -27,6 +28,12 @@ module StorageTables
       end
     end
 
+    initializer "storage_tables.configs" do
+      config.after_initialize do |app|
+        StorageTables.routes_prefix = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
+      end
+    end
+
     initializer "storage_tables.services" do
       ActiveSupport.on_load(:storage_tables_blob) do
         # Use the application's configured Active Storage service.
@@ -35,6 +42,12 @@ module StorageTables
 
         config_choice = Rails.configuration.storage_tables.service
         StorageTables::Blob.service = StorageTables::Blob.services.fetch(config_choice)
+      end
+    end
+
+    initializer "storage_tables.queues" do
+      config.after_initialize do |app|
+        StorageTables.queues = app.config.storage_tables.queues || {}
       end
     end
 

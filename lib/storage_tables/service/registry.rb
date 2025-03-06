@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require "storage_tables/service"
 require "storage_tables/service/configurator"
 
 module StorageTables
-  module Service
-    # A registry for storage services that are configured in the application.
-    class Registry
+  class Service
+    class Registry # :nodoc:
       def initialize(configurations)
         @configurations = configurations.deep_symbolize_keys
         @services = {}

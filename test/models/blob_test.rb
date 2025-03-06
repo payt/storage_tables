@@ -23,7 +23,7 @@ module StorageTables
 
       assert_predicate(blob, :persisted?)
       # Check that the blob was uploaded to the service.
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "identify without byte size" do
@@ -37,7 +37,7 @@ module StorageTables
 
       assert_predicate(blob, :persisted?)
       # Check that the blob was uploaded to the service.
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "create_and_upload extracts content type from data" do
@@ -87,7 +87,7 @@ module StorageTables
       blob = create_blob(content_type: "text/html")
 
       assert_predicate blob, :persisted?
-      assert blob.service.exist?(blob.checksum)
+      assert_predicate blob, :on_disk?
     end
 
     test "Destroying a blob also removes the file on disk" do
@@ -104,6 +104,16 @@ module StorageTables
 
       assert_raises(StorageTables::ActiveRecordError) do
         blob.reload.destroy!
+      end
+    end
+
+    test "Cannot destroy a blob that is if deleted through SQL" do
+      blob = create_blob
+      @user = User.create!(name: "My User")
+      @user.avatar.attach blob, filename: "funky.jpg"
+
+      assert_raises(ActiveRecord::StatementInvalid) do
+        blob.reload.delete
       end
     end
 
