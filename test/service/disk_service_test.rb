@@ -3,6 +3,7 @@
 require "test_helper"
 require "storage_tables/service/disk_service"
 require "service/shared_service_tests"
+require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class Service
@@ -50,6 +51,20 @@ module StorageTables
         ensure
           Rails.application.routes.default_url_options = original_url_options
         end
+      end
+
+      test "when destroying a blob from database fails" do
+        blob = StorageTables::Blob.create_and_upload!(io: StringIO.new(FIXTURE_DATA))
+
+        assert_predicate blob, :on_disk?
+
+        assert_raises StorageTables::ActiveRecordError do
+          blob.stub :destroy, ->(*) { raise StorageTables::ActiveRecordError } do
+            blob.destroy!
+          end
+        end
+
+        assert_not blob.on_disk?
       end
     end
   end

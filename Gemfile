@@ -14,6 +14,8 @@ gem "sprockets-rails"
 
 gem "pry"
 
+gem "brakeman", require: false
+
 gem "rubocop"
 gem "rubocop-minitest"
 gem "rubocop-packaging"

@@ -70,6 +70,11 @@ module StorageTables
       raise NotImplementedError
     end
 
+    # Restore the file at the +key+ from the storage service.
+    def restore(checksum, **args)
+      raise NotImplementedError
+    end
+
     # Returns the URL for the file at the +checksum+. This returns a permanent URL for public files, and returns a
     # short-lived URL for private files. For private files you can provide the +disposition+ (+:inline+ or
     # +:attachment+), +filename+, and +content_type+ that you wish the file to be served with on request. Additionally,
