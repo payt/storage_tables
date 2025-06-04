@@ -20,6 +20,14 @@ module StorageTables
         backfill_later(checksum)
       end
 
+      def download_chunk(checksum, range)
+        primary.download_chunk(checksum, range)
+      rescue StorageTables::FileNotFoundError
+        backup.download_chunk(checksum, range)
+
+        backfill_later(checksum)
+      end
+
       def exist?(checksum)
         primary.exist?(checksum) || backup.exist?(checksum)
       end
