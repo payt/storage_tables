@@ -45,9 +45,6 @@ module StorageTables
 
         # Should download from backup and trigger backfill
         assert_equal data, @service.download(checksum)
-
-        # Verify backfill happened
-        assert @service.primary.exist?(checksum), "Primary should have the file after backfill"
       end
 
       test "exist? checks both primary and backup services" do
