@@ -74,6 +74,16 @@ module StorageTables
           @service.download(checksum)
         end
       end
+
+      test "backfill job is enqueued when downloading from backup chunk" do
+        data = "Test data"
+        checksum = generate_checksum(data)
+        @service.backup.upload(checksum, StringIO.new(data))
+
+        assert_enqueued_with(job: StorageTables::BackfillJob) do
+          @service.download_chunk(checksum, 0..10)
+        end
+      end
     end
   end
 end

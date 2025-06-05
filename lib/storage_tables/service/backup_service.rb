@@ -12,9 +12,11 @@ module StorageTables
       delegate :delete, :url, :path_for, :upload, :url_for_direct_upload,
                :headers_for_direct_upload, :compose, to: :primary
 
-      def download(checksum)
-        primary.download(checksum)
+      def download(checksum, &)
+        primary.download(checksum, &)
       rescue StorageTables::FileNotFoundError
+        # First download the file from the backup as this can also trigger a FileNotFoundError
+        # and we don't want to trigger a backfill in that case
         data = backup.download(checksum)
 
         backfill_later(checksum)
@@ -25,6 +27,8 @@ module StorageTables
       def download_chunk(checksum, range)
         primary.download_chunk(checksum, range)
       rescue StorageTables::FileNotFoundError
+        # First download the chunk from the backup as this can also trigger a FileNotFoundError
+        # and we don't want to trigger a backfill in that case
         data = backup.download_chunk(checksum, range)
 
         backfill_later(checksum)
