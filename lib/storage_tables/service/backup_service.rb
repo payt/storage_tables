@@ -46,9 +46,9 @@ module StorageTables
 
       def backfill(checksum)
         instrument(:backfill_from_backup, checksum:) do
-          primary.open(checksum) do |io|
+          backup.open(checksum) do |io|
             io.rewind
-            backup.upload checksum, io
+            primary.upload checksum, io
           end
         end
       end

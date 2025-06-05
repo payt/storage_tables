@@ -5,8 +5,8 @@ module StorageTables
   class BackfillJob < ActiveJob::Base # rubocop:disable Rails/ApplicationJob
     queue_as { StorageTables.queues[:backfill] }
 
-    discard_on StorageTables::FileNotFoundError
-    retry_on StorageTables::IntegrityError, attempts: 10, wait: :polynomially_longer
+    retry_on StorageTables::FileNotFoundError, attempts: 5, wait: :polynomially_longer
+    retry_on StorageTables::IntegrityError, attempts: 5, wait: :polynomially_longer
 
     def perform(checksum)
       StorageTables::Blob.service.try(:backfill, checksum)

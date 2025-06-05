@@ -84,6 +84,16 @@ module StorageTables
           @service.download_chunk(checksum, 0..10)
         end
       end
+
+      test "#backfill copies file from backup to primary" do
+        data = "Test data"
+        checksum = generate_checksum(data)
+        @service.backup.upload(checksum, StringIO.new(data))
+
+        @service.backfill(checksum)
+
+        assert @service.primary.exist?(checksum), "File should exist in primary after backfill"
+      end
     end
   end
 end
