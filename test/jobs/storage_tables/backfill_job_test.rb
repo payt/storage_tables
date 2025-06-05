@@ -16,14 +16,13 @@ module StorageTables
     setup do
       @checksum = generate_checksum(FIXTURE_DATA)
       @service = self.class.const_get(:SERVICE)
+      StorageTables::Blob.service = @service
     end
 
     test "performs backfill with the given checksum" do
       @service.backup.upload(@checksum, StringIO.new(FIXTURE_DATA))
 
-      perform_enqueued_jobs do
-        BackfillJob.perform_later(@checksum)
-      end
+      BackfillJob.perform_now(@checksum)
 
       assert @service.primary.exist?(@checksum)
     end
