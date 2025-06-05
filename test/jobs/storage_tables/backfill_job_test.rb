@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class BackfillJobTest < ActiveJob::TestCase
@@ -16,15 +17,16 @@ module StorageTables
     setup do
       @checksum = generate_checksum(FIXTURE_DATA)
       @service = self.class.const_get(:SERVICE)
-      StorageTables::Blob.service = @service
     end
 
     test "performs backfill with the given checksum" do
-      @service.backup.upload(@checksum, StringIO.new(FIXTURE_DATA))
+      StorageTables::Blob.stub(:service, @service) do
+        @service.backup.upload(@checksum, StringIO.new(FIXTURE_DATA))
 
-      BackfillJob.perform_now(@checksum)
+        BackfillJob.perform_now(@checksum)
 
-      assert @service.primary.exist?(@checksum)
+        assert @service.primary.exist?(@checksum)
+      end
     end
 
     test "discards job when file is not found" do
