@@ -4,16 +4,28 @@ require "test_helper"
 
 module StorageTables
   class BackfillJobTest < ActiveJob::TestCase
+    backup_config = {
+      primary: { service: "Disk", root: Dir.mktmpdir("active_storage_tests_primary") },
+      backup: { service: "Backup", primary: "primary", backup: "original" },
+      original: { service: "Disk", root: Dir.mktmpdir("active_storage_tests_original") }
+    }
+
+    SERVICE = StorageTables::Service.configure :backup, backup_config
+    FIXTURE_DATA = ("a" * 64.kilobytes).freeze
+
     setup do
-      @checksum = "a" * 64
+      @checksum = generate_checksum(FIXTURE_DATA)
+      @service = self.class.const_get(:SERVICE)
     end
 
     test "performs backfill with the given checksum" do
-      StorageTables::Blob.service.stub(:backfill, true) do
-        perform_enqueued_jobs do
-          BackfillJob.perform_later(@checksum)
-        end
+      @service.backup.upload(@checksum, StringIO.new(FIXTURE_DATA))
+
+      perform_enqueued_jobs do
+        BackfillJob.perform_later(@checksum)
       end
+
+      assert @service.primary.exist?(@checksum)
     end
 
     test "discards job when file is not found" do
@@ -40,6 +52,10 @@ module StorageTables
           end
         end
       end
+    end
+
+    def generate_checksum(string)
+      OpenSSL::Digest.new("SHA3-512").base64digest(string)
     end
   end
 end
