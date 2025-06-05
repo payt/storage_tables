@@ -8,6 +8,14 @@ module StorageTables
       @checksum = "a" * 64
     end
 
+    test "performs backfill with the given checksum" do
+      StorageTables::Blob.service.stub(:backfill, true) do
+        perform_enqueued_jobs do
+          BackfillJob.perform_later(@checksum)
+        end
+      end
+    end
+
     test "discards job when file is not found" do
       assert_raises(StorageTables::FileNotFoundError) do
         StorageTables::Blob.service.stub(:backfill, raise(StorageTables::FileNotFoundError)) do
