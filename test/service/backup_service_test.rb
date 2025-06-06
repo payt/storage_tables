@@ -94,6 +94,24 @@ module StorageTables
 
         assert @service.primary.exist?(checksum), "File should exist in primary after backfill"
       end
+
+      test "#exist? enqueues backfill job when file is only in backup" do
+        data = "Test data"
+        checksum = generate_checksum(data)
+        @service.backup.upload(checksum, StringIO.new(data))
+
+        assert_enqueued_with(job: StorageTables::BackfillJob) do
+          assert @service.exist?(checksum)
+        end
+      end
+
+      test "#exist? returns true when file is in primary" do
+        data = "Test data"
+        checksum = generate_checksum(data)
+        @service.primary.upload(checksum, StringIO.new(data))
+
+        assert @service.exist?(checksum), "File should exist in primary"
+      end
     end
   end
 end

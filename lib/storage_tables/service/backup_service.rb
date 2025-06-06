@@ -37,7 +37,14 @@ module StorageTables
       end
 
       def exist?(checksum)
-        primary.exist?(checksum) || backup.exist?(checksum)
+        if primary.exist?(checksum)
+          true
+        elsif backup.exist?(checksum)
+          backfill_later(checksum)
+          true
+        else
+          false
+        end
       end
 
       def backfill_later(checksum)
