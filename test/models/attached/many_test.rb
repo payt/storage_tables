@@ -12,7 +12,7 @@ module StorageTables
     end
 
     teardown do
-      ActiveStorage::Blob.find_each(&:delete)
+      StorageTables::Blob.find_each(&:delete)
     end
 
     test "attaching existing blobs to an existing record" do
