@@ -167,16 +167,16 @@ module StorageTables
     end
 
     def forcibly_serve_as_binary?
-      ActiveStorage.content_types_to_serve_as_binary.include?(content_type)
+      StorageTables.content_types_to_serve_as_binary.include?(content_type)
     end
 
     def allowed_inline?
-      ActiveStorage.content_types_allowed_inline.include?(content_type)
+      StorageTables.content_types_allowed_inline.include?(content_type)
     end
 
     def service_metadata
       if forcibly_serve_as_binary?
-        { content_type: ActiveStorage.binary_content_type, disposition: :attachment }
+        { content_type: StorageTables.binary_content_type, disposition: :attachment }
       elsif !allowed_inline?
         { content_type:, disposition: :attachment }
       else
