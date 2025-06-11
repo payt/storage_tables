@@ -28,7 +28,7 @@ Rails.configuration.storage_tables.service_configurations = SERVICE_CONFIGURATIO
 
 Rails.configuration.storage_tables.service = "local"
 
-module ActiveSupport 
+module ActiveSupport
   class TestCase
     self.file_fixture_path = File.expand_path("fixtures/files", __dir__)
 
