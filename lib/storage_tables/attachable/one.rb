@@ -6,6 +6,8 @@ module StorageTables
     class One < Attached
       include Changes::Helper
 
+      delegate :blob, to: :attachment
+
       # Returns +true+ if an attachment is not attached.
       #
       #   class User < ApplicationRecord
