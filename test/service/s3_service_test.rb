@@ -24,6 +24,8 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         def teardown
+          StorageTables::UserAvatarAttachment.find_each(&:delete)
+          StorageTables::UserPhotoAttachment.find_each(&:delete)
           StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
           StorageTables::Blob.find_each(&:delete)
         end
