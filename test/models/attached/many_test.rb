@@ -12,7 +12,10 @@ module StorageTables
     end
 
     teardown do
-      ActiveStorage::Blob.find_each(&:delete)
+      StorageTables::UserAvatarAttachment.find_each(&:delete)
+      StorageTables::UserPhotoAttachment.find_each(&:delete)
+      StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
+      StorageTables::Blob.find_each(&:delete)
     end
 
     test "attaching existing blobs to an existing record" do
@@ -267,6 +270,7 @@ module StorageTables
 
       @user.highlights = []
 
+      assert_empty @user.attachment_changes.values.first.attachables
       assert_not @user.highlights.attached?
 
       perform_enqueued_jobs do

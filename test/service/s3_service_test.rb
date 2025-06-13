@@ -23,6 +23,13 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
+        def teardown
+          StorageTables::UserAvatarAttachment.find_each(&:delete)
+          StorageTables::UserPhotoAttachment.find_each(&:delete)
+          StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
+          StorageTables::Blob.find_each(&:delete)
+        end
+
         test "name" do
           assert_equal :s3, @service.name
         end
@@ -130,7 +137,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: ActiveStorage::Filename.new("avatar.png"),
+                                       disposition: :inline, filename: StorageTables::Filename.new("avatar.png"),
                                        content_type: "image/png")
 
           assert_match(
