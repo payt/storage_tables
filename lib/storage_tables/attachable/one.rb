@@ -3,8 +3,30 @@
 module StorageTables
   module Attachable
     # Representation of a single attachment to a model.
-    class One < StorageTables::Attached::One
+    class One < Attached
       include Changes::Helper
+
+      # Returns +true+ if an attachment is not attached.
+      #
+      #   class User < ApplicationRecord
+      #     has_one_attached :avatar
+      #   end
+      #
+      #   User.new.avatar.blank? # => true
+      def blank?
+        !attached?
+      end
+
+      # Returns +true+ if an attachment has been made.
+      #
+      #   class User < ApplicationRecord
+      #     has_one_attached :avatar
+      #   end
+      #
+      #   User.new.avatar.attached? # => false
+      def attached?
+        attachment.present?
+      end
 
       # Attaches an +attachable+ to the record.
       #
