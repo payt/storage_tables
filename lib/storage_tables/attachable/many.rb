@@ -9,6 +9,8 @@ module StorageTables
     class Many < Attached
       include Changes::Helper
 
+      delegate :blobs, to: :attachments
+
       # Returns true if any attachments have been made.
       #
       #   class Gallery < ApplicationRecord
