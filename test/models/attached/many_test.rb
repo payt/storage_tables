@@ -270,6 +270,7 @@ module StorageTables
 
       @user.highlights = []
 
+      assert_empty @user.attachment_changes.values.first.attachables
       assert_not @user.highlights.attached?
 
       perform_enqueued_jobs do
