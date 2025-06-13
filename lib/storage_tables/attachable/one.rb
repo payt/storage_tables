@@ -3,7 +3,7 @@
 module StorageTables
   module Attachable
     # Representation of a single attachment to a model.
-    class One < ActiveStorage::Attached::One
+    class One < StorageTables::Attached::One
       include Changes::Helper
 
       # Attaches an +attachable+ to the record.

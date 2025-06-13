@@ -6,7 +6,7 @@ module StorageTables
   # Decorated proxy object representing of multiple attachments to a model.
   module Attachable
     # Create many attachments to a model.
-    class Many < ActiveStorage::Attached::Many
+    class Many < StorageTables::Attached::Many
       include Changes::Helper
 
       def attach(*attachables)
