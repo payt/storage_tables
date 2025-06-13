@@ -17,8 +17,8 @@ end
 
 require "tmpdir"
 
-Rails.configuration.active_storage.service_configurations = SERVICE_CONFIGURATIONS.merge(
-  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("active_storage_tests") }
+Rails.configuration.storage_tables.service_configurations = SERVICE_CONFIGURATIONS.merge(
+  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") }
 ).deep_stringify_keys
 
-Rails.configuration.active_storage.service = "local"
+Rails.configuration.storage_tables.service = "local"
