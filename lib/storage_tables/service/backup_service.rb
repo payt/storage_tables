@@ -12,6 +12,8 @@ module StorageTables
       delegate :delete, :url, :path_for, :upload, :url_for_direct_upload,
                :headers_for_direct_upload, :compose, to: :primary
 
+      alias mirror backfill
+
       def download(checksum, &)
         primary.download(checksum, &)
       rescue StorageTables::FileNotFoundError
