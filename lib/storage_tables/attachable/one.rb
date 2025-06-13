@@ -6,7 +6,7 @@ module StorageTables
     class One < Attached
       include Changes::Helper
 
-      delegate :blob, to: :attachment
+      delegate_missing_to :attachment
 
       # Returns +true+ if an attachment is not attached.
       #

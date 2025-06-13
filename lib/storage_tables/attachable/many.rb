@@ -9,7 +9,7 @@ module StorageTables
     class Many < Attached
       include Changes::Helper
 
-      delegate :blobs, to: :attachments
+      delegate_missing_to :attachments
 
       # Returns true if any attachments have been made.
       #
