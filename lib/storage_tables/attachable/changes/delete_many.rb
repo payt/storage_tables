@@ -3,8 +3,19 @@
 module StorageTables
   module Attachable
     module Changes
-      class DeleteMany < ActiveStorage::Attached::Changes::DeleteMany # :nodoc:
+      class DeleteMany # :nodoc:
         include ManyHelper
+
+        attr_reader :name, :record
+
+        def initialize(name, record)
+          @name = name
+          @record = record
+        end
+
+        def attachables
+          []
+        end
 
         def save
           delete_old_attachments(original_attachments)
