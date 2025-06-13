@@ -6,8 +6,21 @@ module StorageTables
   # Decorated proxy object representing of multiple attachments to a model.
   module Attachable
     # Create many attachments to a model.
-    class Many < ActiveStorage::Attached::Many
+    class Many < Attached
       include Changes::Helper
+
+      delegate_missing_to :attachments, allow_nil: true
+
+      # Returns true if any attachments have been made.
+      #
+      #   class Gallery < ApplicationRecord
+      #     has_many_attached :photos
+      #   end
+      #
+      #   Gallery.new.photos.attached? # => false
+      def attached?
+        attachments.any?
+      end
 
       def attach(*attachables)
         record.public_send(:"#{name}=", blobs + attachables)
