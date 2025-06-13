@@ -59,7 +59,8 @@ module StorageTables
         StorageTables.routes_prefix = app.config.storage_tables.routes_prefix || "/rails/storage_tables"
 
         StorageTables.binary_content_type = app.config.storage_tables.binary_content_type || "application/octet-stream"
-        StorageTables.content_types_to_serve_as_binary = app.config.storage_tables.content_types_to_serve_as_binary || []
+        StorageTables.content_types_to_serve_as_binary =
+          app.config.storage_tables.content_types_to_serve_as_binary || []
         StorageTables.content_types_allowed_inline = app.config.storage_tables.content_types_allowed_inline || []
       end
     end
