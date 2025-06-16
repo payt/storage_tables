@@ -4,6 +4,7 @@ module StorageTables
   # Representation of a file with the location of the file stored in a database table.
   class Blob < ApplicationRecord
     include StorageTables::Blobs::Identifiable
+    include StorageTables::Blobs::Servable
 
     self.primary_key = [:checksum, :partition_key]
 
@@ -158,6 +159,15 @@ module StorageTables
     # Returns an instance of service, which can be configured globally or per attachment
     def service
       services.fetch(service_name)
+    end
+
+    # Returns the URL of the blob on the service. This returns a permanent URL for public files, and returns a
+    # short-lived URL for private files. Private files are signed, and not for public use. Instead,
+    # the URL should only be exposed as a redirect from a stable, possibly authenticated URL. Hiding the
+    # URL behind a redirect also allows you to change services without updating all URLs.
+    def url(expires_in: ActiveStorage.service_urls_expire_in, disposition: :inline, **)
+      service.url(checksum, expires_in: expires_in,
+                            content_type: content_type_for_serving, disposition: forced_disposition_for_serving || disposition, **)
     end
 
     private

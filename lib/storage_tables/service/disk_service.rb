@@ -102,6 +102,31 @@ module StorageTables
 
       private
 
+      def private_url(checksum, expires_in:, content_type:, disposition:, **)
+        generate_url(checksum, expires_in: expires_in, content_type: content_type,
+                               disposition: disposition)
+      end
+
+      def public_url(checksum, content_type: nil, disposition: :attachment, **)
+        generate_url(checksum, expires_in: nil, content_type: content_type,
+                               disposition: disposition)
+      end
+
+      def generate_url(checksum, expires_in:, content_type:, disposition:)
+        verified_key_with_expiration = StorageTables.verifier.generate(
+          {
+            checksum:,
+            disposition:,
+            content_type: content_type,
+            service_name: name
+          },
+          expires_in: expires_in,
+          purpose: :blob_url
+        )
+
+        url_helpers.show_storage_tables_disk_service_url(verified_key_with_expiration, **url_options)
+      end
+
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end
@@ -127,6 +152,10 @@ module StorageTables
         end
 
         StorageTables::Current.url_options
+      end
+
+      def url_helpers
+        @url_helpers ||= Rails.application.routes.url_helpers
       end
 
       def stream(checksum)

@@ -126,6 +126,14 @@ module StorageTables
       assert_match(%r{/rails/storage_tables/disk/}, url)
     end
 
+    test "url" do
+      blob = create_blob
+
+      expected_url = "https://example.com/rails/storage_tables/disk/#{blob.checksum}"
+
+      assert_equal expected_url.first(46), blob.url.first(46)
+    end
+
     ## StorageTables::Blob.where_checksum
 
     test "where_checksum" do
