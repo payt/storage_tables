@@ -167,7 +167,8 @@ module StorageTables
     # URL behind a redirect also allows you to change services without updating all URLs.
     def url(expires_in: ActiveStorage.service_urls_expire_in, disposition: :inline, **)
       service.url(checksum, expires_in: expires_in,
-                            content_type: content_type_for_serving, disposition: forced_disposition_for_serving || disposition, **)
+                            content_type: content_type_for_serving,
+                            disposition: forced_disposition_for_serving || disposition, **)
     end
 
     private
