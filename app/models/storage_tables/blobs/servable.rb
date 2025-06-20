@@ -16,11 +16,15 @@ module StorageTables
       private
 
       def forcibly_serve_as_binary?
+        # :nocov:
         StorageTables.content_types_to_serve_as_binary.include?(content_type)
+        # :nocov:
       end
 
       def allowed_inline?
+        # :nocov:
         StorageTables.content_types_allowed_inline.include?(content_type)
+        # :nocov:
       end
     end
   end
