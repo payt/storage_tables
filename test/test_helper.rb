@@ -32,7 +32,6 @@ Rails.configuration.storage_tables.service = "local"
 module ActiveSupport
   class TestCase
     self.file_fixture_path = File.expand_path("fixtures/files", __dir__)
-    self.use_transactional_tests = false
 
     setup do
       StorageTables::Current.url_options = { protocol: "https://", host: "example.com", port: nil }
@@ -40,10 +39,6 @@ module ActiveSupport
 
     teardown do
       StorageTables::Current.reset
-      StorageTables::UserAvatarAttachment.delete_all
-      StorageTables::UserPhotoAttachment.delete_all
-      StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
-      StorageTables::Blob.delete_all
     end
 
     private
