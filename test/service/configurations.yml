@@ -4,6 +4,11 @@ s3:
   secret_access_key: <%= ENV.fetch("AWS_ACCESS_KEY", nil) %>
   region: <%= ENV.fetch("AWS_REGION", nil) %>
   bucket: <%= ENV.fetch("AWS_BUCKET", nil) %>
+
+local_public:
+  service: Disk
+  root: <%= Rails.root.join("storage/public") %>
+  public: true
 #
 # gcs:
 #   service: GCS
