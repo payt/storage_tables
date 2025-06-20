@@ -219,6 +219,95 @@ module StorageTables
       end
     end
 
+    test "content_type_for_serving returns binary content type when content type is in binary list" do
+      original_config = StorageTables.content_types_to_serve_as_binary.dup
+      StorageTables.content_types_to_serve_as_binary = ["application/pdf"]
+
+      blob = create_blob(content_type: "application/pdf")
+
+      assert_equal StorageTables.binary_content_type, blob.content_type_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_config
+    end
+
+    test "content_type_for_serving returns original content type when not in binary list" do
+      original_config = StorageTables.content_types_to_serve_as_binary.dup
+      StorageTables.content_types_to_serve_as_binary = ["application/octet-stream"]
+
+      blob = create_blob(content_type: "application/pdf")
+
+      assert_equal "application/pdf", blob.content_type_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_config
+    end
+
+    test "forced_disposition_for_serving returns :attachment when content type is in binary list" do
+      original_config = StorageTables.content_types_to_serve_as_binary.dup
+      StorageTables.content_types_to_serve_as_binary = ["application/pdf"]
+
+      blob = create_blob(content_type: "application/pdf")
+
+      assert_equal :attachment, blob.forced_disposition_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_config
+    end
+
+    test "forced_disposition_for_serving returns :attachment when content type is not allowed inline" do
+      original_binary_config = StorageTables.content_types_to_serve_as_binary.dup
+      original_inline_config = StorageTables.content_types_allowed_inline.dup
+
+      StorageTables.content_types_to_serve_as_binary = []
+      StorageTables.content_types_allowed_inline = ["image/png"]
+
+      blob = create_blob(content_type: "application/pdf")
+
+      assert_equal :attachment, blob.forced_disposition_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_binary_config
+      StorageTables.content_types_allowed_inline = original_inline_config
+    end
+
+    test "forced_disposition_for_serving returns nil when content type is allowed inline" do
+      original_binary_config = StorageTables.content_types_to_serve_as_binary.dup
+      original_inline_config = StorageTables.content_types_allowed_inline.dup
+
+      StorageTables.content_types_to_serve_as_binary = []
+      StorageTables.content_types_allowed_inline = ["application/pdf"]
+
+      blob = create_blob(content_type: "application/pdf")
+
+      assert_nil blob.forced_disposition_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_binary_config
+      StorageTables.content_types_allowed_inline = original_inline_config
+    end
+
+    test "forced_disposition_for_serving with nil content type" do
+      original_binary_config = StorageTables.content_types_to_serve_as_binary.dup
+      original_inline_config = StorageTables.content_types_allowed_inline.dup
+
+      StorageTables.content_types_to_serve_as_binary = []
+      StorageTables.content_types_allowed_inline = []
+
+      blob = create_blob(content_type: nil)
+
+      assert_equal :attachment, blob.forced_disposition_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_binary_config
+      StorageTables.content_types_allowed_inline = original_inline_config
+    end
+
+    test "content_type_for_serving with nil content type" do
+      original_config = StorageTables.content_types_to_serve_as_binary.dup
+      StorageTables.content_types_to_serve_as_binary = [nil]
+
+      blob = create_blob(content_type: nil)
+
+      assert_equal StorageTables.binary_content_type, blob.content_type_for_serving
+    ensure
+      StorageTables.content_types_to_serve_as_binary = original_config
+    end
+
     private
 
     def expected_url_for(blob, disposition: :attachment, content_type: nil, service_name: :local)
