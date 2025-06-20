@@ -6,6 +6,19 @@ require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class DiskControllerTest < ActionDispatch::IntegrationTest
+    ## GET /disk/:encoded_checksum
+    test "showing blob inline" do
+      blob = create_blob(content_type: "image/jpeg")
+
+      get blob.url
+
+      assert_response :ok
+      assert_equal "inline", response.headers["Content-Disposition"]
+      assert_equal "image/jpeg", response.headers["Content-Type"]
+      assert_equal "Hello world!", response.body
+    end
+
+    ## PUT /disk/:encoded_token
     test "directly uploading blob with integrity" do
       data = name
       blob = create_blob_before_direct_upload byte_size: data.size, checksum: create_checksum(data)

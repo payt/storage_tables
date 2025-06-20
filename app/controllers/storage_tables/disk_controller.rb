@@ -6,7 +6,20 @@ module StorageTables
   # Always go through the BlobsController, or your own authenticated controller, rather than directly
   # to the service URL.
   class DiskController < BaseController
+    include StorageTables::FileServer
+
     skip_forgery_protection
+
+    def show
+      if encoded_checksum
+        serve_file named_disk_service(encoded_checksum[:service_name]).path_for(encoded_checksum[:checksum]),
+                   content_type: encoded_checksum[:content_type], disposition: encoded_checksum[:disposition]
+      else
+        head :not_found
+      end
+    rescue Errno::ENOENT
+      head :not_found
+    end
 
     def update
       return head :not_found unless token
@@ -29,6 +42,11 @@ module StorageTables
     end
 
     private
+
+    def encoded_checksum
+      @encoded_checksum ||= StorageTables.verifier.verified(params[:encoded_checksum],
+                                                            purpose: :blob_url)&.deep_symbolize_keys
+    end
 
     def token
       @token ||= StorageTables.verifier.verified(params[:encoded_token], purpose: :blob_token)&.deep_symbolize_keys
