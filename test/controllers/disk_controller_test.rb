@@ -49,6 +49,14 @@ module StorageTables
       assert_response :range_not_satisfiable
     end
 
+    test "with invalid token" do
+      blob = create_blob
+
+      get "#{blob.url}1"
+
+      assert_response :not_found
+    end
+
     test "showing blob that does not exist" do
       blob = create_blob
       blob.delete
