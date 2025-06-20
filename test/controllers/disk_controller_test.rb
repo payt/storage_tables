@@ -53,7 +53,9 @@ module StorageTables
       blob = create_blob
       blob.delete
 
-      get blob.url
+      with_service("local_public") do
+        get blob.url
+      end
 
       assert_response :not_found
     end
