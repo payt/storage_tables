@@ -10,6 +10,10 @@ module StorageTables
       host! "test.host"
     end
 
+    def teardown
+      StorageTables::Blob.delete_all
+    end
+
     ## GET /disk/:encoded_checksum
     test "showing blob inline" do
       blob = create_blob(content_type: "image/jpeg")
