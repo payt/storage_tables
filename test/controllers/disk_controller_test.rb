@@ -10,11 +10,6 @@ module StorageTables
       host! "test.host"
     end
 
-    def teardown
-      StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
-      StorageTables::Blob.find_each(&:delete)
-    end
-
     ## GET /disk/:encoded_checksum
     test "showing blob inline" do
       blob = create_blob(content_type: "image/jpeg")
