@@ -32,6 +32,7 @@ Rails.configuration.storage_tables.service = "local"
 module ActiveSupport
   class TestCase
     self.file_fixture_path = File.expand_path("fixtures/files", __dir__)
+    self.use_transactional_tests = false
 
     setup do
       StorageTables::Current.url_options = { protocol: "https://", host: "example.com", port: nil }

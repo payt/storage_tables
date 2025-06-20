@@ -107,7 +107,7 @@ module StorageTables
       end
     end
 
-    test "Cannot destroy a blob that is if deleted through SQL" do
+    test "Cannot destroy a blob that exists if deleted through SQL" do
       blob = create_blob
       @user = User.create!(name: "My User")
       @user.avatar.attach blob, filename: "funky.jpg"
