@@ -39,6 +39,7 @@ module ActiveSupport
 
     teardown do
       StorageTables::Current.reset
+      StorageTables::Blob.delete_all
     end
 
     private
