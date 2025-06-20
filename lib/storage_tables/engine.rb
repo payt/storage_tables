@@ -62,6 +62,7 @@ module StorageTables
         StorageTables.content_types_to_serve_as_binary =
           app.config.storage_tables.content_types_to_serve_as_binary || []
         StorageTables.content_types_allowed_inline = app.config.storage_tables.content_types_allowed_inline || []
+        StorageTables.service_urls_expire_in = app.config.storage_tables.service_urls_expire_in || 5.minutes
       end
     end
 

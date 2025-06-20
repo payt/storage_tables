@@ -6,6 +6,10 @@ require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class DiskControllerTest < ActionDispatch::IntegrationTest
+    def setup
+      host! "test.host"
+    end
+
     ## GET /disk/:encoded_checksum
     test "showing blob inline" do
       blob = create_blob(content_type: "image/jpeg")
@@ -13,9 +17,63 @@ module StorageTables
       get blob.url
 
       assert_response :ok
-      assert_equal "inline", response.headers["Content-Disposition"]
+      assert_equal :inline, response.headers["Content-Disposition"]
       assert_equal "image/jpeg", response.headers["Content-Type"]
-      assert_equal "Hello world!", response.body
+      assert_equal "hello world", response.body
+    end
+
+    test "showing blob as attachment" do
+      blob = create_blob
+      get blob.url(disposition: :attachment)
+
+      assert_response :ok
+      assert_equal :attachment, response.headers["Content-Disposition"]
+      assert_equal "image/jpeg", response.headers["Content-Type"]
+      assert_equal "hello world", response.body
+    end
+
+    test "showing blob range" do
+      blob = create_blob
+      get blob.url, headers: { "Range" => "bytes=5-9" }
+
+      assert_response :partial_content
+      assert_equal :inline, response.headers["Content-Disposition"]
+      assert_equal "image/jpeg", response.headers["Content-Type"]
+      assert_equal " worl", response.body
+    end
+
+    test "showing blob with invalid range" do
+      blob = create_blob
+      get blob.url, headers: { "Range" => "bytes=1000-1000" }
+
+      assert_response :range_not_satisfiable
+    end
+
+    test "showing blob that does not exist" do
+      blob = create_blob
+      blob.delete
+
+      get blob.url
+
+      assert_response :not_found
+    end
+
+    test "showing blob with invalid key" do
+      get rails_disk_service_url(encoded_key: "Invalid key", filename: "hello.txt")
+
+      assert_response :not_found
+    end
+
+    test "showing public blob" do
+      with_service("local_public") do
+        blob = create_blob(content_type: "image/jpeg")
+
+        get blob.url
+
+        assert_response :ok
+        assert_equal "image/jpeg", response.headers["Content-Type"]
+        assert_equal "hello world", response.body
+      end
     end
 
     ## PUT /disk/:encoded_token

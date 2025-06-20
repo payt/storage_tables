@@ -23,7 +23,8 @@ end
 require "tmpdir"
 
 Rails.configuration.storage_tables.service_configurations = SERVICE_CONFIGURATIONS.merge(
-  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") }
+  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") },
+  "local_public" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests_public"), "public" => true }
 ).deep_stringify_keys
 
 Rails.configuration.storage_tables.service = "local"
@@ -73,6 +74,15 @@ module ActiveSupport
 
     def fixture_file_upload(filename)
       Rack::Test::UploadedFile.new file_fixture(filename).to_s
+    end
+
+    def with_service(service_name)
+      previous_service = StorageTables::Blob.service
+      StorageTables::Blob.service = service_name ? StorageTables::Blob.services.fetch(service_name) : nil
+
+      yield
+    ensure
+      StorageTables::Blob.service = previous_service
     end
   end
 end

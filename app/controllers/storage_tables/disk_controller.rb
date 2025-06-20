@@ -12,7 +12,7 @@ module StorageTables
 
     def show
       if encoded_checksum
-        serve_file named_disk_service(encoded_checksum[:service_name]).path_for(encoded_checksum[:checksum]),
+        serve_file StorageTables::Blob.service.path_for(encoded_checksum[:checksum]),
                    content_type: encoded_checksum[:content_type], disposition: encoded_checksum[:disposition]
       else
         head :not_found

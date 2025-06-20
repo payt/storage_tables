@@ -123,7 +123,6 @@ module StorageTables
           expires_in: expires_in,
           purpose: :blob_url
         )
-
         url_helpers.show_storage_tables_disk_service_url(verified_key_with_expiration, **url_options)
       end
 
