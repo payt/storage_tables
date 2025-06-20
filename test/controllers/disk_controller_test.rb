@@ -12,7 +12,7 @@ module StorageTables
 
     def teardown
       StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
-      StorageTables::Blob.delete_all
+      StorageTables::Blob.find_each(&:delete)
     end
 
     ## GET /disk/:encoded_checksum
