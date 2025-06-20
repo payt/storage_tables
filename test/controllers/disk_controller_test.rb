@@ -58,7 +58,7 @@ module StorageTables
     end
 
     test "showing blob that does not exist" do
-      blob = create_blob
+      blob = create_blob(data: "once upon a time")
       blob.delete
 
       with_service("local_public") do
