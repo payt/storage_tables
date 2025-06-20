@@ -111,9 +111,10 @@ module StorageTables
       blob = create_blob
       @user = User.create!(name: "My User")
       @user.avatar.attach blob, filename: "funky.jpg"
-
       assert_raises(ActiveRecord::StatementInvalid) do
-        blob.reload.delete
+        ActiveRecord::Base.transaction do
+          blob.reload.delete
+        end
       end
     end
 

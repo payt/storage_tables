@@ -39,6 +39,10 @@ module ActiveSupport
 
     teardown do
       StorageTables::Current.reset
+      StorageTables::UserAvatarAttachment.delete_all
+      StorageTables::UserPhotoAttachment.delete_all
+      StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
+      StorageTables::Blob.find_each(&:delete)
     end
 
     private
