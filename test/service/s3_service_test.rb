@@ -18,7 +18,7 @@ if SERVICE_CONFIGURATIONS[:s3]
         include StorageTables::Service::SharedServiceTests
 
         around do |&block|
-          VCR.use_cassette("services/s3/#{name}", record: :all) do
+          VCR.use_cassette("services/s3/#{name}") do
             super(&block)
           end
         end
