@@ -18,7 +18,7 @@ if SERVICE_CONFIGURATIONS[:s3]
         include StorageTables::Service::SharedServiceTests
 
         around do |&block|
-          VCR.use_cassette("services/s3/#{name}") do
+          VCR.use_cassette("services/s3/#{name}", record: :all) do
             super(&block)
           end
         end
@@ -181,8 +181,7 @@ if SERVICE_CONFIGURATIONS[:s3]
             filename: "custom_metadata.txt"
           )
 
-          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
-                                       filename: StorageTables::Filename.new("test.html"))
+          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html")
 
           response = Net::HTTP.get_response(URI(url))
 
