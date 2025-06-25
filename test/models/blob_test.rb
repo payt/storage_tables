@@ -107,13 +107,14 @@ module StorageTables
       end
     end
 
-    test "Cannot destroy a blob that is if deleted through SQL" do
+    test "Cannot destroy a blob that is connected to an attachment if deleted through SQL" do
       blob = create_blob
       @user = User.create!(name: "My User")
       @user.avatar.attach blob, filename: "funky.jpg"
-
       assert_raises(ActiveRecord::StatementInvalid) do
-        blob.reload.delete
+        ActiveRecord::Base.transaction do
+          blob.reload.delete
+        end
       end
     end
 
@@ -124,6 +125,46 @@ module StorageTables
       url = blob.service_url_for_direct_upload
 
       assert_match(%r{/rails/storage_tables/disk/}, url)
+    end
+
+    test "url" do
+      blob = create_blob
+
+      expected_url = "https://example.com/rails/storage_tables/disk/#{blob.checksum}"
+
+      assert_equal expected_url.first(46), blob.url.first(46)
+    end
+
+    ## URL's
+
+    test "URLs expiring in 15 minutes" do
+      blob = create_blob
+
+      freeze_time do
+        assert_equal expected_url_for(blob, disposition: :inline), blob.url
+        assert_equal expected_url_for(blob, disposition: :attachment), blob.url(disposition: :attachment)
+      end
+    end
+
+    test "URLs force content_type to binary and attachment as content disposition for content types served as binary" do
+      blob = create_blob(content_type: "text/html")
+
+      freeze_time do
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream"),
+                     blob.url
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream"),
+                     blob.url(disposition: :inline)
+      end
+    end
+
+    test "URLs force attachment as content disposition when the content type is not allowed inline" do
+      blob = create_blob(content_type: "application/zip")
+
+      freeze_time do
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip"), blob.url
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip"),
+                     blob.url(disposition: :inline)
+      end
     end
 
     ## StorageTables::Blob.where_checksum
@@ -177,6 +218,19 @@ module StorageTables
       assert_deprecated("StorageTables", StorageTables.deprecator) do
         Blob.existing_blob("non-existing-checksum")
       end
+    end
+
+    private
+
+    def expected_url_for(blob, disposition: :attachment, content_type: nil, service_name: :local)
+      content_type ||= blob.content_type
+
+      key_params = { checksum: blob.checksum,
+                     disposition: disposition, content_type: content_type, service_name: service_name }
+
+      "https://example.com/rails/storage_tables/disk/#{StorageTables.verifier.generate(key_params,
+                                                                                       expires_in: 15.minutes,
+                                                                                       purpose: :blob_url)}"
     end
   end
 end

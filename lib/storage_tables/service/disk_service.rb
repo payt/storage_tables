@@ -102,6 +102,20 @@ module StorageTables
 
       private
 
+      def generate_url(checksum, expires_in:, content_type:, disposition:)
+        verified_key_with_expiration = StorageTables.verifier.generate(
+          {
+            checksum:,
+            disposition:,
+            content_type: content_type,
+            service_name: name
+          },
+          expires_in: expires_in,
+          purpose: :blob_url
+        )
+        url_helpers.show_storage_tables_disk_service_url(verified_key_with_expiration, **url_options)
+      end
+
       def folder_for(checksum)
         "#{checksum[0]}/#{checksum[1..2]}/#{checksum[3..4]}"
       end
@@ -129,6 +143,10 @@ module StorageTables
         StorageTables::Current.url_options
       end
 
+      def url_helpers
+        @url_helpers ||= Rails.application.routes.url_helpers
+      end
+
       def stream(checksum)
         File.open(path_for(checksum), "rb") do |file|
           while (data = file.read(5.megabytes))
@@ -137,10 +155,6 @@ module StorageTables
         end
       rescue Errno::ENOENT
         raise StorageTables::FileNotFoundError
-      end
-
-      def url_helpers
-        @url_helpers ||= Rails.application.routes.url_helpers
       end
     end
   end

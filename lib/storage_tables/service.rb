@@ -81,16 +81,7 @@ module StorageTables
     # you can also provide the amount of seconds the URL will be valid for, specified in +expires_in+.
     def url(checksum, **options)
       instrument(:url, checksum:) do |payload|
-        generated_url =
-          if public?
-            public_url(checksum, **options)
-          else
-            private_url(checksum, **options)
-          end
-
-        payload[:url] = generated_url
-
-        generated_url
+        payload[:url] = generate_url(checksum, **options)
       end
     end
 
