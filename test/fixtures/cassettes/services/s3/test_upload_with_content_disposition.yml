@@ -10,26 +10,30 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - bc4bfe28-74f4-4af7-b9c3-8d847c42e615
+      - a1ff620e-64d5-48d6-bca2-95f54bd13736
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
       - 100-continue
       Content-Type:
       - application/octet-stream
-      User-Agent:
-      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
-        md/3.3.3 m/A,D
+      X-Amz-Sdk-Checksum-Algorithm:
+      - CRC32
+      X-Amz-Checksum-Crc32:
+      - wyCR/w==
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20241224T142427Z
+      - 20250625T104455Z
       X-Amz-Content-Sha256:
       - bf718b6f653bebc184e1479f1935b8da974d701b893afcf49e701f3e2f9f9c5a
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
-        SignedHeaders=amz-sdk-invocation-id;content-md5;content-type;host;x-amz-content-sha256;x-amz-date,
-        Signature=2489da30aa4023e6b0d8fd7f5a9e2a0fcb0619e77f6b47bca32ef55eda4053e9
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;content-md5;content-type;host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm,
+        Signature=323a053d519a31a17548a9b55ac72f557e259fb8879b05e523df72862b94b8df
+      User-Agent:
+      - aws-sdk-ruby3/3.226.1 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,Z,b,U,D,n
       Content-Length:
       - '65536'
       Accept:
@@ -40,15 +44,21 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - rb74yXIS8b4tuEuLf8Olo0BrIiwgBMdlc58OvJn5Ei6TZsGOd3lW4LIwAWw+HH9XIFDMX/f3yi/YRkSJJBeC6A==
+      - xix/hAsf8Zv4fTkzDdluzo9riTBa498lZLIHTFEKrRXO1cn6HkD5gItd+hos4XtHi/aQzETsOFqupca8cuMyUvZc8IhFvy2d
       X-Amz-Request-Id:
-      - 3XP02GW1T0QPJ5P9
+      - JHPX95JVD8794J2D
       Date:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:56 GMT
+      X-Amz-Version-Id:
+      - RowT2aQ0lMdgOx8F8i7ldeqGdTq3_3yl
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
       - '"2d61aa54b58c2e94403fb092c3dbc027"'
+      X-Amz-Checksum-Crc32:
+      - wyCR/w==
+      X-Amz-Checksum-Type:
+      - FULL_OBJECT
       Content-Length:
       - '0'
       Server:
@@ -56,7 +66,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 24 Dec 2024 14:24:27 GMT
+  recorded_at: Wed, 25 Jun 2025 10:44:55 GMT
 - request:
     method: put
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -67,7 +77,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 8d6e264d-1581-4941-8ad2-a2d12108e15b
+      - b8d64bee-c5f1-4b7f-8414-9a04c98064e4
       Content-Disposition:
       - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
       Content-Md5:
@@ -76,19 +86,23 @@ http_interactions:
       - 100-continue
       Content-Type:
       - application/octet-stream
-      User-Agent:
-      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
-        md/3.3.3 m/A,D
+      X-Amz-Sdk-Checksum-Algorithm:
+      - CRC32
+      X-Amz-Checksum-Crc32:
+      - NufERQ==
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20241224T142427Z
+      - 20250625T104455Z
       X-Amz-Content-Sha256:
       - def6629d9a2dad4c0234ef217cf870ea14696c4ed16371aa9d1fe716a808238e
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
-        SignedHeaders=amz-sdk-invocation-id;content-disposition;content-md5;content-type;host;x-amz-content-sha256;x-amz-date,
-        Signature=d4b7ac92442c8fbeb2e1cc843710a58e71f0f40920f57cd59beda49ac42286e4
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;content-disposition;content-md5;content-type;host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm,
+        Signature=738808afe0668cc359d05f526f9d5d374bed169a9530d5c9a55f653a8371d743
+      User-Agent:
+      - aws-sdk-ruby3/3.226.1 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,Z,b,U,D,n
       Content-Length:
       - '24'
       Accept:
@@ -99,15 +113,21 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - N8nbZiUg2WH68sHkMkCQjiCGf6nKrDeiYGGHUcFie4J3e1NIAhw5Xm3OC9pntP2IUz9Ar5D18vw=
+      - Q0FhT5ZGJoTjftJxSU3qbteOURoViTKsF3xToYY/fRx9Z8y1DK8ELC/ki3rFy4Zpiwi+cf11QOg=
       X-Amz-Request-Id:
-      - 3XP9BPD1JWHW2BQK
+      - JHPPDQ5GW7Y3TRFE
       Date:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:56 GMT
+      X-Amz-Version-Id:
+      - UZvyIHt5PsdJdrtODjbhN32V9.E.OVXL
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
       - '"b228e0125acd98d401a6ecf6c67f17ed"'
+      X-Amz-Checksum-Crc32:
+      - NufERQ==
+      X-Amz-Checksum-Type:
+      - FULL_OBJECT
       Content-Length:
       - '0'
       Server:
@@ -115,7 +135,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 24 Dec 2024 14:24:27 GMT
+  recorded_at: Wed, 25 Jun 2025 10:44:55 GMT
 - request:
     method: head
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -126,20 +146,20 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - ae8c4ae9-9ff9-4ec6-8ed3-5a6bb48c8d83
-      User-Agent:
-      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
-        md/3.3.3 m/A,D
+      - 2a358793-88ed-421b-9454-09ad9602bba4
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20241224T142427Z
+      - 20250625T104455Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
-        Signature=a80aea65a4410269e7d42ed7c12973c0a2f253bf22d90ae37357407a19e5390a
+        Signature=1350ebe919fac34f8d0a42af4eab5c0e0fc96401beaaddf340f053bcfc9a5d3a
+      User-Agent:
+      - aws-sdk-ruby3/3.226.1 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,Z,b,D,n
       Accept:
       - "*/*"
   response:
@@ -148,19 +168,21 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - JV2IHsJ2UORPxav0QHEZbd08XlSo+ZRxi5KwFIXoXRPo3991vhIgff3HNbOjVGkbvOqcoHQba6uOXiK0wxolNQ==
+      - 9rp+Wa4q6LKCqewVUd36074DUpaOI/w/2DD9AgoXiSBqOuKu3RkuPzMHVKGjjg9PuD5ZGNrVM7+E7UETjE0S+LosUJHzhbK+
       X-Amz-Request-Id:
-      - 3XP8315SMP649RAZ
+      - JHPR7HJ0BFGR79FE
       Date:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:56 GMT
       Last-Modified:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:56 GMT
       Etag:
       - '"b228e0125acd98d401a6ecf6c67f17ed"'
       X-Amz-Server-Side-Encryption:
       - AES256
       Content-Disposition:
       - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
+      X-Amz-Version-Id:
+      - UZvyIHt5PsdJdrtODjbhN32V9.E.OVXL
       Accept-Ranges:
       - bytes
       Content-Type:
@@ -172,7 +194,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 24 Dec 2024 14:24:27 GMT
+  recorded_at: Wed, 25 Jun 2025 10:44:55 GMT
 - request:
     method: delete
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -183,20 +205,20 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 834db784-d8a2-448f-b321-adc73a78fe5b
-      User-Agent:
-      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
-        md/3.3.3 m/A,D
+      - 1863af27-4dbb-4868-a212-7fb36fa24d36
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20241224T142427Z
+      - 20250625T104455Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
-        Signature=1e4ed4d01d437da1946222c86d13a8f78feda581ed23631def0db34ac3ebc227
+        Signature=8faa0a63282a010056c32ef97c86554237bd478d0fe93cbdeb6b49c909475099
+      User-Agent:
+      - aws-sdk-ruby3/3.226.1 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,Z,b,D,n
       Accept:
       - "*/*"
   response:
@@ -205,15 +227,19 @@ http_interactions:
       message: No Content
     headers:
       X-Amz-Id-2:
-      - daEcMPdcEq3Jf53R0a62pswnw34JhObXbbYEX6CEnUXVAbtBJzoVEcTlKrV5iNMdqPsmDSdnHpw=
+      - 0TFC0Z1P49Ei3xst/GNZuo0JCpU9Qsjm9WV1tyWTiKA4w5hWQ/WkYWqIWarfxIZ1WB/pvnYbxf8=
       X-Amz-Request-Id:
-      - 3XP22TFBGYBDD3MQ
+      - JHPHCNY7CT1WW966
       Date:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:56 GMT
+      X-Amz-Version-Id:
+      - UUOVIPL7D9K6xafRMVkURW0k6fUZ.o3a
+      X-Amz-Delete-Marker:
+      - 'true'
       Server:
       - AmazonS3
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 24 Dec 2024 14:24:27 GMT
-recorded_with: VCR 6.2.0
+  recorded_at: Wed, 25 Jun 2025 10:44:55 GMT
+recorded_with: VCR 6.3.1

@@ -181,8 +181,7 @@ if SERVICE_CONFIGURATIONS[:s3]
             filename: "custom_metadata.txt"
           )
 
-          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
-                                       filename: StorageTables::Filename.new("test.html"))
+          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html")
 
           response = Net::HTTP.get_response(URI(url))
 

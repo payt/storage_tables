@@ -10,26 +10,30 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 7beb7526-16ec-4570-bfde-8e810e319d03
+      - 82f4447d-ecec-4c06-b54b-7930322076b4
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
       - 100-continue
       Content-Type:
       - application/octet-stream
-      User-Agent:
-      - aws-sdk-ruby3/3.202.2 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
-        md/3.3.3 m/A,D
+      X-Amz-Sdk-Checksum-Algorithm:
+      - CRC32
+      X-Amz-Checksum-Crc32:
+      - wyCR/w==
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20241224T142427Z
+      - 20250625T104454Z
       X-Amz-Content-Sha256:
       - bf718b6f653bebc184e1479f1935b8da974d701b893afcf49e701f3e2f9f9c5a
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20241224/eu-west-1/s3/aws4_request,
-        SignedHeaders=amz-sdk-invocation-id;content-md5;content-type;host;x-amz-content-sha256;x-amz-date,
-        Signature=a8d4d0c27231b7c3cadb216db321bb12aa8ff05906eb6fcbc34084b1cbad5eea
+      - AWS4-HMAC-SHA256 Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;content-md5;content-type;host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm,
+        Signature=1f30ece0a211d952161ebf9c314fde006570a1526a44474883118985dd54dd62
+      User-Agent:
+      - aws-sdk-ruby3/3.226.1 ua/2.1 api/s3#1.152.3 os/linux md/x86_64 lang/ruby#3.3.3
+        md/3.3.3 m/A,Z,b,U,D,n
       Content-Length:
       - '65536'
       Accept:
@@ -40,15 +44,21 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - SoKSryila1oSdI/dmT9AAC+6QNZL/4z8tybkdY3Nn/M+mO6+qjQm+upMrGtca2NNxFiw+CNVg2Q=
+      - ZTMS0Oq4opt1ydizbU5bMY/pic0LESKjLTqaDMqoOXDO+8/wga+VmX3Pn0GpvGWVEXfwvHJg8rsAMOlCYrc8qRfXLmb/IIaf
       X-Amz-Request-Id:
-      - 3XP8KQ0FN76BA4E6
+      - GYH31R7EMW978VZB
       Date:
-      - Tue, 24 Dec 2024 14:24:28 GMT
+      - Wed, 25 Jun 2025 10:44:55 GMT
+      X-Amz-Version-Id:
+      - yeSblZM_ruU6q2viEqj5h2zVIkoFs9Nk
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
       - '"2d61aa54b58c2e94403fb092c3dbc027"'
+      X-Amz-Checksum-Crc32:
+      - wyCR/w==
+      X-Amz-Checksum-Type:
+      - FULL_OBJECT
       Content-Length:
       - '0'
       Server:
@@ -56,5 +66,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 24 Dec 2024 14:24:27 GMT
-recorded_with: VCR 6.2.0
+  recorded_at: Wed, 25 Jun 2025 10:44:54 GMT
+recorded_with: VCR 6.3.1
