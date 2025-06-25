@@ -137,7 +137,7 @@ module StorageTables
 
     ## URL's
 
-    test "URLs expiring in 5 minutes" do
+    test "URLs expiring in 15 minutes" do
       blob = create_blob
 
       freeze_time do
@@ -229,7 +229,7 @@ module StorageTables
                      disposition: disposition, content_type: content_type, service_name: service_name }
 
       "https://example.com/rails/storage_tables/disk/#{StorageTables.verifier.generate(key_params,
-                                                                                       expires_in: 5.minutes,
+                                                                                       expires_in: 15.minutes,
                                                                                        purpose: :blob_url)}"
     end
   end
