@@ -24,7 +24,7 @@ require "tmpdir"
 
 Rails.configuration.storage_tables.service_configurations = SERVICE_CONFIGURATIONS.merge(
   "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") },
-  "local_public" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests_public"), "public" => true }
+  "local_secondary" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests_secondary") }
 ).deep_stringify_keys
 
 Rails.configuration.storage_tables.service = "local"

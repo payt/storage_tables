@@ -61,7 +61,7 @@ module StorageTables
       blob = create_blob(data: "once upon a time")
       blob.delete
 
-      with_service("local_public") do
+      with_service("local_secondary") do
         get blob.url
       end
 
@@ -74,8 +74,8 @@ module StorageTables
       assert_response :not_found
     end
 
-    test "showing public blob" do
-      with_service("local_public") do
+    test "showing blob from secondary storage location" do
+      with_service("local_secondary") do
         blob = create_blob(content_type: "image/jpeg")
 
         get blob.url
