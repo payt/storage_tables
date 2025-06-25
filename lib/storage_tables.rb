@@ -32,7 +32,7 @@ module StorageTables
 
   mattr_accessor :queues, default: {}
 
-  mattr_accessor :service_urls_expire_in, default: 5.minutes
+  mattr_accessor :service_urls_expire_in, default: 15.minutes
 
   def self.deprecator
     @deprecator ||= ActiveSupport::Deprecation.new("0.2.0", "StorageTables")
