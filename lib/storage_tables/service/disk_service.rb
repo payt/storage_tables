@@ -102,16 +102,6 @@ module StorageTables
 
       private
 
-      def private_url(checksum, expires_in:, content_type:, disposition:, **)
-        generate_url(checksum, expires_in: expires_in, content_type: content_type,
-                               disposition: disposition)
-      end
-
-      def public_url(checksum, content_type: nil, disposition: :attachment, **)
-        generate_url(checksum, expires_in: nil, content_type: content_type,
-                               disposition: disposition)
-      end
-
       def generate_url(checksum, expires_in:, content_type:, disposition:)
         verified_key_with_expiration = StorageTables.verifier.generate(
           {
