@@ -23,7 +23,8 @@ end
 require "tmpdir"
 
 Rails.configuration.storage_tables.service_configurations = SERVICE_CONFIGURATIONS.merge(
-  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") }
+  "local" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests") },
+  "local_secondary" => { "service" => "Disk", "root" => Dir.mktmpdir("storage_tables_tests_secondary") }
 ).deep_stringify_keys
 
 Rails.configuration.storage_tables.service = "local"
@@ -38,6 +39,10 @@ module ActiveSupport
 
     teardown do
       StorageTables::Current.reset
+      StorageTables::UserAvatarAttachment.delete_all
+      StorageTables::UserPhotoAttachment.delete_all
+      StorageTables::Blob.update_all(attachments_count: 0) # rubocop:disable Rails/SkipsModelValidations
+      StorageTables::Blob.find_each(&:delete)
     end
 
     private
@@ -73,6 +78,15 @@ module ActiveSupport
 
     def fixture_file_upload(filename)
       Rack::Test::UploadedFile.new file_fixture(filename).to_s
+    end
+
+    def with_service(service_name)
+      previous_service = StorageTables::Blob.service
+      StorageTables::Blob.service = service_name ? StorageTables::Blob.services.fetch(service_name) : nil
+
+      yield
+    ensure
+      StorageTables::Blob.service = previous_service
     end
   end
 end
