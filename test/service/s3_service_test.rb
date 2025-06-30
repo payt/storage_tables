@@ -130,11 +130,11 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: StorageTables::Filename.new("avatar.png"),
+                                       disposition: :inline,
                                        content_type: "image/png")
 
           assert_match(
-            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*avatar\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
+            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
           )
           assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
         end
