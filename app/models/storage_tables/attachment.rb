@@ -47,7 +47,7 @@ module StorageTables
 
       def where_checksum(input)
         if input.is_a?(Array)
-          where([:blob_key, :checksum] => input.map { checksum_to_primary(_1) })
+          where([:blob_key, :checksum] => input.map { checksum_to_primary(self.it) })
         else
           where(blob_key: input[0], checksum: input[1..].chomp("=="))
         end
