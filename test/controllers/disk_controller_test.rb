@@ -54,21 +54,20 @@ module StorageTables
       assert_response :range_not_satisfiable
     end
 
-    test "with invalid token" do
+    test "with expired token" do
       blob = create_blob
+      url = blob.url(expires_in: 1.minute)
 
-      get "#{blob.url}1"
+      travel 2.minutes
+      get url
 
       assert_response :not_found
     end
 
     test "showing blob that does not exist" do
-      blob = create_blob(data: "once upon a time")
-      blob.delete
+      blob = Blob.new(checksum: "1234567890", byte_size: 1024, content_type: "image/jpeg")
 
-      with_service("local_secondary") do
-        get blob.url
-      end
+      get blob.url
 
       assert_response :not_found
     end
