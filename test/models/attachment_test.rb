@@ -253,7 +253,7 @@ module StorageTables
       attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "test.txt")
 
       freeze_time do
-        assert_equal expected_url_for(blob, filename: StorageTables::Filename.new("test.txt")),
+        assert_equal expected_url_for(blob, disposition: :inline, filename: StorageTables::Filename.new("test.txt")),
                      attachment.url
       end
     end
@@ -265,6 +265,8 @@ module StorageTables
       freeze_time do
         assert_equal expected_url_for(attachment.blob, disposition: :inline, filename: StorageTables::Filename.new("test.txt")),
                      attachment.url(disposition: :inline)
+        assert_equal expected_url_for(attachment.blob, disposition: :attachment, filename: StorageTables::Filename.new("test.txt")),
+                     attachment.url(disposition: :attachment)
       end
     end
 
