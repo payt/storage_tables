@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "models/helpers/url_generation_helper"
 
 module StorageTables
   class BlobTest < ActiveSupport::TestCase
+    include StorageTables::Helpers::UrlGenerationHelper
+
     test "setup" do
       blob = StorageTables::Blob.new
 
@@ -139,31 +142,36 @@ module StorageTables
 
     test "URLs expiring in 15 minutes" do
       blob = create_blob
+      filename = StorageTables::Filename.new("test.txt")
 
       freeze_time do
-        assert_equal expected_url_for(blob, disposition: :inline), blob.url
-        assert_equal expected_url_for(blob, disposition: :attachment), blob.url(disposition: :attachment)
+        assert_equal expected_url_for(blob, disposition: :inline, filename: filename), blob.url(filename:)
+        assert_equal expected_url_for(blob, disposition: :attachment, filename: filename),
+                     blob.url(disposition: :attachment, filename: filename)
       end
     end
 
     test "URLs force content_type to binary and attachment as content disposition for content types served as binary" do
       blob = create_blob(content_type: "text/html")
+      filename = StorageTables::Filename.new("test.html")
 
       freeze_time do
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream"),
-                     blob.url
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream"),
-                     blob.url(disposition: :inline)
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream", filename: filename),
+                     blob.url(filename: filename)
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream", filename: filename),
+                     blob.url(disposition: :inline, filename: filename)
       end
     end
 
     test "URLs force attachment as content disposition when the content type is not allowed inline" do
       blob = create_blob(content_type: "application/zip")
+      filename = StorageTables::Filename.new("test.zip")
 
       freeze_time do
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip"), blob.url
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip"),
-                     blob.url(disposition: :inline)
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip", filename: filename),
+                     blob.url(filename: filename)
+        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip", filename: filename),
+                     blob.url(disposition: :inline, filename: filename)
       end
     end
 
@@ -218,19 +226,6 @@ module StorageTables
       assert_deprecated("StorageTables", StorageTables.deprecator) do
         Blob.existing_blob("non-existing-checksum")
       end
-    end
-
-    private
-
-    def expected_url_for(blob, disposition: :attachment, content_type: nil, service_name: :local)
-      content_type ||= blob.content_type
-
-      key_params = { checksum: blob.checksum,
-                     disposition: disposition, content_type: content_type, service_name: service_name }
-
-      "https://example.com/rails/storage_tables/disk/#{StorageTables.verifier.generate(key_params,
-                                                                                       expires_in: 15.minutes,
-                                                                                       purpose: :blob_url)}"
     end
   end
 end
