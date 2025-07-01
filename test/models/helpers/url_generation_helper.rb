@@ -11,9 +11,10 @@ module StorageTables
         key_params = { checksum: blob.checksum,
                        disposition: content_disposition, content_type: content_type, service_name: service_name }
 
-        "https://example.com/rails/storage_tables/disk/#{StorageTables.verifier.generate(key_params,
-                                                                                         expires_in: 15.minutes,
-                                                                                         purpose: :blob_url)}/#{filename}"
+        "https://example.com/rails/storage_tables/disk/#{
+          StorageTables.verifier.generate(key_params,
+                                          expires_in: 15.minutes,
+                                          purpose: :blob_url)}/#{filename}"
       end
     end
   end

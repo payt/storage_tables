@@ -113,7 +113,7 @@ module StorageTables
 
       private
 
-      def generate_url(checksum, expires_in:, disposition:, content_type:, filename: nil, **client_opts)
+      def generate_url(checksum, expires_in:, disposition:, content_type:, filename: nil, **client_opts) # rubocop:disable Metrics/ParameterLists
         object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
                                                  response_content_disposition: content_disposition_with(
                                                    type: disposition, filename: filename ||

@@ -156,9 +156,15 @@ module StorageTables
       filename = StorageTables::Filename.new("test.html")
 
       freeze_time do
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream", filename: filename),
+        assert_equal expected_url_for(blob,
+                                      disposition: :attachment,
+                                      content_type: "application/octet-stream",
+                                      filename: filename),
                      blob.url(filename: filename)
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/octet-stream", filename: filename),
+        assert_equal expected_url_for(blob,
+                                      disposition: :attachment,
+                                      content_type: "application/octet-stream",
+                                      filename: filename),
                      blob.url(disposition: :inline, filename: filename)
       end
     end
@@ -168,9 +174,15 @@ module StorageTables
       filename = StorageTables::Filename.new("test.zip")
 
       freeze_time do
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip", filename: filename),
+        assert_equal expected_url_for(blob,
+                                      disposition: :attachment,
+                                      content_type: "application/zip",
+                                      filename: filename),
                      blob.url(filename: filename)
-        assert_equal expected_url_for(blob, disposition: :attachment, content_type: "application/zip", filename: filename),
+        assert_equal expected_url_for(blob,
+                                      disposition: :attachment,
+                                      content_type: "application/zip",
+                                      filename: filename),
                      blob.url(disposition: :inline, filename: filename)
       end
     end
