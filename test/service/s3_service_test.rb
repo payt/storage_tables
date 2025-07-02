@@ -130,11 +130,12 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: StorageTables::Filename.new("avatar.png"),
+                                       disposition: :inline,
+                                       filename: StorageTables::Filename.new("test.png"),
                                        content_type: "image/png")
 
           assert_match(
-            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*avatar\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
+            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
           )
           assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
         end
@@ -181,8 +182,7 @@ if SERVICE_CONFIGURATIONS[:s3]
             filename: "custom_metadata.txt"
           )
 
-          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
-                                       filename: StorageTables::Filename.new("test.html"))
+          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html")
 
           response = Net::HTTP.get_response(URI(url))
 
