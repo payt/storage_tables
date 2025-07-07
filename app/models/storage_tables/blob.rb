@@ -118,24 +118,6 @@ module StorageTables
         end.base64digest
       end
 
-      # Downloads the blob to a tempfile on disk. Yields the tempfile.
-      #
-      # The tempfile's name is prefixed with +StorageTables-+ and the blob's checksum.
-      #
-      # By default, the tempfile is created in <tt>Dir.tmpdir</tt>. 
-      # Pass +tmpdir:+ to create it in a different directory:
-      #
-      #   blob.open(tmpdir: "/path/to/tmp") do |file|
-      #     # ...
-      #   end
-      #
-      # The tempfile is automatically closed and unlinked after the given block is executed.
-      #
-      # Raises StorageTables::IntegrityError if the downloaded data does not match the blob's checksum.
-      def open(tmpdir: nil, filename: nil, &block)
-        service.open(checksum, tmpdir: tmpdir, filename: filename, &block)
-      end
-
       private
 
       # Cut the checksum into an Array to match the primary key
@@ -188,6 +170,24 @@ module StorageTables
                             content_type: content_type_for_serving,
                             filename: filename || StorageTables::Filename.new(checksum),
                             disposition: forced_disposition_for_serving || disposition, **)
+    end
+
+    # Downloads the blob to a tempfile on disk. Yields the tempfile.
+    #
+    # The tempfile's name is prefixed with +StorageTables-+ and the blob's checksum.
+    #
+    # By default, the tempfile is created in <tt>Dir.tmpdir</tt>.
+    # Pass +tmpdir:+ to create it in a different directory:
+    #
+    #   blob.open(tmpdir: "/path/to/tmp") do |file|
+    #     # ...
+    #   end
+    #
+    # The tempfile is automatically closed and unlinked after the given block is executed.
+    #
+    # Raises StorageTables::IntegrityError if the downloaded data does not match the blob's checksum.
+    def open(tmpdir: nil, filename: nil, &)
+      service.open(checksum, tmpdir: tmpdir, filename: filename, &)
     end
 
     private
