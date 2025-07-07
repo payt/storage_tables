@@ -187,7 +187,7 @@ module StorageTables
     #
     # Raises StorageTables::IntegrityError if the downloaded data does not match the blob's checksum.
     def open(tmpdir: nil, filename: nil, &)
-      service.open(checksum, tmpdir: tmpdir, name: ["StorageTables-#{checksum}", filename.extension_with_delimiter], &)
+      service.open(checksum, tmpdir: tmpdir, name: ["StorageTables-#{checksum}", filename], &)
     end
 
     private
