@@ -270,6 +270,31 @@ module StorageTables
       end
     end
 
+    test "open with integrity" do
+      create_file_blob(filename: "racecar.jpg").tap do |blob|
+        attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "AvatarRacecar.jpg")
+        attachment.open do |file|
+          assert_predicate file, :binmode?
+          assert_equal 0, file.pos
+          assert file.path.end_with?(".jpg")
+          assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+        end
+      end
+    end
+
+    test "open in a custom tmpdir" do
+      create_file_blob(filename: "racecar.jpg").tap do |blob|
+        attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "AvatarRacecar.jpg")
+        attachment.open(tmpdir: tmpdir = Dir.mktmpdir) do |file|
+          assert_predicate file, :binmode?
+          assert_equal 0, file.pos
+          assert file.path.start_with?(tmpdir)
+          assert file.path.end_with?(".jpg")
+          assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+        end
+      end
+    end
+
     private
 
     def assert_blob_identified_before_owner_validated(owner, blob, content_type)

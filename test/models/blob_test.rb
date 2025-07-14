@@ -121,6 +121,25 @@ module StorageTables
       end
     end
 
+    test "open with integrity" do
+      create_file_blob(filename: "racecar.jpg").tap do |blob|
+        blob.open do |file|
+          assert_predicate file, :binmode?
+          assert_equal 0, file.pos
+          assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+        end
+      end
+    end
+
+    test "open in a custom tmpdir" do
+      create_file_blob(filename: "racecar.jpg").open(tmpdir: tmpdir = Dir.mktmpdir) do |file|
+        assert_predicate file, :binmode?
+        assert_equal 0, file.pos
+        assert file.path.start_with?(tmpdir)
+        assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+      end
+    end
+
     ## ServiceUrl for direct upload
     test "service_url_for_direct_upload" do
       blob = create_blob
