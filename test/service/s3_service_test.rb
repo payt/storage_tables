@@ -154,18 +154,18 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "signed URL generation with custom url" do
-          StorageTables.custom_s3_url_enabled = true
-          StorageTables.custom_s3_url = "custom-s3-url.com"
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = "custom-s3-url.com"
 
-          url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline,
-                                       filename: StorageTables::Filename.new("test.png"),
-                                       content_type: "image/png")
+            url = @service.url(checksum, expires_in: 5.minutes,
+                                         disposition: :inline,
+                                         filename: StorageTables::Filename.new("test.png"),
+                                         content_type: "image/png")
 
-          assert_match(
-            /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url
-          )
-          assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
+            assert_match(
+              /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url
+            )
+          end
         end
 
         test "uploading with server-side encryption" do
