@@ -121,16 +121,17 @@ if SERVICE_CONFIGURATIONS[:s3]
         end
 
         test "request direct upload with custom url" do
-          StorageTables.custom_s3_url_enabled = true
-          StorageTables.custom_s3_url = "custom-s3-url.com"
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = "custom-s3-url.com"
 
-          data = "Something else entirely!"
-          checksum = generate_checksum(data)
-          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
-          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
-                                                         content_length: data.size, content_md5:)
+            data = "Something else entirely!"
+            checksum = generate_checksum(data)
+            content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+            url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                           content_length: data.size, content_md5:)
 
-          assert_match(%r{https://custom-s3-url.com.*}, url)
+            assert_match(%r{https://custom-s3-url.com.*}, url)
+          end
         end
 
         test "upload a zero byte file" do
@@ -165,6 +166,19 @@ if SERVICE_CONFIGURATIONS[:s3]
             assert_match(
               /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url
             )
+          end
+        end
+
+        test "when custom S3 URL is enabled, but custom S3 URL is not set, an error is raised" do
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = ""
+            error = assert_raises StorageTables::ServiceError do
+              @service.url(checksum, expires_in: 5.minutes,
+                                     disposition: :inline,
+                                     filename: StorageTables::Filename.new("test.png"),
+                                     content_type: "image/png")
+            end
+            assert_equal "Custom S3 URL is not configured", error.message
           end
         end
 
