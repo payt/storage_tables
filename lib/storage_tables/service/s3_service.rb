@@ -16,10 +16,9 @@ module StorageTables
 
       attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options, :region
 
-      def initialize(bucket:, upload: {}, region:, **) # rubocop:disable Lint/MissingSuper
+      def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
         @bucket = @client.bucket(bucket)
-        @region = region
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
 

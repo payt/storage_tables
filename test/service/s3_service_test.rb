@@ -164,7 +164,8 @@ if SERVICE_CONFIGURATIONS[:s3]
                                          content_type: "image/png")
 
             assert_match(
-              /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url
+              /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/,
+              url
             )
           end
         end
