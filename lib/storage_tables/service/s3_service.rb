@@ -194,7 +194,7 @@ module StorageTables
         raise StorageTables::ServiceError, "Custom S3 URL is not configured" if StorageTables.custom_s3_url.blank?
 
         parsed_url = URI.parse(url)
-        parsed_url.host = StorageTables.custom_s3_url if parsed_url.host == "#{bucket.name}.s3.#{region}.amazonaws.com"
+        parsed_url.host = StorageTables.custom_s3_url
 
         parsed_url.to_s
       end
