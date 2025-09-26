@@ -120,6 +120,19 @@ if SERVICE_CONFIGURATIONS[:s3]
           @service.delete checksum
         end
 
+        test "request direct upload with custom url" do
+          StorageTables.custom_s3_url_enabled = true
+          StorageTables.custom_s3_url = "custom-s3-url.com"
+
+          data = "Something else entirely!"
+          checksum = generate_checksum(data)
+          content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+          url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                         content_length: data.size, content_md5:)
+
+          assert_match(%r{https://custom-s3-url.com.*}, url)
+        end
+
         test "upload a zero byte file" do
           blob = directly_upload_file_blob filename: "empty_file.txt", content_type: nil
           user = User.create! name: "DHH"
@@ -136,6 +149,21 @@ if SERVICE_CONFIGURATIONS[:s3]
 
           assert_match(
             /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
+          )
+          assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
+        end
+
+        test "signed URL generation with custom url" do
+          StorageTables.custom_s3_url_enabled = true
+          StorageTables.custom_s3_url = "custom-s3-url.com"
+
+          url = @service.url(checksum, expires_in: 5.minutes,
+                                       disposition: :inline,
+                                       filename: StorageTables::Filename.new("test.png"),
+                                       content_type: "image/png")
+
+          assert_match(
+            /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url
           )
           assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
         end

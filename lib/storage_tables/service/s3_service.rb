@@ -14,11 +14,12 @@ module StorageTables
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
       MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
+      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options, :region
 
-      def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
+      def initialize(bucket:, upload: {}, region:, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
         @bucket = @client.bucket(bucket)
+        @region = region
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
 
@@ -90,6 +91,11 @@ module StorageTables
 
           payload[:url] = generated_url
 
+          if StorageTables.custom_s3_url_enabled
+            custom_url = custom_url(generated_url)
+            payload[:custom_url] = custom_url
+            return custom_url
+          end
           generated_url
         end
       end
@@ -114,11 +120,17 @@ module StorageTables
       private
 
       def generate_url(checksum, expires_in:, disposition:, content_type:, filename: nil, **client_opts) # rubocop:disable Metrics/ParameterLists
-        object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
-                                                 response_content_disposition: content_disposition_with(
-                                                   type: disposition, filename: filename ||
-                                                   StorageTables::Filename.new(checksum)
-                                                 ), response_content_type: content_type, **client_opts
+        generated_url = object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
+                                                                 response_content_disposition: content_disposition_with(
+                                                                   type: disposition, filename: filename ||
+                                                                   StorageTables::Filename.new(checksum)
+                                                                 ), response_content_type: content_type, **client_opts
+
+        if StorageTables.custom_s3_url_enabled
+          custom_url = custom_url(generated_url)
+          return custom_url
+        end
+        generated_url
       end
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
@@ -176,6 +188,15 @@ module StorageTables
 
           io.rewind
         end.base64digest
+      end
+
+      def custom_url(url)
+        raise StorageTables::ServiceError, "Custom S3 URL is not configured" if StorageTables.custom_s3_url.blank?
+
+        parsed_url = URI.parse(url)
+        parsed_url.host = StorageTables.custom_s3_url if parsed_url.host == "#{bucket.name}.s3.#{region}.amazonaws.com"
+
+        parsed_url.to_s
       end
     end
   end
