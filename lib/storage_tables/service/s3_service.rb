@@ -14,7 +14,7 @@ module StorageTables
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
       MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options, :region
+      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
 
       def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
