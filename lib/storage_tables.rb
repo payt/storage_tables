@@ -34,6 +34,9 @@ module StorageTables
 
   mattr_accessor :service_urls_expire_in, default: 15.minutes
 
+  mattr_accessor :custom_s3_url_enabled, default: false
+  mattr_accessor :custom_s3_url, default: ""
+
   def self.deprecator
     @deprecator ||= ActiveSupport::Deprecation.new("0.2.0", "StorageTables")
   end
