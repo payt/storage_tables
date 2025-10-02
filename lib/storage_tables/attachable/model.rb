@@ -42,13 +42,13 @@ module StorageTables
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
 
-        def stored_one_attachment(**)
+        def stored_one_attachment(name, class_name:)
           StorageTables.deprecator.warn(
             "[StorageTables] #stored_one_attachment is deprecated. " \
             "Use #has_one_stored instead."
           )
 
-          has_one_stored(**)
+          has_one_stored(name, class_name:)
         end
 
         def has_many_stored(name, class_name:) # rubocop:disable Naming/PredicatePrefix
@@ -87,13 +87,13 @@ module StorageTables
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
 
-        def stored_many_attachments(**)
+        def stored_many_attachments(name, class_name:)
           StorageTables.deprecator.warn(
             "[StorageTables] #stored_many_attachments is deprecated. " \
             "Use #has_many_stored instead."
           )
 
-          has_many_stored(**)
+          has_many_stored(name, class_name:)
         end
       end
     end
