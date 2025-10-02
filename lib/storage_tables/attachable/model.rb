@@ -7,7 +7,7 @@ module StorageTables
       extend ActiveSupport::Concern
 
       class_methods do # rubocop:disable Metrics/BlockLength
-        def has_one_stored(name, class_name:)
+        def has_one_stored(name, class_name:) # rubocop:disable Naming/PredicatePrefix
           define_method(name) do
             @storage_tables_attached ||= {}
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::One.new(name.to_s, self)
@@ -51,7 +51,7 @@ module StorageTables
           has_one_stored(**)
         end
 
-        def has_many_stored(name, class_name:)
+        def has_many_stored(name, class_name:) # rubocop:disable Naming/PredicatePrefix
           define_method(name) do
             @storage_tables_attached ||= {}
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::Many.new(name.to_s, self)
