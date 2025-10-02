@@ -33,7 +33,7 @@ module StorageTables
       assert_equal [User], reflections.collect(&:active_record).uniq
       assert_equal [:avatar, :highlights],
                    reflections.collect(&:name)
-      assert_equal [:stored_one_attachment, :stored_many_attachments],
+      assert_equal [:has_one_stored, :has_many_stored],
                    reflections.collect(&:macro)
     end
   end

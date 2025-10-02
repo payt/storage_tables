@@ -5,17 +5,17 @@ module StorageTables
   module Reflection
     # Holds all the metadata about a has_one_attached attachment as it was
     # specified in the Active Record class.
-    class StoredOneAttachmentReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
+    class HasOneStoredAttachmentReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro
-        :stored_one_attachment
+        :has_one_stored
       end
     end
 
     # Holds all the metadata about a has_many_attached attachment as it was
     # specified in the Active Record class.
-    class StoredManyAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
+    class HasManyStoredAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro
-        :stored_many_attachments
+        :has_many_stored
       end
     end
 
@@ -28,10 +28,10 @@ module StorageTables
 
       def reflection_class_for(macro)
         case macro
-        when :stored_one_attachment
-          StoredOneAttachmentReflection
-        when :stored_many_attachments
-          StoredManyAttachmentsReflection
+        when :has_one_stored || :stored_one_attachment
+          HasOneStoredAttachmentReflection
+        when :has_many_stored || :stored_many_attachments
+          HasManyStoredAttachmentsReflection
         else
           super
         end
