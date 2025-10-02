@@ -9,7 +9,7 @@ module StorageTables
 
       assert_equal User, reflection.active_record
       assert_equal :avatar, reflection.name
-      assert_equal :stored_one_attachment, reflection.macro
+      assert_equal :has_one_stored, reflection.macro
       # assert_equal :purge_later, reflection.options[:dependent]
 
       reflection = User.reflect_on_attachment(:avatar)

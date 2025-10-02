@@ -28,9 +28,9 @@ module StorageTables
 
       def reflection_class_for(macro)
         case macro
-        when :has_one_stored || :stored_one_attachment
+        when :has_one_stored
           HasOneStoredAttachmentReflection
-        when :has_many_stored || :stored_many_attachments
+        when :has_many_stored
           HasManyStoredAttachmentsReflection
         else
           super
