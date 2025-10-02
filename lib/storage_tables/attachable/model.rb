@@ -7,7 +7,7 @@ module StorageTables
       extend ActiveSupport::Concern
 
       class_methods do # rubocop:disable Metrics/BlockLength
-        def stored_one_attachment(name, class_name:)
+        def has_one_stored(name, class_name:)
           define_method(name) do
             @storage_tables_attached ||= {}
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::One.new(name.to_s, self)
@@ -33,7 +33,7 @@ module StorageTables
           after_commit(on: [:create, :update]) { attachment_changes.delete(name.to_s) }
 
           reflection = ActiveRecord::Reflection.create(
-            :stored_one_attachment,
+            :has_one_stored,
             name,
             nil,
             { class_name: },
@@ -42,7 +42,16 @@ module StorageTables
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
         end
 
-        def stored_many_attachments(name, class_name:)
+        def stored_one_attachment(**)
+          StorageTables.deprecator.warn(
+            "[StorageTables] #stored_one_attachment is deprecated. " \
+            "Use #has_one_stored instead."
+          )
+
+          has_one_stored(**)
+        end
+
+        def has_many_stored(name, class_name:)
           define_method(name) do
             @storage_tables_attached ||= {}
             @storage_tables_attached[name.to_sym] ||= StorageTables::Attachable::Many.new(name.to_s, self)
@@ -69,13 +78,22 @@ module StorageTables
           after_save { attachment_changes[name.to_s]&.save }
 
           reflection = ActiveRecord::Reflection.create(
-            :stored_many_attachments,
+            :has_many_stored,
             name,
             nil,
             { class_name: },
             self
           )
           ActiveRecord::Reflection.add_attachment_reflection(self, name, reflection)
+        end
+
+        def stored_many_attachments(**)
+          StorageTables.deprecator.warn(
+            "[StorageTables] #stored_many_attachments is deprecated. " \
+            "Use #has_many_stored instead."
+          )
+
+          has_many_stored(**)
         end
       end
     end
