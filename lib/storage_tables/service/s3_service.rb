@@ -14,10 +14,11 @@ module StorageTables
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
       MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
+      attr_reader :client, :bucket, :transfer_manager, :multipart_upload_threshold, :upload_options
 
       def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
+        @transfer_manager = Aws::S3::TransferManager.new(client: @client.client) if defined?(Aws::S3::TransferManager)
         @bucket = @client.bucket(bucket)
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
@@ -118,6 +119,14 @@ module StorageTables
 
       private
 
+      def upload_stream(checksum:, **, &)
+        if @transfer_manager
+          @transfer_manager.upload_stream(key: checksum, bucket: bucket.name, **, &)
+        else
+          object_for(checksum).upload_stream(**, &)
+        end
+      end
+
       def generate_url(checksum, expires_in:, disposition:, content_type:, filename: nil, **client_opts) # rubocop:disable Metrics/ParameterLists
         generated_url = object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
                                                                  response_content_disposition: content_disposition_with(
@@ -146,8 +155,12 @@ module StorageTables
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
 
-        object_for(checksum).upload_stream(content_type:, content_disposition:,
-                                           part_size:, metadata: custom_metadata, **upload_options) do |out|
+        upload_stream(checksum:,
+                      content_type:,
+                      content_disposition:,
+                      part_size:,
+                      metadata: custom_metadata,
+                      **upload_options) do |out|
           IO.copy_stream(io, out)
         end
       end
