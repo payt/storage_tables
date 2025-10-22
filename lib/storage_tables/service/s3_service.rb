@@ -14,11 +14,11 @@ module StorageTables
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
       MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
+      attr_reader :client, :transfer_manager, :bucket, :multipart_upload_threshold, :upload_options
 
       def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
-        @transfer_manager = Aws::S3::Transfer::Manager.new(client: @client) if defined?(Aws::S3::TransferManager)
+        @transfer_manager = Aws::S3::TransferManager.new(client: @client) if defined?(Aws::S3::TransferManager)
         @bucket = @client.bucket(bucket)
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
