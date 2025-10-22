@@ -133,11 +133,11 @@ module StorageTables
         generated_url
       end
 
-      def upload_stream(key:, **options, &block)
+      def upload_stream(checksum:, **, &)
         if @transfer_manager
-          @transfer_manager.upload_stream(key: key, bucket: bucket.name, **options, &block)
+          @transfer_manager.upload_stream(key: checksum, bucket: bucket.name, **, &)
         else
-          object_for(key).upload_stream(**options, &block)
+          object_for(checksum).upload_stream(**, &)
         end
       end
 
@@ -155,7 +155,7 @@ module StorageTables
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
       
-        upload_stream(key: key, content_Type:, content_disposition:, part_size: , metadata: custom_metadata, **options) do |out|
+        upload_stream(checksum: checksum, content_Type:, content_disposition:, part_size: , metadata: custom_metadata, **options) do |out|
           IO.copy_stream(io, out)
         end
       end
