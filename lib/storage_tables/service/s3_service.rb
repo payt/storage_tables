@@ -156,7 +156,7 @@ module StorageTables
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
 
         upload_stream(checksum: checksum, content_type:, content_disposition:, part_size:, metadata: custom_metadata,
-                      **options) do |out|
+                      **upload_options) do |out|
           IO.copy_stream(io, out)
         end
       end
