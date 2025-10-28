@@ -14,10 +14,11 @@ module StorageTables
       MAXIMUM_UPLOAD_PARTS_COUNT = 10_000
       MINIMUM_UPLOAD_PART_SIZE   = 5.megabytes
 
-      attr_reader :client, :bucket, :multipart_upload_threshold, :upload_options
+      attr_reader :client, :transfer_manager, :bucket, :multipart_upload_threshold, :upload_options
 
       def initialize(bucket:, upload: {}, **) # rubocop:disable Lint/MissingSuper
         @client = Aws::S3::Resource.new(**)
+        @transfer_manager = Aws::S3::TransferManager.new(client: @client) if defined?(Aws::S3::TransferManager)
         @bucket = @client.bucket(bucket)
 
         @multipart_upload_threshold = upload.delete(:multipart_threshold) || MULTIPART_THRESHOLD
@@ -132,6 +133,14 @@ module StorageTables
         generated_url
       end
 
+      def upload_stream(checksum:, **, &)
+        if @transfer_manager
+          @transfer_manager.upload_stream(key: checksum, bucket: bucket.name, **, &)
+        else
+          object_for(checksum).upload_stream(**, &)
+        end
+      end
+
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
                                   custom_metadata: {})
         object_for(checksum).put(body: io, content_md5: compute_md5_checksum(io), content_type:,
@@ -146,8 +155,8 @@ module StorageTables
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
 
-        object_for(checksum).upload_stream(content_type:, content_disposition:,
-                                           part_size:, metadata: custom_metadata, **upload_options) do |out|
+        upload_stream(checksum: checksum, content_type:, content_disposition:, part_size:, metadata: custom_metadata,
+                      **upload_options) do |out|
           IO.copy_stream(io, out)
         end
       end
