@@ -154,8 +154,9 @@ module StorageTables
 
       def upload_with_multipart(checksum, io, content_type: nil, content_disposition: nil, custom_metadata: {})
         part_size = [io.size.fdiv(MAXIMUM_UPLOAD_PARTS_COUNT).ceil, MINIMUM_UPLOAD_PART_SIZE].max
-      
-        upload_stream(checksum: checksum, content_Type:, content_disposition:, part_size: , metadata: custom_metadata, **options) do |out|
+
+        upload_stream(checksum: checksum, content_type:, content_disposition:, part_size:, metadata: custom_metadata,
+                      **options) do |out|
           IO.copy_stream(io, out)
         end
       end
