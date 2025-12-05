@@ -79,10 +79,10 @@ module StorageTables
         [primary, *mirrors].each(&)
       end
 
-      def perform_across_services(method, *args)
+      def perform_across_services(method, *)
         tasks = each_service.collect do |service|
           Concurrent::Promise.execute(executor: @executor) do
-            service.public_send method, *args
+            service.public_send(method, *)
           end
         end
         tasks.each(&:value!)
