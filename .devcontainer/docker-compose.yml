@@ -1,5 +1,5 @@
 services:
-  app:
+  storage_tables:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -10,7 +10,7 @@ services:
         VARIANT: "3"
 
     volumes:
-      - ..:/workspace:cached
+      - ..:/workspaces:cached
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity

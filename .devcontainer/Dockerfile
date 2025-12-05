@@ -14,4 +14,4 @@ RUN bundle config set --local ignore_funding_requests true && \
 
 WORKDIR /app
 
-COPY . ./
+COPY . .
