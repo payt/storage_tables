@@ -24,7 +24,7 @@ services:
     image: postgres:17.6
     restart: unless-stopped
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql-17/data
     environment:
       POSTGRES_USER: storage_tables
       POSTGRES_PASSWORD: storage_tables
