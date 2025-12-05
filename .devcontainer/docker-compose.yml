@@ -1,0 +1,41 @@
+services:
+  storage_tables:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        # Update 'VARIANT' to pick a version of Ruby: 3, 3.0, 2, 2.7, 2.6
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use -bullseye variants on local arm64/Apple Silicon.
+        VARIANT: "3"
+
+    volumes:
+      - ..:/workspaces:cached
+    environment:
+      PG_DATABASE: storage_tables_development
+      PG_HOST: postgres
+      PG_USER: storage_tables
+      PG_PASSWORD: storage_tables
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+  postgres:
+    image: postgres:17.6
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: storage_tables
+      POSTGRES_PASSWORD: storage_tables
+      POSTGRES_DB: storage_tables_development
+    volumes:
+      - postgres:/var/lib/postgresql-17/data
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+networks:
+  default: 
+    name: storage-tables
+
+volumes:
+  postgres:
