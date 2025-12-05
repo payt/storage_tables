@@ -14,8 +14,8 @@ services:
     environment:
       PG_DATABASE: storage_tables_development
       PG_HOST: postgres
-      PG_USER: postgres
-      PG_PASSWORD: postgres
+      PG_USER: storage_tables
+      PG_PASSWORD: storage_tables
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -26,9 +26,10 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: storage_tables_development
+      POSTGRES_USER: storage_tables
+      POSTGRES_PASSWORD: storage_tables
+      POSTGRES_DB: storage_tables_development
+      POSTGRES_HOST_AUTH_METHOD: trust
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
