@@ -23,6 +23,14 @@ module StorageTables
       association(:blob).klass.service.relative_path_for(full_checksum)
     end
 
+    def url(expires_in: StorageTables.service_urls_expire_in, disposition: :inline)
+      blob.url(filename: filename, disposition: disposition, expires_in: expires_in)
+    end
+
+    def open(**args, &)
+      blob.open(filename: filename.extension_with_delimiter, **args, &)
+    end
+
     def full_checksum
       raise StorageTables::ActiveRecordError, "blob is nil" unless checksum
 

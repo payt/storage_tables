@@ -10,34 +10,39 @@ module StorageTables
       host! "test.host"
     end
 
-    ## GET /disk/:encoded_checksum
+    ## GET /disk/:encoded_checksum/*filename
     test "showing blob inline" do
+      filename = StorageTables::Filename.new("hello.txt")
       blob = create_blob(content_type: "image/jpeg")
 
-      get blob.url
+      get blob.url(filename: filename)
 
       assert_response :ok
-      assert_equal :inline, response.headers["Content-Disposition"]
+      assert_equal "inline; filename=\"hello.txt\"; filename*=UTF-8''hello.txt", response.headers["Content-Disposition"]
       assert_equal "image/jpeg", response.headers["Content-Type"]
       assert_equal "hello world", response.body
     end
 
     test "showing blob as attachment" do
+      filename = StorageTables::Filename.new("hello.txt")
       blob = create_blob
-      get blob.url(disposition: :attachment)
+      get blob.url(filename: filename, disposition: :attachment)
 
       assert_response :ok
-      assert_equal :attachment, response.headers["Content-Disposition"]
+      assert_equal "attachment; filename=\"hello.txt\"; filename*=UTF-8''hello.txt",
+                   response.headers["Content-Disposition"]
       assert_equal "image/jpeg", response.headers["Content-Type"]
       assert_equal "hello world", response.body
     end
 
     test "showing blob range" do
+      filename = StorageTables::Filename.new("racecar.jpg")
       blob = create_blob
-      get blob.url, headers: { "Range" => "bytes=5-9" }
+      get blob.url(filename: filename), headers: { "Range" => "bytes=5-9" }
 
       assert_response :partial_content
-      assert_equal :inline, response.headers["Content-Disposition"]
+      assert_equal "inline; filename=\"racecar.jpg\"; filename*=UTF-8''racecar.jpg",
+                   response.headers["Content-Disposition"]
       assert_equal "image/jpeg", response.headers["Content-Type"]
       assert_equal " worl", response.body
     end
@@ -49,21 +54,20 @@ module StorageTables
       assert_response :range_not_satisfiable
     end
 
-    test "with invalid token" do
+    test "with expired token" do
       blob = create_blob
+      url = blob.url(expires_in: 1.minute)
 
-      get "#{blob.url}1"
+      travel 2.minutes
+      get url
 
       assert_response :not_found
     end
 
     test "showing blob that does not exist" do
-      blob = create_blob(data: "once upon a time")
-      blob.delete
+      blob = Blob.new(checksum: "1234567890", byte_size: 1024, content_type: "image/jpeg")
 
-      with_service("local_secondary") do
-        get blob.url
-      end
+      get blob.url
 
       assert_response :not_found
     end
@@ -129,7 +133,7 @@ module StorageTables
 
       put blob.service_url_for_direct_upload, params: data
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       assert_match(/Received Content-Type does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
@@ -140,7 +144,7 @@ module StorageTables
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "application/octet-stream" }
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       assert_match(/Received Content-Type does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
@@ -152,7 +156,7 @@ module StorageTables
 
       put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       assert_match(/Received file size does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
@@ -172,7 +176,7 @@ module StorageTables
 
       put blob.service_url_for_direct_upload, params: mismatched_data, headers: { "Content-Type" => "text/plain" }
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       assert_match(/File checksum does not match the expected value/, response.body)
       assert_not blob.service.exist?(blob.checksum)
     end
@@ -184,7 +188,7 @@ module StorageTables
 
         put blob.service_url_for_direct_upload, params: data, headers: { "Content-Type" => "text/plain" }
 
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
         assert_not blob.service.exist?(blob.checksum)
       end
     end

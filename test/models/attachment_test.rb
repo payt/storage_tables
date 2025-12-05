@@ -2,9 +2,12 @@
 
 require "test_helper"
 require "database/setup"
+require "models/helpers/url_generation_helper"
 
 module StorageTables
   class AttachmentTest < ActiveSupport::TestCase
+    include StorageTables::Helpers::UrlGenerationHelper
+
     setup do
       @user = User.create!(name: "Post")
     end
@@ -243,6 +246,53 @@ module StorageTables
       result = UserAvatarAttachment.find_by_checksum("non-existing-checksum")
 
       assert_nil result
+    end
+
+    test "url" do
+      blob = create_blob(data: "First blob")
+      attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "test.txt")
+
+      freeze_time do
+        assert_equal expected_url_for(blob, disposition: :inline, filename: StorageTables::Filename.new("test.txt")),
+                     attachment.url
+      end
+    end
+
+    test "url with disposition" do
+      blob = create_blob(data: "First blob")
+      attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "test.txt")
+
+      freeze_time do
+        assert_equal expected_url_for(attachment.blob, disposition: :inline, filename: StorageTables::Filename.new("test.txt")),
+                     attachment.url(disposition: :inline)
+        assert_equal expected_url_for(attachment.blob, disposition: :attachment, filename: StorageTables::Filename.new("test.txt")),
+                     attachment.url(disposition: :attachment)
+      end
+    end
+
+    test "open with integrity" do
+      create_file_blob(filename: "racecar.jpg").tap do |blob|
+        attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "AvatarRacecar.jpg")
+        attachment.open do |file|
+          assert_predicate file, :binmode?
+          assert_equal 0, file.pos
+          assert file.path.end_with?(".jpg")
+          assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+        end
+      end
+    end
+
+    test "open in a custom tmpdir" do
+      create_file_blob(filename: "racecar.jpg").tap do |blob|
+        attachment = UserAvatarAttachment.create!(record: @user, blob: blob, filename: "AvatarRacecar.jpg")
+        attachment.open(tmpdir: tmpdir = Dir.mktmpdir) do |file|
+          assert_predicate file, :binmode?
+          assert_equal 0, file.pos
+          assert file.path.start_with?(tmpdir)
+          assert file.path.end_with?(".jpg")
+          assert_equal file_fixture("racecar.jpg").binread, file.read, "Expected downloaded file to match fixture file"
+        end
+      end
     end
 
     private

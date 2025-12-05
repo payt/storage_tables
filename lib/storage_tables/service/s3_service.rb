@@ -90,6 +90,11 @@ module StorageTables
 
           payload[:url] = generated_url
 
+          if StorageTables.custom_s3_url_enabled
+            custom_url = custom_url(generated_url)
+            payload[:custom_url] = custom_url
+            return custom_url
+          end
           generated_url
         end
       end
@@ -113,11 +118,18 @@ module StorageTables
 
       private
 
-      def generate_url(checksum, expires_in:, filename:, disposition:, content_type:, **client_opts) # rubocop:disable Metrics/ParameterLists
-        object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
-                                                 response_content_disposition: content_disposition_with(
-                                                   type: disposition, filename:
-                                                 ), response_content_type: content_type, **client_opts
+      def generate_url(checksum, expires_in:, disposition:, content_type:, filename: nil, **client_opts) # rubocop:disable Metrics/ParameterLists
+        generated_url = object_for(checksum).presigned_url :get, expires_in: expires_in.to_i,
+                                                                 response_content_disposition: content_disposition_with(
+                                                                   type: disposition, filename: filename ||
+                                                                   StorageTables::Filename.new(checksum)
+                                                                 ), response_content_type: content_type, **client_opts
+
+        if StorageTables.custom_s3_url_enabled
+          custom_url = custom_url(generated_url)
+          return custom_url
+        end
+        generated_url
       end
 
       def upload_with_single_part(checksum, io, content_type: nil, content_disposition: nil,
@@ -175,6 +187,15 @@ module StorageTables
 
           io.rewind
         end.base64digest
+      end
+
+      def custom_url(url)
+        raise StorageTables::ServiceError, "Custom S3 URL is not configured" if StorageTables.custom_s3_url.blank?
+
+        parsed_url = URI.parse(url)
+        parsed_url.host = StorageTables.custom_s3_url
+
+        parsed_url.to_s
       end
     end
   end

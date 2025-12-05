@@ -120,6 +120,20 @@ if SERVICE_CONFIGURATIONS[:s3]
           @service.delete checksum
         end
 
+        test "request direct upload with custom url" do
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = "custom-s3-url.com"
+
+            data = "Something else entirely!"
+            checksum = generate_checksum(data)
+            content_md5 = OpenSSL::Digest::MD5.base64digest(data)
+            url = @service.url_for_direct_upload(checksum, expires_in: 5.minutes, content_type: "text/plain",
+                                                           content_length: data.size, content_md5:)
+
+            assert_match(%r{https://custom-s3-url.com.*}, url)
+          end
+        end
+
         test "upload a zero byte file" do
           blob = directly_upload_file_blob filename: "empty_file.txt", content_type: nil
           user = User.create! name: "DHH"
@@ -130,13 +144,43 @@ if SERVICE_CONFIGURATIONS[:s3]
 
         test "signed URL generation" do
           url = @service.url(checksum, expires_in: 5.minutes,
-                                       disposition: :inline, filename: StorageTables::Filename.new("avatar.png"),
+                                       disposition: :inline,
+                                       filename: StorageTables::Filename.new("test.png"),
                                        content_type: "image/png")
 
           assert_match(
-            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*avatar\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
+            /s3(-[-a-z0-9]+)?\.(\S+)?amazonaws.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/, url # rubocop:disable Layout/LineLength
           )
           assert_match SERVICE_CONFIGURATIONS[:s3][:bucket], url
+        end
+
+        test "signed URL generation with custom url" do
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = "custom-s3-url.com"
+
+            url = @service.url(checksum, expires_in: 5.minutes,
+                                         disposition: :inline,
+                                         filename: StorageTables::Filename.new("test.png"),
+                                         content_type: "image/png")
+
+            assert_match(
+              /custom-s3-url.com.*response-content-disposition=inline.*test\.png.*response-content-type=image%2Fpng/,
+              url
+            )
+          end
+        end
+
+        test "when custom S3 URL is enabled, but custom S3 URL is not set, an error is raised" do
+          StorageTables.stub(:custom_s3_url_enabled, true) do
+            StorageTables.custom_s3_url = ""
+            error = assert_raises StorageTables::ServiceError do
+              @service.url(checksum, expires_in: 5.minutes,
+                                     disposition: :inline,
+                                     filename: StorageTables::Filename.new("test.png"),
+                                     content_type: "image/png")
+            end
+            assert_equal "Custom S3 URL is not configured", error.message
+          end
         end
 
         test "uploading with server-side encryption" do
@@ -181,8 +225,7 @@ if SERVICE_CONFIGURATIONS[:s3]
             filename: "custom_metadata.txt"
           )
 
-          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html",
-                                       filename: StorageTables::Filename.new("test.html"))
+          url = @service.url(checksum, expires_in: 2.minutes, disposition: :inline, content_type: "text/html")
 
           response = Net::HTTP.get_response(URI(url))
 

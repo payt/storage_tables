@@ -63,6 +63,9 @@ module StorageTables
           app.config.storage_tables.content_types_to_serve_as_binary || []
         StorageTables.content_types_allowed_inline = app.config.storage_tables.content_types_allowed_inline || []
         StorageTables.service_urls_expire_in = app.config.storage_tables.service_urls_expire_in || 15.minutes
+
+        StorageTables.custom_s3_url_enabled = app.config.storage_tables.custom_s3_url_enabled || false
+        StorageTables.custom_s3_url = app.config.storage_tables.custom_s3_url || ""
       end
     end
 

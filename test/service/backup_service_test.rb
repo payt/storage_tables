@@ -95,6 +95,16 @@ module StorageTables
         assert @service.primary.exist?(checksum), "File should exist in primary after backfill"
       end
 
+      test "#mirror copies file from backup to primary" do
+        data = "Test data"
+        checksum = generate_checksum(data)
+        @service.backup.upload(checksum, StringIO.new(data))
+
+        @service.mirror(checksum)
+
+        assert @service.primary.exist?(checksum), "File should exist in primary after mirror"
+      end
+
       test "#exist? enqueues backfill job when file is only in backup" do
         data = "Test data"
         checksum = generate_checksum(data)

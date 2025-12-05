@@ -74,6 +74,8 @@ module StorageTables
         @primary = primary
         @backup = backup
       end
+
+      alias mirror backfill
     end
   end
 end
