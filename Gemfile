@@ -27,6 +27,7 @@ gem "dotenv", groups: [:development, :test]
 
 gem "simplecov", require: false
 
+gem "minitest", "~> 5.25"
 gem "minitest-hooks"
 gem "vcr"
 gem "webmock"

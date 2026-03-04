@@ -121,7 +121,7 @@ module StorageTables
 
       def upload_stream(checksum:, **, &)
         if @transfer_manager
-          @transfer_manager.upload_stream(key: checksum, bucket: bucket.name, **, &)
+          @transfer_manager.upload_stream(key: refactored_checksum(checksum), bucket: bucket.name, **, &)
         else
           object_for(checksum).upload_stream(**, &)
         end
