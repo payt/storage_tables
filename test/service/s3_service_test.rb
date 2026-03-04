@@ -307,7 +307,8 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
-        test "when Aws::S3::TransferManager is not defined, initializes without transfer_manager and upload_stream falls back to object_for" do
+        test "when Aws::S3::TransferManager is not defined, " \
+             "initializes without transfer_manager and upload_stream falls back to object_for" do
           transfer_manager_class = Aws::S3.send(:remove_const, :TransferManager)
           service = build_service({})
 
@@ -321,10 +322,11 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
 
           service.stub(:object_for, fake_object) do
-            service.send(:upload_stream, checksum: "test_checksum") { |_out| }
+            service.send(:upload_stream, checksum: "test_checksum") { upload_stream_called }
           end
 
-          assert upload_stream_called, "Expected object_for(checksum).upload_stream to be called when transfer_manager is absent"
+          assert upload_stream_called,
+                 "Expected object_for(checksum).upload_stream to be called when transfer_manager is absent"
         ensure
           Aws::S3.const_set(:TransferManager, transfer_manager_class)
         end
