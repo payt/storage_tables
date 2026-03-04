@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  stored_one_attachment :avatar, class_name: "StorageTables::UserAvatarAttachment"
-  stored_many_attachments :highlights, class_name: "StorageTables::UserPhotoAttachment"
+  has_one_stored :avatar, class_name: "StorageTables::UserAvatarAttachment"
+  has_many_stored :highlights, class_name: "StorageTables::UserPhotoAttachment"
 
   validates :name, presence: true
 end
 
 class Group < ApplicationRecord
-  stored_one_attachment :image, class_name: "StorageTables::GroupAttachment"
+  has_one_stored :image, class_name: "StorageTables::GroupAttachment"
 end
 
 module StorageTables

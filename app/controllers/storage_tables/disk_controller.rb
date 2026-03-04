@@ -28,17 +28,17 @@ module StorageTables
         render json: { error: "Received Content-Type does not match the expected value. Expected " \
                               "'#{token[:content_type]}', but got '#{request.content_mime_type}'. Please ensure " \
                               "the request Content-Type is correct." },
-               status: :unprocessable_entity
+               status: :unprocessable_content
       elsif invalid_content_length?
         render json: { error: "Received file size does not match the expected value. Expected " \
                               "'#{token[:content_length]}' bytes, but got '#{request.content_length}' bytes. " \
-                              "Please ensure the request file_size is correct." }, status: :unprocessable_entity
+                              "Please ensure the request file_size is correct." }, status: :unprocessable_content
       else
         StorageTables::Blob.service.upload token[:checksum], request.body
         head :no_content
       end
     rescue StorageTables::IntegrityError
-      render json: { error: "File checksum does not match the expected value" }, status: :unprocessable_entity
+      render json: { error: "File checksum does not match the expected value" }, status: :unprocessable_content
     end
 
     private

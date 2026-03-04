@@ -6,9 +6,9 @@
 #
 default: &default
   adapter: postgresql
-  username: <%= ENV.fetch("PG_USER") { } %>
-  password: <%= ENV.fetch("PG_PASSWORD") { } %>
-  host: <%= ENV.fetch("PG_HOST") { } %>  
+  username: <%= ENV.fetch("PG_USER") { "storage_tables" } %>
+  password: <%= ENV.fetch("PG_PASSWORD") { "storage_tables" } %>
+  host: <%= ENV.fetch("PG_HOST") { } %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 

@@ -2,7 +2,7 @@ s3:
   service: S3
   access_key_id: <%= ENV.fetch("AWS_ACCESS_ID", nil) %>
   secret_access_key: <%= ENV.fetch("AWS_ACCESS_KEY", nil) %>
-  region: <%= ENV.fetch("AWS_REGION", nil) %>
+  region: <%= ENV.fetch("AWS_REGION", "aws-west-1") %>
   bucket: <%= ENV.fetch("AWS_BUCKET", nil) %>
 
 local_secondary:
