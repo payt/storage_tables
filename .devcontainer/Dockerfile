@@ -6,6 +6,15 @@ ARG bundler_version=2.6.9
 
 USER root
 
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update && apt-get install -y curl gnupg lsb-release && \
+  curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+  apt-get update && apt-get install -y postgresql-client-18 && \
+  rm -rf /var/lib/apt/lists/*
+
 ENV BUNDLER_VERSION="$bundler_version"
 RUN gem install bundler --no-document -v "$bundler_version"
 RUN bundle config set --local ignore_funding_requests true && \
