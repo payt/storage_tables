@@ -307,8 +307,32 @@ if SERVICE_CONFIGURATIONS[:s3]
           end
         end
 
+        test "when Aws::S3::TransferManager is not defined, " \
+             "initializes without transfer_manager and upload_stream falls back to object_for" do
+          transfer_manager_class = Aws::S3.send(:remove_const, :TransferManager)
+          service = build_service({})
+
+          assert_nil service.transfer_manager
+
+          upload_stream_called = false
+          fake_object = Object.new
+          fake_object.define_singleton_method(:upload_stream) do |**, &block|
+            upload_stream_called = true
+            block.call(StringIO.new)
+          end
+
+          service.stub(:object_for, fake_object) do
+            service.send(:upload_stream, checksum: "test_checksum") { upload_stream_called }
+          end
+
+          assert upload_stream_called,
+                 "Expected object_for(checksum).upload_stream to be called when transfer_manager is absent"
+        ensure
+          Aws::S3.const_set(:TransferManager, transfer_manager_class)
+        end
+
         test "when restore a blob and blob is not in database" do
-          @service.restore("not-existing", ::OpenStruct.new(delete_marker: true)) # rubocop:disable Style/OpenStructUse
+          assert_nil @service.restore("not-existing", ::OpenStruct.new(delete_marker: true)) # rubocop:disable Style/OpenStructUse
         end
 
         test "when calling restore on a blob with a version that has not a delete marker" do

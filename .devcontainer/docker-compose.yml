@@ -19,9 +19,12 @@ services:
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   postgres:
-    image: postgres:17.6
+    image: postgres:18
     restart: unless-stopped
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
@@ -29,7 +32,12 @@ services:
       POSTGRES_PASSWORD: storage_tables
       POSTGRES_DB: storage_tables_development
     volumes:
-      - postgres:/var/lib/postgresql-17/data
+      - postgres:/var/lib/postgresql-18/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storage_tables -d storage_tables_development"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 

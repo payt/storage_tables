@@ -5,7 +5,7 @@
 	"name": "StorageTables",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "storage_tables",
-	"workspaceFolder": "/app",
+	"workspaceFolder": "/workspaces",
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
@@ -16,7 +16,7 @@
 	// "forwardPorts": [3000, 5432],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bundle exec rails db:schema:load",
+	"postCreateCommand": "bundle exec rake db:schema:load",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "root"
