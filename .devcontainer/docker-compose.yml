@@ -10,7 +10,7 @@ services:
         VARIANT: "3"
 
     volumes:
-      - ..:/workspaces:cached
+      - ..:/app
     environment:
       PG_DATABASE: storage_tables_development
       PG_HOST: postgres
@@ -19,6 +19,7 @@ services:
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+    
     depends_on:
       postgres:
         condition: service_healthy
