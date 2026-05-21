@@ -11,7 +11,7 @@ end
 SERVICE_CONFIGURATIONS = begin
   ActiveSupport::ConfigurationFile.parse(File.expand_path("service/configurations.yml", __dir__)).deep_symbolize_keys
 rescue Errno::ENOENT
-  puts "Missing service configuration file in test/service/configurations.yml"
+  Rails.logger.debug "Missing service configuration file in test/service/configurations.yml"
   {}
 end
 

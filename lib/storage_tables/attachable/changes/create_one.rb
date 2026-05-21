@@ -74,23 +74,25 @@ module StorageTables
           when ActionDispatch::Http::UploadedFile
             StorageTables::Blob.create_and_upload!(
               io: attachable.open,
-              content_type: attachable.content_type
+              content_type: attachable.content_type,
+              filename:
             )
           when Rack::Test::UploadedFile
             StorageTables::Blob.create_and_upload!(
               io: attachable.respond_to?(:open) ? attachable.open : attachable,
-              content_type: attachable.content_type
+              content_type: attachable.content_type,
+              filename:
             )
           when Hash
             from_hash(attachable)
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
-            StorageTables::Blob.create_and_upload!(io: attachable)
+            StorageTables::Blob.create_and_upload!(io: attachable, filename:)
           when Pathname
-            StorageTables::Blob.create_and_upload!(io: attachable.open)
+            StorageTables::Blob.create_and_upload!(io: attachable.open, filename:)
           when ActiveStorage::Blob
-            StorageTables::Blob.create_and_upload!(io: StringIO.new(attachable.download))
+            StorageTables::Blob.create_and_upload!(io: StringIO.new(attachable.download), filename:)
           else
             raise(
               ArgumentError,
@@ -104,7 +106,7 @@ module StorageTables
           return attachable[:blob] if attachable[:blob]
           return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
 
-          StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename), filename:)
         end
       end
     end

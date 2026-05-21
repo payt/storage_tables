@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "database/setup"
+require "active_support/testing/method_call_assertions"
 
 module StorageTables
   class ManyAttachedTest < ActiveSupport::TestCase
@@ -635,5 +636,38 @@ module StorageTables
     #     @user.highlights_with_preprocessed.attach unrepresentable_blob
     #   end
     # end
+
+    test "custom filename from Array-form Rack::Test::UploadedFile is passed to service upload" do
+      assert_filenames_on_upload("custom.jpg") do
+        @user.highlights.attach [fixture_file_upload("racecar.jpg"), "custom.jpg"]
+      end
+    end
+
+    test "custom filenames from multiple Array-form uploaded files are passed to service upload" do
+      assert_filenames_on_upload(["custom1.jpg", "custom2.mp4"]) do
+        @user.highlights.attach [fixture_file_upload("racecar.jpg"), "custom1.jpg"],
+                                [fixture_file_upload("video.mp4"), "custom2.mp4"]
+      end
+    end
+
+    private
+
+    def assert_filenames_on_upload(expected, &)
+      filenames = []
+      service = StorageTables::Blob.service
+      original = service.method(:upload)
+      service.stub(:upload, lambda { |*args, **kwargs|
+        filenames << kwargs[:filename]
+        original.call(*args, **kwargs)
+      }, &)
+
+      expected = Array(expected)
+
+      assert_not_empty filenames, "Expected service.upload to be called at least once"
+      assert expected.all? { |f| filenames.map(&:to_s).include?(f) },
+             "Expected filenames #{expected.inspect} in upload calls, got #{filenames.map(&:to_s).inspect}"
+      assert filenames.map(&:to_s).all? { |f| expected.include?(f) },
+             "Unexpected filenames in upload calls: #{(filenames.map(&:to_s) - expected).inspect}"
+    end
   end
 end

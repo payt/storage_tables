@@ -251,6 +251,23 @@ if SERVICE_CONFIGURATIONS[:s3]
           @service.delete checksum
         end
 
+        test "upload with plain string filename and attachment disposition" do
+          data = "Something else entirely!"
+          checksum = generate_checksum(data)
+
+          @service.upload(
+            checksum,
+            StringIO.new(data),
+            filename: "cool_data.txt",
+            disposition: :attachment
+          )
+
+          assert_equal("attachment; filename=\"cool_data.txt\"; filename*=UTF-8''cool_data.txt",
+                       @service.bucket.object(safe_checksum(checksum)).content_disposition)
+        ensure
+          @service.delete checksum
+        end
+
         test "uploading a large object in multiple parts" do
           service = build_service(upload: { multipart_threshold: 5.megabytes })
 
@@ -356,5 +373,5 @@ if SERVICE_CONFIGURATIONS[:s3]
     end
   end
 else
-  puts "Skipping S3 Service tests because no S3 configuration was supplied"
+  Rails.logger.debug "Skipping S3 Service tests because no S3 configuration was supplied"
 end

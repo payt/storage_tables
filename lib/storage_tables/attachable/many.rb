@@ -44,7 +44,9 @@ module StorageTables
       end
 
       def upload_many
-        change.pending_uploads.each { |uploadable| upload(uploadable.attachable, uploadable.blob) }
+        change.pending_uploads.each do |uploadable|
+          upload(uploadable.attachable, uploadable.blob, filename: uploadable.filename)
+        end
       end
     end
   end

@@ -8,7 +8,8 @@ module StorageTables
       @service = service
     end
 
-    def open(checksum, verify: true, name: "StorageTables-#{checksum}", tmpdir: nil)
+    def open(checksum, verify: true, name: nil, tmpdir: nil)
+      name ||= "StorageTables-#{service.refactored_checksum(checksum)}"
       open_tempfile(name, tmpdir) do |file|
         download checksum, file
         verify_integrity_of(file, checksum:) if verify

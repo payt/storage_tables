@@ -7,11 +7,11 @@ class User < ApplicationRecord
   validates :name, presence: true
 end
 
-class Group < ApplicationRecord # rubocop:disable Style/OneClassPerFile
+class Group < ApplicationRecord
   has_one_stored :image, class_name: "StorageTables::GroupAttachment"
 end
 
-module StorageTables # rubocop:disable Style/OneClassPerFile
+module StorageTables
   class UserAvatarAttachment < StorageTables::Attachment
     belongs_to :record, class_name: "User", inverse_of: :avatar_storage_attachment
   end

@@ -16,7 +16,7 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __d
 SERVICE_CONFIGURATIONS = begin
   ActiveSupport::ConfigurationFile.parse(File.expand_path("service/configurations.yml", __dir__)).deep_symbolize_keys
 rescue Errno::ENOENT
-  puts "Missing service configuration file in test/service/configurations.yml"
+  Rails.logger.debug "Missing service configuration file in test/service/configurations.yml"
   {}
 end
 
@@ -52,8 +52,9 @@ module ActiveSupport
     end
 
     def create_file_blob(filename: "racecar.jpg", content_type: "image/jpeg", metadata: nil)
+      upload = fixture_file_upload(filename)
       StorageTables::Blob.create_and_upload!(
-        io: fixture_file_upload(filename).open, content_type:, metadata:
+        io: upload.open, content_type:, metadata:
       )
     end
 

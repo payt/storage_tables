@@ -253,5 +253,77 @@ module StorageTables
         end
       end
     end
+
+    test "filename from ActionDispatch::Http::UploadedFile is passed to service upload" do
+      upload = ActionDispatch::Http::UploadedFile.new(
+        filename: "racecar.jpg",
+        type: "image/jpeg",
+        tempfile: fixture_file_upload("racecar.jpg")
+      )
+      assert_filenames_on_upload("racecar.jpg") { @user.avatar.attach(upload) }
+    end
+
+    test "filename from Pathname is passed to service upload" do
+      assert_filenames_on_upload("racecar.jpg") { @user.avatar.attach(file_fixture("racecar.jpg")) }
+    end
+
+    test "filename from Rack::Test::UploadedFile is passed to service upload" do
+      assert_filenames_on_upload("racecar.jpg") { @user.avatar.attach(fixture_file_upload("racecar.jpg")) }
+    end
+
+    test "filename from Hash is passed to service upload" do
+      assert_filenames_on_upload("face.jpg") do
+        @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "face.jpg" })
+      end
+    end
+
+    test "explicit filename kwarg on Hash attachable is passed to service upload" do
+      assert_filenames_on_upload("override.jpg") do
+        @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "image/jpeg" }, filename: "override.jpg")
+      end
+    end
+
+    test "filename from File is passed to service upload" do
+      assert_filenames_on_upload("racecar.jpg") do
+        @user.avatar.attach(file_fixture("racecar.jpg").open)
+      end
+    end
+
+    test "filename from ActiveStorage::Blob is passed to service upload" do
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: StringIO.new("STUFF"),
+        content_type: "image/jpeg",
+        filename: "town.jpg"
+      )
+      assert_filenames_on_upload("town.jpg") { @user.avatar.attach(blob) }
+    end
+
+    test "filename is passed to service upload via model setter" do
+      upload = ActionDispatch::Http::UploadedFile.new(
+        filename: "racecar.jpg",
+        type: "image/jpeg",
+        tempfile: fixture_file_upload("racecar.jpg")
+      )
+      assert_filenames_on_upload("racecar.jpg") do
+        @user.avatar = upload
+        @user.save!
+      end
+    end
+
+    private
+
+    def assert_filenames_on_upload(expected, &)
+      filenames = []
+      service = StorageTables::Blob.service
+      original = service.method(:upload)
+      service.stub(:upload, lambda { |*args, **kwargs|
+        filenames << kwargs[:filename]
+        original.call(*args, **kwargs)
+      }, &)
+
+      assert_not_empty filenames, "Expected service.upload to be called at least once"
+      assert filenames.all? { |f| f.to_s == expected },
+             "Expected filename #{expected.inspect} on all upload calls, got #{filenames.map(&:to_s).inspect}"
+    end
   end
 end

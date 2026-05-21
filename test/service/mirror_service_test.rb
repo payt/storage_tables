@@ -68,12 +68,15 @@ module StorageTables
         checksum = generate_checksum(data)
 
         @service.primary.upload(checksum, StringIO.new(data))
+        @service.mirrors.each { |mirror| mirror.delete(checksum) }
 
         @service.mirror(checksum)
 
         assert_equal data, @service.mirrors.first.download(checksum)
         assert_equal data, @service.mirrors.second.download(checksum)
         assert_equal data, @service.mirrors.third.download(checksum)
+      ensure
+        @service.delete checksum
       end
 
       test "mirroring a file from the primary service to secondary services where it already exists" do
