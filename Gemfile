@@ -29,5 +29,6 @@ gem "simplecov", require: false
 
 gem "minitest", "~> 6.0"
 gem "minitest-hooks"
+gem "minitest-mock"
 gem "vcr"
 gem "webmock"
