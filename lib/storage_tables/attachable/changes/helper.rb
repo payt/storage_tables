@@ -21,7 +21,7 @@ module StorageTables
         end
 
         # Uploads the attachable to the blob.
-        def upload(attachable, blob, filename: nil)
+        def upload(attachable, blob, filename: nil, disposition: nil)
           if ActiveRecord::Base.connection.open_transactions > MAX_TRANSACTIONS_OPEN
             raise StorageTables::ActiveRecordError, "Cannot upload a blob inside a transaction"
           end
@@ -30,18 +30,18 @@ module StorageTables
 
           case attachable
           when ActionDispatch::Http::UploadedFile, Pathname
-            blob.upload_without_unfurling(attachable.open, filename:)
+            blob.upload_without_unfurling(attachable.open, filename:, disposition:)
           when Rack::Test::UploadedFile
             blob.upload_without_unfurling(
               attachable.respond_to?(:open) ? attachable.open : attachable,
-              filename:
+              filename:, disposition:
             )
           when Hash
-            blob.upload_without_unfurling(attachable.fetch(:io), filename:)
+            blob.upload_without_unfurling(attachable.fetch(:io), filename:, disposition:)
           when File
-            blob.upload_without_unfurling(attachable, filename:)
+            blob.upload_without_unfurling(attachable, filename:, disposition:)
           when ActiveStorage::Blob
-            blob.upload_without_unfurling(StringIO.new(attachable.download), filename:)
+            blob.upload_without_unfurling(StringIO.new(attachable.download), filename:, disposition:)
           end
         rescue StandardError
           blob.destroy!

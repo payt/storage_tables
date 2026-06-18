@@ -14,7 +14,7 @@ module StorageTables
       # Returns true if any attachments have been made.
       #
       #   class Gallery < ApplicationRecord
-      #     has_many_attached :photos
+      #     has_many_stored :photos
       #   end
       #
       #   Gallery.new.photos.attached? # => false
@@ -45,7 +45,8 @@ module StorageTables
 
       def upload_many
         change.pending_uploads.each do |uploadable|
-          upload(uploadable.attachable, uploadable.blob, filename: uploadable.filename)
+          upload(uploadable.attachable, uploadable.blob, filename: uploadable.filename,
+                                                         disposition: default_disposition)
         end
       end
     end

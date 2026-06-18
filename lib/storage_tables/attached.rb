@@ -7,11 +7,12 @@ module StorageTables
   # Abstract base class for the concrete StorageTables::Attached::One and StorageTables::Attached::Many
   # classes that both provide proxy access to the blob association for a record.
   class Attached
-    attr_reader :name, :record
+    attr_reader :name, :record, :default_disposition
 
-    def initialize(name, record)
+    def initialize(name, record, default_disposition: nil)
       @name = name
       @record = record
+      @default_disposition = default_disposition
     end
 
     private

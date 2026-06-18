@@ -67,6 +67,10 @@ module StorageTables
           record.public_send(:"#{name}_storage_attachment")
         end
 
+        def default_disposition
+          record.attachment_reflections[name].options[:disposition]
+        end
+
         def find_or_build_blob
           case attachable
           when StorageTables::Blob
@@ -75,24 +79,27 @@ module StorageTables
             StorageTables::Blob.create_and_upload!(
               io: attachable.open,
               content_type: attachable.content_type,
-              filename:
+              filename:,
+              disposition: default_disposition
             )
           when Rack::Test::UploadedFile
             StorageTables::Blob.create_and_upload!(
               io: attachable.respond_to?(:open) ? attachable.open : attachable,
               content_type: attachable.content_type,
-              filename:
+              filename:,
+              disposition: default_disposition
             )
           when Hash
             from_hash(attachable)
           when String
             StorageTables::Blob.find_signed!(attachable)
           when File
-            StorageTables::Blob.create_and_upload!(io: attachable, filename:)
+            StorageTables::Blob.create_and_upload!(io: attachable, filename:, disposition: default_disposition)
           when Pathname
-            StorageTables::Blob.create_and_upload!(io: attachable.open, filename:)
+            StorageTables::Blob.create_and_upload!(io: attachable.open, filename:, disposition: default_disposition)
           when ActiveStorage::Blob
-            StorageTables::Blob.create_and_upload!(io: StringIO.new(attachable.download), filename:)
+            StorageTables::Blob.create_and_upload!(io: StringIO.new(attachable.download), filename:,
+                                                   disposition: default_disposition)
           else
             raise(
               ArgumentError,
@@ -106,7 +113,8 @@ module StorageTables
           return attachable[:blob] if attachable[:blob]
           return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
 
-          StorageTables::Blob.create_and_upload!(**attachable.except(:filename), filename:)
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename), filename:,
+                                                                                 disposition: default_disposition)
         end
       end
     end

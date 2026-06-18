@@ -30,7 +30,7 @@ module StorageTables
         ensure_integrity_of(checksum, io)
 
         instrument(:upload, checksum:) do
-          content_disposition = content_disposition_with(filename:, type: disposition) if disposition && filename
+          content_disposition = content_disposition_with(filename:, type: disposition) if filename
 
           if io.size < multipart_upload_threshold
             upload_with_single_part(checksum, io, content_type:,

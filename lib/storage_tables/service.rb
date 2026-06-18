@@ -116,8 +116,8 @@ module StorageTables
       )
     end
 
-    def content_disposition_with(filename:, type: "inline")
-      disposition = type.to_s.presence_in(["attachment", "inline"]) || "inline"
+    def content_disposition_with(filename:, type: "attachment")
+      disposition = type.to_s.presence_in(["attachment", "inline"]) || "attachment"
       ActionDispatch::Http::ContentDisposition.format(disposition:, filename: Filename.wrap(filename).sanitized)
     end
 

@@ -3,7 +3,7 @@
 module StorageTables
   # Storage Tables reflection extensions for Active Record.
   module Reflection
-    # Holds all the metadata about a has_one_attached attachment as it was
+    # Holds all the metadata about a has_one_stored attachment as it was
     # specified in the Active Record class.
     class HasOneStoredAttachmentReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro
@@ -11,7 +11,7 @@ module StorageTables
       end
     end
 
-    # Holds all the metadata about a has_many_attached attachment as it was
+    # Holds all the metadata about a has_many_stored attachment as it was
     # specified in the Active Record class.
     class HasManyStoredAttachmentsReflection < ActiveRecord::Reflection::MacroReflection # :nodoc:
       def macro

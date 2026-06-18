@@ -69,9 +69,9 @@ module StorageTables
       # Creates a new blob instance and then uploads the contents of
       # the given <tt>io</tt> to the service. The blob instance is going to
       # be saved before the upload begins to prevent the upload clobbering another due to key collisions.
-      def create_and_upload!(io:, content_type: nil, filename: nil, metadata: nil)
+      def create_and_upload!(io:, content_type: nil, filename: nil, metadata: nil, disposition: nil)
         create_after_unfurling!(io:, content_type:, metadata:).tap do |blob|
-          blob.upload_without_unfurling(io, filename:)
+          blob.upload_without_unfurling(io, filename:, disposition:)
         end
       end
 
@@ -134,8 +134,10 @@ module StorageTables
 
     # Uploads the file associated with this blob to the service.
     # When uploading fails the blob is deleted from the database, as it is not usable.
-    def upload_without_unfurling(io, filename: nil)
-      service.upload checksum, io, checksum:, filename:, **service_metadata
+    def upload_without_unfurling(io, filename: nil, disposition: nil)
+      metadata = service_metadata
+      metadata[:disposition] = disposition if disposition && !forcibly_serve_as_binary?
+      service.upload checksum, io, checksum:, filename:, **metadata
     rescue StorageTables::ServiceError
       destroy!
       raise

@@ -11,7 +11,7 @@ module StorageTables
       # Returns +true+ if an attachment is not attached.
       #
       #   class User < ApplicationRecord
-      #     has_one_attached :avatar
+      #     has_one_stored :avatar
       #   end
       #
       #   User.new.avatar.blank? # => true
@@ -22,7 +22,7 @@ module StorageTables
       # Returns +true+ if an attachment has been made.
       #
       #   class User < ApplicationRecord
-      #     has_one_attached :avatar
+      #     has_one_stored :avatar
       #   end
       #
       #   User.new.avatar.attached? # => false
@@ -48,7 +48,7 @@ module StorageTables
         raise ArgumentError, "Could not determine filename from #{attachable.inspect}" unless filename
 
         record.public_send(:"#{name}=", attachable, filename)
-        blob.save! && upload(attachable, blob, filename:)
+        blob.save! && upload(attachable, blob, filename:, disposition: default_disposition)
         # :nocov:
         return if record.persisted? && !record.changed? && !record.save
         # :nocov:
