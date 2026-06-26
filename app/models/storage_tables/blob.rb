@@ -63,7 +63,22 @@ module StorageTables
       end
 
       def create_after_unfurling!(...)
-        build_after_unfurling(...).tap(&:save!)
+        attempts = 0
+        begin
+          blob = build_after_unfurling(...)
+          blob.save!
+          blob
+        rescue ActiveRecord::RecordNotUnique
+          # Race condition: another process saved the same checksum between our
+          # find_by_checksum check and save!. The blob already exists, so return
+          # it. If it was deleted in that narrow window, retry once; after that
+          # re-raise so the caller sees a real error.
+          existing = find_by_checksum(blob.checksum)
+          return existing if existing
+          attempts += 1
+          retry if attempts <= 1
+          raise
+        end
       end
 
       # Creates a new blob instance and then uploads the contents of
@@ -81,7 +96,17 @@ module StorageTables
       # Once the form using the direct upload is submitted, the blob can be associated with the right record using
       # the signed ID.
       def create_before_direct_upload!(byte_size:, checksum:, content_type:, metadata: nil)
-        create!(byte_size:, checksum:, content_type:, metadata:)
+        attempts = 0
+        begin
+          create!(byte_size:, checksum:, content_type:, metadata:)
+        rescue ActiveRecord::RecordNotUnique
+          # Same race condition as create_after_unfurling! — see comment there.
+          existing = find_by_checksum(checksum)
+          return existing if existing
+          attempts += 1
+          retry if attempts <= 1
+          raise
+        end
       end
 
       def existing_blob(checksum)
