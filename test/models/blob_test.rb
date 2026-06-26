@@ -89,6 +89,7 @@ module StorageTables
           end
         end
       end
+    end
 
     test "download yields chunks" do
       blob   = create_blob data: "a" * 5.0625.megabytes
