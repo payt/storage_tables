@@ -75,6 +75,7 @@ module StorageTables
           # re-raise so the caller sees a real error.
           existing = find_by_checksum(blob.checksum)
           return existing if existing
+          
           attempts += 1
           retry if attempts <= 1
           raise
@@ -103,6 +104,7 @@ module StorageTables
           # Same race condition as create_after_unfurling! — see comment there.
           existing = find_by_checksum(checksum)
           return existing if existing
+
           attempts += 1
           retry if attempts <= 1
           raise
