@@ -85,7 +85,7 @@ module StorageTables
       unsaved_blob.stub(:save!, -> { raise ActiveRecord::RecordNotUnique }) do
         StorageTables::Blob.stub(:build_after_unfurling, ->(**) { unsaved_blob }) do
           result = StorageTables::Blob.create_after_unfurling!(io:)
-          
+
           assert_equal existing_blob, result
         end
       end
