@@ -35,14 +35,10 @@ module StorageTables
       raise StorageTables::ActiveRecordError, "Cannot delete blob attached to a record" if attachments_count.positive?
 
       delete_result = service.delete(checksum)
-
-      begin
-        super
-      rescue StandardError
-        service.restore(checksum, delete_result)
-
-        raise
-      end
+      super
+    rescue StandardError
+      service.restore(checksum, delete_result)
+      raise
     end
 
     # Check if file exists on disk
@@ -63,7 +59,21 @@ module StorageTables
       end
 
       def create_after_unfurling!(...)
-        build_after_unfurling(...).tap(&:save!)
+        blob = build_after_unfurling(...)
+        blob.save!
+        blob
+      rescue ActiveRecord::RecordNotUnique
+        # Race condition: another process saved the same checksum between our
+        # find_by_checksum check and save!. The blob already exists, so return
+        # it. If it was deleted in that narrow window, retry once; after that
+        # re-raise so the caller sees a real error.
+        existing = find_by_checksum(blob.checksum)
+        return existing if existing
+
+        attempts ||= 0
+        attempts += 1
+        retry if attempts <= 1
+        raise
       end
 
       # Creates a new blob instance and then uploads the contents of
@@ -82,6 +92,15 @@ module StorageTables
       # the signed ID.
       def create_before_direct_upload!(byte_size:, checksum:, content_type:, metadata: nil)
         create!(byte_size:, checksum:, content_type:, metadata:)
+      rescue ActiveRecord::RecordNotUnique
+        # Same race condition as create_after_unfurling! — see comment there.
+        existing = find_by_checksum(checksum)
+        return existing if existing
+
+        attempts ||= 0
+        attempts += 1
+        retry if attempts <= 1
+        raise
       end
 
       def existing_blob(checksum)

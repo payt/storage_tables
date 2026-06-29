@@ -73,6 +73,40 @@ module StorageTables
       assert_equal blob, blob2
     end
 
+    test "create_after_unfurling! returns existing blob on concurrent insert race" do
+      # Pre-existing blob (simulates the winner of the race)
+      existing_blob = create_file_blob
+      file_fixture("racecar.jpg").open do |io|
+        # Simulate the loser: build_after_unfurling returns a new unsaved blob,
+        # save! raises RecordNotUnique (as if another process just inserted it),
+        # and the rescue lookup finds the blob that already exists in the DB.
+        unsaved_blob = StorageTables::Blob.new(checksum: existing_blob.checksum)
+        unsaved_blob.stub(:save!, -> { raise ActiveRecord::RecordNotUnique }) do
+          StorageTables::Blob.stub(:build_after_unfurling, ->(**) { unsaved_blob }) do
+            result = StorageTables::Blob.create_after_unfurling!(io:)
+
+            assert_equal existing_blob, result
+          end
+        end
+      end
+    end
+
+    test "create_before_direct_upload! returns existing blob on concurrent insert race" do
+      # Pre-existing blob (simulates the winner of the race)
+      existing_blob = create_file_blob
+      # Simulate the loser: create! raises RecordNotUnique (as if another process just inserted it),
+      # and the rescue lookup finds the blob that already exists in the DB.
+      StorageTables::Blob.stub(:create!, ->(**) { raise ActiveRecord::RecordNotUnique }) do
+        result = StorageTables::Blob.create_before_direct_upload!(
+          byte_size: existing_blob.byte_size,
+          checksum: existing_blob.checksum,
+          content_type: existing_blob.content_type
+        )
+
+        assert_equal existing_blob, result
+      end
+    end
+
     test "download yields chunks" do
       blob   = create_blob data: "a" * 5.0625.megabytes
       chunks = []
