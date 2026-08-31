@@ -8,15 +8,11 @@
 
   "remoteUser": "${localEnv:DOCKER_CONTAINER_USER:runner}",
 
-  "mounts": [
-    "source=${localEnv:HOME}/.dev_container,target=${localEnv:DOCKER_CONTAINER_HOME:/home/runner}/.dev_container,readonly,type=bind"
-  ],
-
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [5432],
 
   // Run commands after the container is created.
-  "postCreateCommand": "cp -r ~/.dev_container/. ~; bundle install; bundle exec rails db:reset RAILS_ENV=test",
+  "postCreateCommand": "bundle install && bundle exec rails db:reset RAILS_ENV=test",
 
   "customizations": {
     "vscode": {
