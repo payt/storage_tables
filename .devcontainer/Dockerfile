@@ -6,6 +6,9 @@ ARG bundler_version=2.6.9
 
 USER root
 
+RUN useradd -m -s /bin/bash runner && \
+  echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn.gpg && \
   echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list
 
