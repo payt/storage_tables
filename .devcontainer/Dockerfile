@@ -6,8 +6,9 @@ ARG bundler_version=2.6.9
 
 USER root
 
-RUN useradd -m -s /bin/bash runner && \
-  echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN useradd -m -s /bin/bash -G rvm,nvm runner && \
+  echo "runner ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/runner && \
+  chmod 0440 /etc/sudoers.d/runner
 
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn.gpg && \
   echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list
@@ -29,3 +30,8 @@ WORKDIR /app
 COPY . .
 
 RUN bundle install
+
+# `bundle install` above runs as root, so the shared rvm gem directory ends up
+# root-owned. postCreateCommand runs later `bundle install`s as the non-root
+# `runner` user (see devcontainer.json's remoteUser), so hand it ownership.
+RUN chown -R runner:runner "$(gem env gemdir)" # cspell:disable-line
