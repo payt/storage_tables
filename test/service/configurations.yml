@@ -1,9 +1,9 @@
 s3:
   service: S3
-  access_key_id: <%= ENV.fetch("AWS_ACCESS_ID", nil) %>
-  secret_access_key: <%= ENV.fetch("AWS_ACCESS_KEY", nil) %>
-  region: <%= ENV.fetch("AWS_REGION", "aws-west-1") %>
-  bucket: <%= ENV.fetch("AWS_BUCKET", nil) %>
+  access_key_id: <%= ENV.fetch("AWS_ACCESS_ID", "set_in_dotenv_file_to_record_cassettes") %>
+  secret_access_key: <%= ENV.fetch("AWS_ACCESS_KEY", "set_in_dotenv_file_to_record_cassettes") %>
+  region: <%= ENV.fetch("AWS_REGION", "eu-west-1") %>
+  bucket: <%= ENV.fetch("AWS_BUCKET", "pay-test-storage-tables") %>
 
 local_secondary:
   service: Disk
