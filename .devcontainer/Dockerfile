@@ -34,4 +34,4 @@ RUN bundle install
 # `bundle install` above runs as root, so the shared rvm gem directory ends up
 # root-owned. postCreateCommand runs later `bundle install`s as the non-root
 # `runner` user (see devcontainer.json's remoteUser), so hand it ownership.
-RUN chown -R runner:runner "$(gem env gemdir)" # cspell:disable-line
+RUN chown -R runner:runner /app "$(gem env gemdir)" /home/runner # cspell:disable-line
