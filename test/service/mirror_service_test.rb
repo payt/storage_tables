@@ -64,7 +64,7 @@ module StorageTables
       end
 
       test "mirroring a file from the primary service to secondary services where it doesn't exist" do
-        data     = "Something else entirely!"
+        data     = "Something else entirely! (#{name})"
         checksum = generate_checksum(data)
 
         @service.primary.upload(checksum, StringIO.new(data))
@@ -77,7 +77,7 @@ module StorageTables
       end
 
       test "mirroring a file from the primary service to secondary services where it already exists" do
-        data     = "Something else entirely!"
+        data     = "Something else entirely! (#{name})"
         checksum = generate_checksum(data)
 
         @service.primary.upload(checksum, StringIO.new(data))

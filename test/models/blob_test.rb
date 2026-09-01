@@ -91,6 +91,31 @@ module StorageTables
       end
     end
 
+    test "create_after_unfurling! retries once and then re-raises when the row is gone again" do
+      saves = 0
+      unsaved_blob = StorageTables::Blob.new(checksum: OpenSSL::Digest.new("SHA3-512").base64digest("gone"))
+      raising_save = lambda do
+        saves += 1
+        raise ActiveRecord::RecordNotUnique
+      end
+
+      # The winner's row is deleted again before the retry, so the rescue lookup keeps coming
+      # up empty and the second RecordNotUnique is re-raised.
+      unsaved_blob.stub(:save!, raising_save) do
+        StorageTables::Blob.stub(:build_after_unfurling, ->(**) { unsaved_blob }) do
+          StorageTables::Blob.stub(:find_by_checksum, ->(_checksum) {}) do
+            file_fixture("racecar.jpg").open do |io|
+              assert_raises ActiveRecord::RecordNotUnique do
+                StorageTables::Blob.create_after_unfurling!(io:)
+              end
+            end
+          end
+        end
+      end
+
+      assert_equal 2, saves
+    end
+
     test "create_before_direct_upload! returns existing blob on concurrent insert race" do
       # Pre-existing blob (simulates the winner of the race)
       existing_blob = create_file_blob
@@ -105,6 +130,28 @@ module StorageTables
 
         assert_equal existing_blob, result
       end
+    end
+
+    test "create_before_direct_upload! retries once and then re-raises when the row is gone again" do
+      creates = 0
+      raising_create = lambda do |**|
+        creates += 1
+        raise ActiveRecord::RecordNotUnique
+      end
+
+      StorageTables::Blob.stub(:create!, raising_create) do
+        StorageTables::Blob.stub(:find_by_checksum, ->(_checksum) {}) do
+          assert_raises ActiveRecord::RecordNotUnique do
+            StorageTables::Blob.create_before_direct_upload!(
+              byte_size: 12,
+              checksum: OpenSSL::Digest.new("SHA3-512").base64digest("gone"),
+              content_type: "text/plain"
+            )
+          end
+        end
+      end
+
+      assert_equal 2, creates
     end
 
     test "download yields chunks" do
