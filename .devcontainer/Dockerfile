@@ -34,7 +34,7 @@ RUN bundle install
 # `bundle install` above runs as root, so the shared rvm gem directory ends up
 # root-owned. postCreateCommand runs later `bundle install`s as the non-root
 # `runner` user (see devcontainer.json's remoteUser), so hand it ownership.
-RUN chown -R runner:runner /app "$(gem env gemdir)" /home/runner && \
+RUN chown -R runner:runner /app "$(gem env gemdir)" && \
   git config --system --add safe.directory '*' && \
   git config --system core.hardlinks false && \
   git config --system core.excludesfile '~/.gitignore'
