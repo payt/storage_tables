@@ -10,7 +10,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 0d8a823c-80a1-49f2-a970-0b6a106408c4
+      - 49c4dcd1-5882-4314-b197-14d4c7ab3a0f
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
@@ -30,11 +30,11 @@ http_interactions:
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100503Z
+      - 20260901T110408Z
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;content-encoding;content-md5;content-type;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-sdk-checksum-algorithm;x-amz-trailer,
-        Signature=265c43fa9aea696159a5f6771e93feb929d311b0a2459087ca02940e4f9159fe
+        Signature=888f31d13a8b05437c73e1f2874bf3dfd2cae3d4f0d409a33ef60a8aebd0d75d
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,U,D,n
@@ -48,13 +48,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - K10qZXSN4joaWcgQKikPtNvsSWalD8lsBF6GjS7kSCJS/mHRmjytzAOTD3XKRys6qUsfkkCmfhswcCreZNrZDRKtDQLoXm9C
+      - MQxK0YdZbA2j6+HJwZOUO8ipsxltLbzQ0FX6jVDJIFQVO3phf7ZskH8lBrzMqaA6Rz3w//JuDt05DkqUbmiWCJdOdTI3NtMw
       X-Amz-Request-Id:
-      - 19N0994F783AE28M
+      - GM2HTHFYMXY57SPZ
       Date:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:09 GMT
       X-Amz-Version-Id:
-      - U_IOCND6VDtfDAGkbMzuUecBVpjiKNIt
+      - GA9lP5IrTkijxPYaZXl43QJa.vziQeGt
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
@@ -70,7 +70,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:03 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:08 GMT
 - request:
     method: put
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -81,7 +81,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 16c872d8-5da4-4da2-af8b-41ab42ae8880
+      - c6741dde-dfd6-40f4-a675-e3c7963c0edf
       Content-Disposition:
       - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
       Content-Md5:
@@ -103,11 +103,11 @@ http_interactions:
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100503Z
+      - 20260901T110408Z
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;content-disposition;content-encoding;content-md5;content-type;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-sdk-checksum-algorithm;x-amz-trailer,
-        Signature=0309b1ac9c826c81bd1f55306a7edf3a290e159c8d7ab223f96c3571265a3937
+        Signature=6276edfeade7e29b6b0a353feb48cb550bbfac0ed4b4a36059a3e8f052aff83a
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,U,D,n
@@ -121,13 +121,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - GkU8cwiWxb8hxkz6NtGNc2Z11LKZhPyXB1Cn8K7lGT6eFNx//XXdTMacvB8IDDTYr3E+aMmhkZDs0furkQZwK1ipyALQCxHH
+      - GXP72HlLKyNTwsNHpOiSvwpZeYcITSt6PJlvhfVyK7JRIVxpBFouHChHm8jSJ/iLGkkmNAl58sEW+f80B+HopHpfrPXv4B02
       X-Amz-Request-Id:
-      - 19N4CYH6W9Q4YN07
+      - GM2QDB074GMTK1B5
       Date:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:09 GMT
       X-Amz-Version-Id:
-      - PVK6vGZB6ZIIM2ZEyFtnHcngxN_aR97r
+      - mHdy6nbs1m3F_nsxYN_pSAaxo9P7BtnR
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
@@ -143,7 +143,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:03 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:08 GMT
 - request:
     method: head
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -154,17 +154,17 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 408cda7d-4445-4c1d-aed1-b1fde9947e57
+      - d3c2eccc-65bf-4d2d-a65d-0c5fd15aa871
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100503Z
+      - 20260901T110408Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
-        Signature=606f3a771556b159e908007565d5ef2f8f9f0fb26f14b4eeda73b4e20bea75b0
+        Signature=d133cb86bf713a587b454641a701383924d064507229e41bef73e4a701c82934
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,D,n
@@ -176,13 +176,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - ZvfEcvlbqs7+RjwXwRS8R9zeNgALOe0+gbiqe6DosOPxt3/eik3K5hUB0RIxjPFdPotSX1/Jm2MtLmKnPt4D6x1AcCbdRroS
+      - q8rWFG0SJwkha7B7s9Y1FE118pxvtKSuTe1Si4ehZRjRd6M0aeOlyYiIIvnn4haYsTn74OvY4g/HZ8muwLltAuWasplCPV/F
       X-Amz-Request-Id:
-      - 19N253ZXA9XDTSJB
+      - GM2Z176G4HQ21WFR
       Date:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:09 GMT
       Last-Modified:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:09 GMT
       Etag:
       - '"b228e0125acd98d401a6ecf6c67f17ed"'
       X-Amz-Server-Side-Encryption:
@@ -190,7 +190,7 @@ http_interactions:
       Content-Disposition:
       - attachment; filename="cool_data.txt"; filename*=UTF-8''cool_data.txt
       X-Amz-Version-Id:
-      - PVK6vGZB6ZIIM2ZEyFtnHcngxN_aR97r
+      - mHdy6nbs1m3F_nsxYN_pSAaxo9P7BtnR
       Accept-Ranges:
       - bytes
       Content-Type:
@@ -202,7 +202,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:03 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:08 GMT
 - request:
     method: delete
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/ijE1ESBohBPSPPMoKg3-m7Xd3aEIz41r7iFVlrUVZrgRyuD7PO5XjesEnT2mUgr51sLo_sDZRBZefMZUl10m1A==
@@ -213,17 +213,17 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 3ccfa2b4-e878-4146-8f2e-2d90ba9c2aac
+      - 5b26dcfd-0379-4a1d-a6e9-2c4820c19bea
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100503Z
+      - 20260901T110408Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
-        Signature=dfe006d1d49809825726e2dbd4a80af2d26ac71c94668dc41b381320fc69372f
+        Signature=d30699e752646a22be6d14d3ae476b1b12d6e359917f00553fe4b0fa562cbea6
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,D,n
@@ -235,13 +235,13 @@ http_interactions:
       message: No Content
     headers:
       X-Amz-Id-2:
-      - Sjgumr7J1eReoWWKwJ0xpr/g516Hg2yaAA0ty3wIOEQFtE3Jr5aK60MfahNXQATwiruF80t1Mn7SHVdH5X7M31dHZFPECn6t
+      - jMuiiyjolU0/7sfAriWIWWKGRuns9JMQaYYDDMjq/iQE7eMUnIpI0FNXtVzbS/JDQF71yTKzsMEq04GIBm+/JDoyhvFLcCYo
       X-Amz-Request-Id:
-      - 19N49KCJZ6Z5RCHW
+      - GM2YHJSJ6X3FVN67
       Date:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:09 GMT
       X-Amz-Version-Id:
-      - OKp.cr60L3AhrRD4jlsw.ebvjR.tIm1P
+      - dQrnOy5j4vwsH2.2153cyAW1PQ._jja1
       X-Amz-Delete-Marker:
       - 'true'
       Server:
@@ -249,5 +249,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:03 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:08 GMT
 recorded_with: VCR 6.4.0

@@ -2,60 +2,6 @@
 http_interactions:
 - request:
     method: put
-    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6KON22367AQZA463/20250625/eu-west-1/s3/aws4_request&X-Amz-Date=20250625T104455Z&X-Amz-Expires=300&X-Amz-Signature=40c98d7b72dafb237d89ec597dba1db9dc6bd911452b34024909dca958084193&X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost&x-amz-checksum-crc32=AAAAAA==&x-amz-sdk-checksum-algorithm=CRC32
-    body:
-      encoding: UTF-8
-      string: Some text that is longer than the specified content length
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Content-Type:
-      - text/plain
-      Content-Md5:
-      - LScqXwz5IEMr2RuXMHDKyw==
-  response:
-    status:
-      code: 403
-      message: Forbidden
-    headers:
-      X-Amz-Request-Id:
-      - JHPV0EWJTZXX7BBF
-      X-Amz-Id-2:
-      - E8f2FfFBS8fEhhYcwe0pn2i+qeTC1aH8mn93YarLMhJboKWLLrvoBETmhR/4LJAoHkER6SVkIlE3v+fwSZjqfw==
-      Content-Type:
-      - application/xml
-      Transfer-Encoding:
-      - chunked
-      Date:
-      - Wed, 25 Jun 2025 10:44:55 GMT
-      Connection:
-      - close
-      Server:
-      - AmazonS3
-    body:
-      encoding: UTF-8
-      string: |-
-        <?xml version="1.0" encoding="UTF-8"?>
-        <Error><Code>SignatureDoesNotMatch</Code><Message>The request signature we calculated does not match the signature you provided. Check your key and signing method.</Message><AWSAccessKeyId>AKIA6KON22367AQZA463</AWSAccessKeyId><StringToSign>AWS4-HMAC-SHA256
-        20250625T104455Z
-        20250625/eu-west-1/s3/aws4_request
-        7de5ca6452291e62cf4e473538a2c4dbd278e38877be5b1231bb8ec5721005d1</StringToSign><SignatureProvided>40c98d7b72dafb237d89ec597dba1db9dc6bd911452b34024909dca958084193</SignatureProvided><StringToSignBytes>41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 0a 32 30 32 35 30 36 32 35 54 31 30 34 34 35 35 5a 0a 32 30 32 35 30 36 32 35 2f 65 75 2d 77 65 73 74 2d 31 2f 73 33 2f 61 77 73 34 5f 72 65 71 75 65 73 74 0a 37 64 65 35 63 61 36 34 35 32 32 39 31 65 36 32 63 66 34 65 34 37 33 35 33 38 61 32 63 34 64 62 64 32 37 38 65 33 38 38 37 37 62 65 35 62 31 32 33 31 62 62 38 65 63 35 37 32 31 30 30 35 64 31</StringToSignBytes><CanonicalRequest>PUT
-        /qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg%3D%3D
-        X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA6KON22367AQZA463%2F20250625%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20250625T104455Z&amp;X-Amz-Expires=300&amp;X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost&amp;x-amz-checksum-crc32=AAAAAA%3D%3D&amp;x-amz-sdk-checksum-algorithm=CRC32
-        content-length:58
-        content-md5:LScqXwz5IEMr2RuXMHDKyw==
-        content-type:text/plain
-        host:pay-test-storage-tables.s3.eu-west-1.amazonaws.com
-
-        content-length;content-md5;content-type;host
-        UNSIGNED-PAYLOAD</CanonicalRequest><CanonicalRequestBytes>50 55 54 0a 2f 71 51 38 49 6f 78 37 53 2d 65 4c 68 39 68 58 34 62 52 6d 58 59 30 62 53 2d 6f 52 37 47 75 41 62 57 49 33 7a 45 42 73 43 71 32 38 4b 35 52 50 4e 4b 55 5a 32 4d 32 47 2d 38 7a 67 7a 62 34 71 54 64 6f 5f 44 5f 56 56 37 61 69 74 6b 72 68 4c 4e 7a 4b 77 64 46 67 25 33 44 25 33 44 0a 58 2d 41 6d 7a 2d 41 6c 67 6f 72 69 74 68 6d 3d 41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 26 58 2d 41 6d 7a 2d 43 72 65 64 65 6e 74 69 61 6c 3d 41 4b 49 41 36 4b 4f 4e 32 32 33 36 37 41 51 5a 41 34 36 33 25 32 46 32 30 32 35 30 36 32 35 25 32 46 65 75 2d 77 65 73 74 2d 31 25 32 46 73 33 25 32 46 61 77 73 34 5f 72 65 71 75 65 73 74 26 58 2d 41 6d 7a 2d 44 61 74 65 3d 32 30 32 35 30 36 32 35 54 31 30 34 34 35 35 5a 26 58 2d 41 6d 7a 2d 45 78 70 69 72 65 73 3d 33 30 30 26 58 2d 41 6d 7a 2d 53 69 67 6e 65 64 48 65 61 64 65 72 73 3d 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 25 33 42 63 6f 6e 74 65 6e 74 2d 6d 64 35 25 33 42 63 6f 6e 74 65 6e 74 2d 74 79 70 65 25 33 42 68 6f 73 74 26 78 2d 61 6d 7a 2d 63 68 65 63 6b 73 75 6d 2d 63 72 63 33 32 3d 41 41 41 41 41 41 25 33 44 25 33 44 26 78 2d 61 6d 7a 2d 73 64 6b 2d 63 68 65 63 6b 73 75 6d 2d 61 6c 67 6f 72 69 74 68 6d 3d 43 52 43 33 32 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3a 35 38 0a 63 6f 6e 74 65 6e 74 2d 6d 64 35 3a 4c 53 63 71 58 77 7a 35 49 45 4d 72 32 52 75 58 4d 48 44 4b 79 77 3d 3d 0a 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3a 74 65 78 74 2f 70 6c 61 69 6e 0a 68 6f 73 74 3a 70 61 79 2d 74 65 73 74 2d 73 74 6f 72 61 67 65 2d 74 61 62 6c 65 73 2e 73 33 2e 65 75 2d 77 65 73 74 2d 31 2e 61 6d 61 7a 6f 6e 61 77 73 2e 63 6f 6d 0a 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3b 63 6f 6e 74 65 6e 74 2d 6d 64 35 3b 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3b 68 6f 73 74 0a 55 4e 53 49 47 4e 45 44 2d 50 41 59 4c 4f 41 44</CanonicalRequestBytes><RequestId>JHPV0EWJTZXX7BBF</RequestId><HostId>E8f2FfFBS8fEhhYcwe0pn2i+qeTC1aH8mn93YarLMhJboKWLLrvoBETmhR/4LJAoHkER6SVkIlE3v+fwSZjqfw==</HostId></Error>
-  recorded_at: Wed, 25 Jun 2025 10:44:55 GMT
-- request:
-    method: put
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/FD-t6iGdBMIvGJ-VoUuqJFBuhM4pk4e9k8xRs3vtuub21wbzw-N35A7h8tu5w7CNiee5L6_u8yM0WRrxbARqcw==
     body:
       encoding: UTF-8
@@ -64,7 +10,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 4e53ce45-f288-4330-8b8f-13280402527a
+      - de365d81-7677-49db-8caf-feefc5b1ea68
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
@@ -84,11 +30,11 @@ http_interactions:
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100504Z
+      - 20260901T110418Z
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;content-encoding;content-md5;content-type;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-sdk-checksum-algorithm;x-amz-trailer,
-        Signature=34c808b41b4fe177ea73e8db6744719dfd97438d67cf170b8d8b29d714355a3e
+        Signature=57d4faaf683288b4bc900ab7d3b52be0e4e4b8b1ad5268994ae22dceb63af60e
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,U,D,n
@@ -102,13 +48,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - 851B3ez9QA8zxL6X7sC/dDCJ8UdMrdsty2Q7yeBY0AhDWMqd75m8dkUy/o5XqJp3kLqamrO54QFyPHf67EX+wmSHZIE6bo8t
+      - Ac9WXoTY3VXCgkWIV7jcO0zOFyoySush6ShEtT33ZBiLq6MrvCGrDXY/4V9QkP7HvE9wWlSyUuBv0Cb9/SOaQwpjcAot/g9L
       X-Amz-Request-Id:
-      - NZFYEEV5R31Z0CCN
+      - 8WHQR0B1A7K484E0
       Date:
-      - Tue, 01 Sep 2026 10:05:05 GMT
+      - Tue, 01 Sep 2026 11:04:19 GMT
       X-Amz-Version-Id:
-      - LNMHd4WUzCYeWX3JPBOeHA5nLKhD_z7Z
+      - ry7tGCgBn916hSrLnxgXLcr3zjQ7sMiD
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
@@ -124,10 +70,10 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:04 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:18 GMT
 - request:
     method: put
-    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request&X-Amz-Date=20260901T100504Z&X-Amz-Expires=300&X-Amz-Signature=f184dce733ef3e7f1686035d07fca1efdfa6680fa513c942f2c6ec8a8c69c1ff&X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost
+    uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request&X-Amz-Date=20260901T110418Z&X-Amz-Expires=300&X-Amz-Signature=ca225e40ed76a6ce169e606cf3f841ed6588fc4b8a5d68048b8146fa99967612&X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost
     body:
       encoding: UTF-8
       string: Some text that is longer than the specified content length
@@ -148,15 +94,15 @@ http_interactions:
       message: Forbidden
     headers:
       X-Amz-Request-Id:
-      - NZFPCVYJQZ1KE2CP
+      - 8WHYGGV5K3W926MN
       X-Amz-Id-2:
-      - 7K8nsoKEtsT4a3ed+qvRO/FHg87thaYNcFt4fFyXkXkRS4fkWAwYPUtOI+nH/4mLBn1QI11Xp6lr1BEVkSNEBF7aXWrOVLlA
+      - Lo6MnugtNjSPGio9BS6F126QVke+pyI9wGVp6E7SOUj4eKglOotnimUnxBC1GqqKwB3nc1/9sKtV4v/9EgKLp7TrzObpCnai
       Content-Type:
       - application/xml
       Transfer-Encoding:
       - chunked
       Date:
-      - Tue, 01 Sep 2026 10:05:04 GMT
+      - Tue, 01 Sep 2026 11:04:18 GMT
       Connection:
       - close
       Server:
@@ -166,19 +112,19 @@ http_interactions:
       string: |-
         <?xml version="1.0" encoding="UTF-8"?>
         <Error><Code>SignatureDoesNotMatch</Code><Message>The request signature we calculated does not match the signature you provided. Check your key and signing method.</Message><AWSAccessKeyId><AWS_ACCESS_ID></AWSAccessKeyId><StringToSign>AWS4-HMAC-SHA256
-        20260901T100504Z
+        20260901T110418Z
         20260901/eu-west-1/s3/aws4_request
-        0848ab904203701a2bbc7c85bb405e52e915f5790791a56042f9bf4ace35410e</StringToSign><SignatureProvided>f184dce733ef3e7f1686035d07fca1efdfa6680fa513c942f2c6ec8a8c69c1ff</SignatureProvided><StringToSignBytes>41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 0a 32 30 32 36 30 39 30 31 54 31 30 30 35 30 34 5a 0a 32 30 32 36 30 39 30 31 2f 65 75 2d 77 65 73 74 2d 31 2f 73 33 2f 61 77 73 34 5f 72 65 71 75 65 73 74 0a 30 38 34 38 61 62 39 30 34 32 30 33 37 30 31 61 32 62 62 63 37 63 38 35 62 62 34 30 35 65 35 32 65 39 31 35 66 35 37 39 30 37 39 31 61 35 36 30 34 32 66 39 62 66 34 61 63 65 33 35 34 31 30 65</StringToSignBytes><CanonicalRequest>PUT
+        d98e6f4acad2d8d0b4d2ff91d10f080c1cb8879314258b648769765b5ffa50b8</StringToSign><SignatureProvided>ca225e40ed76a6ce169e606cf3f841ed6588fc4b8a5d68048b8146fa99967612</SignatureProvided><StringToSignBytes>41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 0a 32 30 32 36 30 39 30 31 54 31 31 30 34 31 38 5a 0a 32 30 32 36 30 39 30 31 2f 65 75 2d 77 65 73 74 2d 31 2f 73 33 2f 61 77 73 34 5f 72 65 71 75 65 73 74 0a 64 39 38 65 36 66 34 61 63 61 64 32 64 38 64 30 62 34 64 32 66 66 39 31 64 31 30 66 30 38 30 63 31 63 62 38 38 37 39 33 31 34 32 35 38 62 36 34 38 37 36 39 37 36 35 62 35 66 66 61 35 30 62 38</StringToSignBytes><CanonicalRequest>PUT
         /qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg%3D%3D
-        X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=<AWS_ACCESS_ID>%2F20260901%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20260901T100504Z&amp;X-Amz-Expires=300&amp;X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost
+        X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=<AWS_ACCESS_ID>%2F20260901%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20260901T110418Z&amp;X-Amz-Expires=300&amp;X-Amz-SignedHeaders=content-length%3Bcontent-md5%3Bcontent-type%3Bhost
         content-length:58
         content-md5:LScqXwz5IEMr2RuXMHDKyw==
         content-type:text/plain
         host:pay-test-storage-tables.s3.eu-west-1.amazonaws.com
 
         content-length;content-md5;content-type;host
-        UNSIGNED-PAYLOAD</CanonicalRequest><CanonicalRequestBytes>50 55 54 0a 2f 71 51 38 49 6f 78 37 53 2d 65 4c 68 39 68 58 34 62 52 6d 58 59 30 62 53 2d 6f 52 37 47 75 41 62 57 49 33 7a 45 42 73 43 71 32 38 4b 35 52 50 4e 4b 55 5a 32 4d 32 47 2d 38 7a 67 7a 62 34 71 54 64 6f 5f 44 5f 56 56 37 61 69 74 6b 72 68 4c 4e 7a 4b 77 64 46 67 25 33 44 25 33 44 0a 58 2d 41 6d 7a 2d 41 6c 67 6f 72 69 74 68 6d 3d 41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 26 58 2d 41 6d 7a 2d 43 72 65 64 65 6e 74 69 61 6c 3d 41 4b 49 41 36 4b 4f 4e 32 32 33 36 35 41 4e 4c 34 52 56 47 25 32 46 32 30 32 36 30 39 30 31 25 32 46 65 75 2d 77 65 73 74 2d 31 25 32 46 73 33 25 32 46 61 77 73 34 5f 72 65 71 75 65 73 74 26 58 2d 41 6d 7a 2d 44 61 74 65 3d 32 30 32 36 30 39 30 31 54 31 30 30 35 30 34 5a 26 58 2d 41 6d 7a 2d 45 78 70 69 72 65 73 3d 33 30 30 26 58 2d 41 6d 7a 2d 53 69 67 6e 65 64 48 65 61 64 65 72 73 3d 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 25 33 42 63 6f 6e 74 65 6e 74 2d 6d 64 35 25 33 42 63 6f 6e 74 65 6e 74 2d 74 79 70 65 25 33 42 68 6f 73 74 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3a 35 38 0a 63 6f 6e 74 65 6e 74 2d 6d 64 35 3a 4c 53 63 71 58 77 7a 35 49 45 4d 72 32 52 75 58 4d 48 44 4b 79 77 3d 3d 0a 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3a 74 65 78 74 2f 70 6c 61 69 6e 0a 68 6f 73 74 3a 70 61 79 2d 74 65 73 74 2d 73 74 6f 72 61 67 65 2d 74 61 62 6c 65 73 2e 73 33 2e 65 75 2d 77 65 73 74 2d 31 2e 61 6d 61 7a 6f 6e 61 77 73 2e 63 6f 6d 0a 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3b 63 6f 6e 74 65 6e 74 2d 6d 64 35 3b 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3b 68 6f 73 74 0a 55 4e 53 49 47 4e 45 44 2d 50 41 59 4c 4f 41 44</CanonicalRequestBytes><RequestId>NZFPCVYJQZ1KE2CP</RequestId><HostId>7K8nsoKEtsT4a3ed+qvRO/FHg87thaYNcFt4fFyXkXkRS4fkWAwYPUtOI+nH/4mLBn1QI11Xp6lr1BEVkSNEBF7aXWrOVLlA</HostId></Error>
-  recorded_at: Tue, 01 Sep 2026 10:05:04 GMT
+        UNSIGNED-PAYLOAD</CanonicalRequest><CanonicalRequestBytes>50 55 54 0a 2f 71 51 38 49 6f 78 37 53 2d 65 4c 68 39 68 58 34 62 52 6d 58 59 30 62 53 2d 6f 52 37 47 75 41 62 57 49 33 7a 45 42 73 43 71 32 38 4b 35 52 50 4e 4b 55 5a 32 4d 32 47 2d 38 7a 67 7a 62 34 71 54 64 6f 5f 44 5f 56 56 37 61 69 74 6b 72 68 4c 4e 7a 4b 77 64 46 67 25 33 44 25 33 44 0a 58 2d 41 6d 7a 2d 41 6c 67 6f 72 69 74 68 6d 3d 41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 26 58 2d 41 6d 7a 2d 43 72 65 64 65 6e 74 69 61 6c 3d 41 4b 49 41 36 4b 4f 4e 32 32 33 36 35 41 4e 4c 34 52 56 47 25 32 46 32 30 32 36 30 39 30 31 25 32 46 65 75 2d 77 65 73 74 2d 31 25 32 46 73 33 25 32 46 61 77 73 34 5f 72 65 71 75 65 73 74 26 58 2d 41 6d 7a 2d 44 61 74 65 3d 32 30 32 36 30 39 30 31 54 31 31 30 34 31 38 5a 26 58 2d 41 6d 7a 2d 45 78 70 69 72 65 73 3d 33 30 30 26 58 2d 41 6d 7a 2d 53 69 67 6e 65 64 48 65 61 64 65 72 73 3d 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 25 33 42 63 6f 6e 74 65 6e 74 2d 6d 64 35 25 33 42 63 6f 6e 74 65 6e 74 2d 74 79 70 65 25 33 42 68 6f 73 74 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3a 35 38 0a 63 6f 6e 74 65 6e 74 2d 6d 64 35 3a 4c 53 63 71 58 77 7a 35 49 45 4d 72 32 52 75 58 4d 48 44 4b 79 77 3d 3d 0a 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3a 74 65 78 74 2f 70 6c 61 69 6e 0a 68 6f 73 74 3a 70 61 79 2d 74 65 73 74 2d 73 74 6f 72 61 67 65 2d 74 61 62 6c 65 73 2e 73 33 2e 65 75 2d 77 65 73 74 2d 31 2e 61 6d 61 7a 6f 6e 61 77 73 2e 63 6f 6d 0a 0a 63 6f 6e 74 65 6e 74 2d 6c 65 6e 67 74 68 3b 63 6f 6e 74 65 6e 74 2d 6d 64 35 3b 63 6f 6e 74 65 6e 74 2d 74 79 70 65 3b 68 6f 73 74 0a 55 4e 53 49 47 4e 45 44 2d 50 41 59 4c 4f 41 44</CanonicalRequestBytes><RequestId>8WHYGGV5K3W926MN</RequestId><HostId>Lo6MnugtNjSPGio9BS6F126QVke+pyI9wGVp6E7SOUj4eKglOotnimUnxBC1GqqKwB3nc1/9sKtV4v/9EgKLp7TrzObpCnai</HostId></Error>
+  recorded_at: Tue, 01 Sep 2026 11:04:18 GMT
 - request:
     method: get
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==
@@ -189,19 +135,19 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - e222a271-362f-4911-a44d-746c6dd81239
+      - 93de01fd-a049-444e-86c2-4e709dcc1758
       X-Amz-Checksum-Mode:
       - ENABLED
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100504Z
+      - 20260901T110418Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-checksum-mode;x-amz-content-sha256;x-amz-date,
-        Signature=fcef54aff2d2190879e089cfc02d03f894faca2f403c18d40e78dad3b765c894
+        Signature=289be4813dca4f069e780fa4a82e45b57c1993cca338248d2260a41701e8e419
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,D,n
@@ -213,27 +159,27 @@ http_interactions:
       message: Not Found
     headers:
       X-Amz-Request-Id:
-      - NZFQW08D4ERBJH0D
+      - 8WHW8ZS9F518RN6F
       X-Amz-Id-2:
-      - csLYqmVNOznQ6JVUBmCrcXz/E447HqKME2Lgk63FyRfUTqPZMnrp1tuTbFqDhiCU+h0Gxt8ZpBB6PwaJ53+4DeHzl6FyGjqB
+      - 5eXEi6tFk2ly4s3bXqz/ydw7PoE3znS3lO7HNTT5GwKQMc7pnDDx0Of/5+hDOXffw8Pw2MTOpSWZoyofnIN1A1uL0+qS/wNG
       X-Amz-Delete-Marker:
       - 'true'
       X-Amz-Version-Id:
-      - sL7ulK0DbtHQzT58kv7tlDBmMvGQrx9g
+      - I2BDKgEpJpNbWCFZMS9OgduJVWYBDxw_
       Content-Type:
       - application/xml
       Transfer-Encoding:
       - chunked
       Date:
-      - Tue, 01 Sep 2026 10:05:03 GMT
+      - Tue, 01 Sep 2026 11:04:18 GMT
       Server:
       - AmazonS3
     body:
       encoding: UTF-8
       string: |-
         <?xml version="1.0" encoding="UTF-8"?>
-        <Error><Code>NoSuchKey</Code><Message>The specified key does not exist.</Message><Key>qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==</Key><RequestId>NZFQW08D4ERBJH0D</RequestId><HostId>csLYqmVNOznQ6JVUBmCrcXz/E447HqKME2Lgk63FyRfUTqPZMnrp1tuTbFqDhiCU+h0Gxt8ZpBB6PwaJ53+4DeHzl6FyGjqB</HostId></Error>
-  recorded_at: Tue, 01 Sep 2026 10:05:04 GMT
+        <Error><Code>NoSuchKey</Code><Message>The specified key does not exist.</Message><Key>qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==</Key><RequestId>8WHW8ZS9F518RN6F</RequestId><HostId>5eXEi6tFk2ly4s3bXqz/ydw7PoE3znS3lO7HNTT5GwKQMc7pnDDx0Of/5+hDOXffw8Pw2MTOpSWZoyofnIN1A1uL0+qS/wNG</HostId></Error>
+  recorded_at: Tue, 01 Sep 2026 11:04:18 GMT
 - request:
     method: delete
     uri: https://pay-test-storage-tables.s3.eu-west-1.amazonaws.com/qQ8Iox7S-eLh9hX4bRmXY0bS-oR7GuAbWI3zEBsCq28K5RPNKUZ2M2G-8zgzb4qTdo_D_VV7aitkrhLNzKwdFg==
@@ -244,17 +190,17 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - caf088aa-026a-4b00-8476-8c73d8143618
+      - a02f8110-cff7-4365-86bf-22a5f7ec139d
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260901T100504Z
+      - 20260901T110418Z
       X-Amz-Content-Sha256:
       - e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       Authorization:
       - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;host;x-amz-content-sha256;x-amz-date,
-        Signature=7f188295b07800f041d893c3cae142934485ddc0cf9008d96ddc423fd212c6f4
+        Signature=81ae82a856bc2ebcb4286f2b151fe8caff266c302b93b46e0016edec445d9794
       User-Agent:
       - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,D,n
@@ -266,13 +212,13 @@ http_interactions:
       message: No Content
     headers:
       X-Amz-Id-2:
-      - VRFDj9aluvCv0DcyZaBTfspNiIipjdZeEs2i5zNTwH5iQ3/ziGgyuaRF6VQyOxzR1bKJyFR8PD9KvxojaGny+eW2I2rBdnOQ
+      - oZF/cBsoPmxGtjoa6PTBjeHBrgNPRf/Qw4YB/TSZAQkFdU1cqIKXSwQ9HQJz+70/DyteZaT++knRaoVMHb5V3uVlts75bL2p
       X-Amz-Request-Id:
-      - NZFJ8F3B1REDP2TJ
+      - 8WHWZR8RJ79RJ6VR
       Date:
-      - Tue, 01 Sep 2026 10:05:05 GMT
+      - Tue, 01 Sep 2026 11:04:19 GMT
       X-Amz-Version-Id:
-      - I2BDKgEpJpNbWCFZMS9OgduJVWYBDxw_
+      - yjxMen51zuJveFvqUe9tZhg3SGbVYpod
       X-Amz-Delete-Marker:
       - 'true'
       Server:
@@ -280,5 +226,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Tue, 01 Sep 2026 10:05:04 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:19 GMT
 recorded_with: VCR 6.4.0
