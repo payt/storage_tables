@@ -9,6 +9,8 @@ services:
         # Use -bullseye variants on local arm64/Apple Silicon.
         VARIANT: "3"
 
+    user: ${DOCKER_CONTAINER_USER:-runner}
+
     volumes:
       - ..:/app
     environment:
