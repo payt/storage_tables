@@ -1,3 +1,5 @@
+name: storage_tables
+
 services:
   storage_tables:
     build:
