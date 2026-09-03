@@ -10,7 +10,7 @@ http_interactions:
       Accept-Encoding:
       - ''
       Amz-Sdk-Invocation-Id:
-      - 6415a052-807d-4f69-95e5-40e4ef91d251
+      - e5f705a6-6e2f-4bd4-9e08-3b0c11c0e8ae
       Content-Md5:
       - LWGqVLWMLpRAP7CSw9vAJw==
       Expect:
@@ -30,13 +30,13 @@ http_interactions:
       Host:
       - pay-test-storage-tables.s3.eu-west-1.amazonaws.com
       X-Amz-Date:
-      - 20260304T142006Z
+      - 20260901T110402Z
       Authorization:
-      - AWS4-HMAC-SHA256 Credential=AKIA6KON22366KSM6J7V/20260304/eu-west-1/s3/aws4_request,
+      - AWS4-HMAC-SHA256 Credential=<AWS_ACCESS_ID>/20260901/eu-west-1/s3/aws4_request,
         SignedHeaders=amz-sdk-invocation-id;content-encoding;content-md5;content-type;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-sdk-checksum-algorithm;x-amz-trailer,
-        Signature=75120a93613e7f58a9749ae998eb0fcb1027b2a4052844996d9d4d3045146b26
+        Signature=cff707f50893679b4f1d7d47f97d135357602b95debe53d17b1155e50e1f1fca
       User-Agent:
-      - aws-sdk-ruby3/3.242.0 ua/2.1 api/s3#1.213.0 os/linux md/x86_64 lang/ruby#3.2.2
+      - aws-sdk-ruby3/3.252.0 ua/2.1 api/s3#1.226.0 os/linux md/aarch64 lang/ruby#3.2.2
         md/3.2.2 m/A,Z,b,U,D,n
       Content-Length:
       - '65610'
@@ -48,13 +48,13 @@ http_interactions:
       message: OK
     headers:
       X-Amz-Id-2:
-      - wTl0cg+H6CIMcDbJ1xYdgTRjcLUKQPKi76TeNg1BtWVVZoAMllmdhfMto4A6FFUiVuaP1W2wbWA=
+      - p/h4sK8y0/zwTdpOgrxN/nDvwAir+72YTVnvwdtQ3//8s8Yl4FldO/ovMqqcBQgoFU48Pab0g9fSwPLf17XZlvhXTG/6Y0CY
       X-Amz-Request-Id:
-      - MVQB3B37KSVVJZ70
+      - MN6M040HM0SWZQME
       Date:
-      - Wed, 04 Mar 2026 14:20:07 GMT
+      - Tue, 01 Sep 2026 11:04:03 GMT
       X-Amz-Version-Id:
-      - losgNwC4_FaA.M26IEtFf8SZuPtSFyOG
+      - eiuLJqZ2KsNXkOahILtwWe9VakaCmbO2
       X-Amz-Server-Side-Encryption:
       - AES256
       Etag:
@@ -70,5 +70,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-  recorded_at: Wed, 04 Mar 2026 14:20:07 GMT
+  recorded_at: Tue, 01 Sep 2026 11:04:03 GMT
 recorded_with: VCR 6.4.0
