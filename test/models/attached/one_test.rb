@@ -130,6 +130,100 @@ module StorageTables
       assert_equal blob, @user.avatar_storage_blob
     end
 
+    test "assigning a Hash with attachment_attributes sets them on the attachment" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { description: "A town" } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+    end
+
+    test "attaching a Hash with attachment_attributes sets them on the attachment" do
+      @user.avatar.attach({ io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                            attachment_attributes: { description: "A town" } })
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+    end
+
+    test "assigning a Hash without attachment_attributes leaves the extra columns unset" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg" }
+      @user.save!
+
+      assert_nil @user.avatar_storage_attachment.description
+    end
+
+    test "assigning a Hash with a nil attachment_attributes is treated as no extra columns" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: nil }
+      @user.save!
+
+      assert_nil @user.avatar_storage_attachment.description
+    end
+
+    test "an attachment_attributes key the attachment does not permit is ignored" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { description: "A town", filename: "hacked.jpg",
+                                                desciption: "A typo" } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+    end
+
+    test "attachment_attributes cannot set a reserved column even when the attachment permits it" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = [:description, :filename, :record_id]
+      other = User.create!(name: "Someone Else")
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { description: "A town", filename: "hacked.jpg",
+                                                record_id: other.id } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal @user.id, @user.avatar_storage_attachment.record_id
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
+    end
+
+    test "attachment_attributes accepts string keys" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { "description" => "A town" } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+    end
+
+    test "a permitted attribute that is not an attachment column raises a clear error" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A town" } }
+      @user.save!
+
+      # The attachment is now persisted, so the assignment below takes the branch that first has to
+      # decide whether anything changed.
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = [:nickname]
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { nickname: "A village" } }
+
+      assert_raises ActiveModel::UnknownAttributeError do
+        @user.save!
+      end
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
+    end
+
+    test "attachment_attributes are updated on an attachment that is already persisted" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A town" } }
+      @user.save!
+
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A village" } }
+      @user.save!
+
+      assert_equal "A village", @user.reload.avatar_storage_attachment.description
+      assert_equal blob, @user.avatar_storage_blob
+    end
+
     test "attaching StringIO attachable to an existing record" do
       upload = Rack::Test::UploadedFile.new StringIO.new(""), original_filename: "test.txt"
 

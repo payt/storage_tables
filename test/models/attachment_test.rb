@@ -24,6 +24,26 @@ module StorageTables
     #   assert_equal blob, StorageTables::Blob.find_signed(signed_id)
     # end
 
+    test "permitted_attachment_attributes strips the columns StorageTables sets itself" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes =
+        [:description, :blob, :blob_key, :checksum, :filename, :record, :record_id]
+
+      assert_equal [:description], StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
+    end
+
+    test "permitted_attachment_attributes accepts strings and is empty until declared" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = ["description", "filename"]
+
+      assert_equal [:description], StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      assert_empty StorageTables::UserPhotoAttachment.permitted_attachment_attributes
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
+    end
+
     test "when trying to upload same file twice, only one blob is present and the filename is replaced" do
       blob = create_blob
       @user.avatar.attach(blob, filename: "test.txt")

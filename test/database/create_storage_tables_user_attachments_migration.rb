@@ -9,6 +9,9 @@ class CreateStorageTablesUserAttachmentsMigration < ActiveRecord::Migration[7.2]
       t.references :record, null: false, foreign_key: { to_table: :users }
       t.datetime :created_at, null: false
       t.string :filename, null: false
+      # Not used by StorageTables itself. Present so the tests can cover an application-owned
+      # column set through the attachable Hash's :attachment_attributes key.
+      t.string :description
     end
 
     ActiveRecord::Base.connection.execute <<~SQL.squish

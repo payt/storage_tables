@@ -7,13 +7,14 @@ module StorageTables
       class CreateOne
         include Helper
 
-        attr_reader :name, :record, :attachable, :filename
+        attr_reader :name, :record, :attachable, :filename, :attachment_attributes
 
         def initialize(name, record, attachable, filename = nil)
           @name = name
           @record = record
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
+          @attachment_attributes = permitted_attachment_attributes(extract_attachment_attributes(attachable))
 
           blob.identify_without_saving
         end
@@ -35,10 +36,10 @@ module StorageTables
 
           if attachment.persisted?
             # Do not change anything if nothing has changed
-            return if attachment.filename == filename
+            return if attachment.filename == filename && attachment_attributes_unchanged?
 
-            # Set the filename on the attachment
-            attachment.filename = filename
+            # Set the filename and any extra attachment columns on the attachment
+            attachment.assign_attributes(filename:, **attachment_attributes)
           else
             # Delete the old attachment if it exists
             attachment.class.where(record:).delete_all
@@ -54,11 +55,29 @@ module StorageTables
         end
 
         def build_attachment
-          attachment_class_name.constantize.new(record:, blob:, filename:, blob_key: blob[:partition_key])
+          attachment_class.new(record:, blob:, filename:, blob_key: blob[:partition_key],
+                               **attachment_attributes)
         end
 
-        def attachment_class_name
-          record.attachment_reflections[name].options[:class_name]
+        # Keep only what the attachment class has declared writable. Anything else is dropped
+        # rather than rejected: the caller that built the attachable cannot be expected to know
+        # what a given attachment permits, and this is also what keeps :attachment_attributes from
+        # reaching the columns StorageTables sets itself.
+        def permitted_attachment_attributes(attributes)
+          attributes.symbolize_keys.slice(*attachment_class.permitted_attachment_attributes)
+        end
+
+        # An attribute the attachment does not have counts as changed, so that #save goes on to
+        # assign it and ActiveRecord raises UnknownAttributeError naming the offending key — the
+        # same error a not-yet-persisted attachment gives — rather than a NoMethodError from here.
+        def attachment_attributes_unchanged?
+          attachment_attributes.all? do |attribute, value|
+            attachment.has_attribute?(attribute) && attachment.public_send(attribute) == value
+          end
+        end
+
+        def attachment_class
+          @attachment_class ||= record.attachment_reflections[name].options[:class_name].constantize
         end
 
         def find_attachment
@@ -104,7 +123,7 @@ module StorageTables
           return attachable[:blob] if attachable[:blob]
           return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
 
-          StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename, :attachment_attributes))
         end
       end
     end
