@@ -13,6 +13,8 @@ end
 
 module StorageTables
   class UserAvatarAttachment < StorageTables::Attachment
+    self.permitted_attachment_attributes = [:description]
+
     belongs_to :record, class_name: "User", inverse_of: :avatar_storage_attachment
   end
 

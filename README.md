@@ -13,7 +13,16 @@ How to use my plugin.
 ### Extra columns on the attachment
 
 An attachment table is owned by the application, so it may carry columns of its own beyond the ones
-StorageTables needs. Set them by passing an `:attachment_attributes` hash alongside the attachable:
+StorageTables needs. The attachment class declares which of them may be written this way; nothing
+is writable until it does:
+
+```ruby
+class StorageTables::InvoiceDocument < StorageTables::Attachment
+  self.permitted_attachment_attributes = %i[template_name]
+end
+```
+
+Then set them by passing an `:attachment_attributes` hash alongside the attachable:
 
 ```ruby
 invoice.document = { io:, filename: "1234.pdf", attachment_attributes: { template_name: "gds801" } }
@@ -21,6 +30,10 @@ invoice.save!
 
 invoice.document_storage_attachment.template_name # => "gds801"
 ```
+
+Anything the class has not permitted is dropped rather than rejected, which is also what keeps the
+hash away from the columns StorageTables sets itself (`record`, `blob`, `blob_key`, `filename`).
+String and symbol keys both work.
 
 It works through `attach` as well, and applies to an attachment that is already persisted, so
 re-assigning the same blob with a changed value updates the column. The key is stripped before the

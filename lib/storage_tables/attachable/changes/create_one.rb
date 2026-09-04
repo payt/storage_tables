@@ -14,7 +14,7 @@ module StorageTables
           @record = record
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
-          @attachment_attributes = extract_attachment_attributes(attachable)
+          @attachment_attributes = permitted_attachment_attributes(extract_attachment_attributes(attachable))
 
           blob.identify_without_saving
         end
@@ -55,8 +55,16 @@ module StorageTables
         end
 
         def build_attachment
-          attachment_class_name.constantize.new(record:, blob:, filename:, blob_key: blob[:partition_key],
-                                                **attachment_attributes)
+          attachment_class.new(record:, blob:, filename:, blob_key: blob[:partition_key],
+                               **attachment_attributes)
+        end
+
+        # Keep only what the attachment class has declared writable. Anything else is dropped
+        # rather than rejected: the caller that built the attachable cannot be expected to know
+        # what a given attachment permits, and this is also what keeps :attachment_attributes from
+        # reaching the columns StorageTables sets itself.
+        def permitted_attachment_attributes(attributes)
+          attributes.symbolize_keys.slice(*attachment_class.permitted_attachment_attributes)
         end
 
         # An attribute the attachment does not have counts as changed, so that #save goes on to
@@ -68,8 +76,8 @@ module StorageTables
           end
         end
 
-        def attachment_class_name
-          record.attachment_reflections[name].options[:class_name]
+        def attachment_class
+          @attachment_class ||= record.attachment_reflections[name].options[:class_name].constantize
         end
 
         def find_attachment

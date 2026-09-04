@@ -160,16 +160,40 @@ module StorageTables
       assert_nil @user.avatar_storage_attachment.description
     end
 
-    test "an attachment_attributes key that is not an attachment column raises a clear error" do
+    test "an attachment_attributes key the attachment does not permit is ignored" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { description: "A town", filename: "hacked.jpg",
+                                                desciption: "A typo" } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+    end
+
+    test "attachment_attributes accepts string keys" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { "description" => "A town" } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+    end
+
+    test "a permitted attribute that is not an attachment column raises a clear error" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
       blob = create_blob
       @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A town" } }
       @user.save!
 
-      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { desciption: "A village" } }
+      # The attachment is now persisted, so the assignment below takes the branch that first has to
+      # decide whether anything changed.
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = [:nickname]
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { nickname: "A village" } }
 
       assert_raises ActiveModel::UnknownAttributeError do
         @user.save!
       end
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
     end
 
     test "attachment_attributes are updated on an attachment that is already persisted" do

@@ -5,6 +5,17 @@ module StorageTables
   class Attachment < ApplicationRecord
     self.abstract_class = true
 
+    # Columns that may be set through the attachable Hash's :attachment_attributes key.
+    #
+    # An attachment table is owned by the application, so StorageTables cannot know which of its
+    # columns are safe to write from whatever built the attachable. Nothing is writable until a
+    # subclass says so, and anything not listed is dropped rather than rejected.
+    #
+    #   class InvoiceDocument < StorageTables::Attachment
+    #     self.permitted_attachment_attributes = %i[template_name]
+    #   end
+    class_attribute :permitted_attachment_attributes, instance_accessor: false, default: [].freeze
+
     belongs_to :blob, class_name: "StorageTables::Blob", autosave: true, foreign_key: [:checksum, :blob_key]
 
     delegate :byte_size, :content_type, to: :blob
