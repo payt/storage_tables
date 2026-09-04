@@ -59,8 +59,13 @@ module StorageTables
                                                 **attachment_attributes)
         end
 
+        # An attribute the attachment does not have counts as changed, so that #save goes on to
+        # assign it and ActiveRecord raises UnknownAttributeError naming the offending key — the
+        # same error a not-yet-persisted attachment gives — rather than a NoMethodError from here.
         def attachment_attributes_unchanged?
-          attachment_attributes.all? { |attribute, value| attachment.public_send(attribute) == value }
+          attachment_attributes.all? do |attribute, value|
+            attachment.has_attribute?(attribute) && attachment.public_send(attribute) == value
+          end
         end
 
         def attachment_class_name

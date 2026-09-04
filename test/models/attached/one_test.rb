@@ -152,6 +152,26 @@ module StorageTables
       assert_nil @user.avatar_storage_attachment.description
     end
 
+    test "assigning a Hash with a nil attachment_attributes is treated as no extra columns" do
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: nil }
+      @user.save!
+
+      assert_nil @user.avatar_storage_attachment.description
+    end
+
+    test "an attachment_attributes key that is not an attachment column raises a clear error" do
+      blob = create_blob
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A town" } }
+      @user.save!
+
+      @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { desciption: "A village" } }
+
+      assert_raises ActiveModel::UnknownAttributeError do
+        @user.save!
+      end
+    end
+
     test "attachment_attributes are updated on an attachment that is already persisted" do
       blob = create_blob
       @user.avatar = { filename: "town.jpg", blob:, attachment_attributes: { description: "A town" } }

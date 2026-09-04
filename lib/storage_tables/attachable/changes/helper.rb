@@ -30,7 +30,9 @@ module StorageTables
         def extract_attachment_attributes(attachable)
           return {} unless attachable.is_a?(Hash)
 
-          attachable.fetch(:attachment_attributes, {})
+          # An explicit nil is as good as no extra columns, and saying so here keeps the splat in
+          # CreateOne#build_attachment from failing with a TypeError far from the cause.
+          attachable[:attachment_attributes] || {}
         end
 
         # Uploads the attachable to the blob.
