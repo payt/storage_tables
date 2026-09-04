@@ -7,13 +7,14 @@ module StorageTables
       class CreateOne
         include Helper
 
-        attr_reader :name, :record, :attachable, :filename
+        attr_reader :name, :record, :attachable, :filename, :attachment_attributes
 
         def initialize(name, record, attachable, filename = nil)
           @name = name
           @record = record
           @attachable = attachable
           @filename = filename || extract_filename(attachable)
+          @attachment_attributes = extract_attachment_attributes(attachable)
 
           blob.identify_without_saving
         end
@@ -35,10 +36,10 @@ module StorageTables
 
           if attachment.persisted?
             # Do not change anything if nothing has changed
-            return if attachment.filename == filename
+            return if attachment.filename == filename && attachment_attributes_unchanged?
 
-            # Set the filename on the attachment
-            attachment.filename = filename
+            # Set the filename and any extra attachment columns on the attachment
+            attachment.assign_attributes(filename:, **attachment_attributes)
           else
             # Delete the old attachment if it exists
             attachment.class.where(record:).delete_all
@@ -54,7 +55,12 @@ module StorageTables
         end
 
         def build_attachment
-          attachment_class_name.constantize.new(record:, blob:, filename:, blob_key: blob[:partition_key])
+          attachment_class_name.constantize.new(record:, blob:, filename:, blob_key: blob[:partition_key],
+                                                **attachment_attributes)
+        end
+
+        def attachment_attributes_unchanged?
+          attachment_attributes.all? { |attribute, value| attachment.public_send(attribute) == value }
         end
 
         def attachment_class_name
@@ -104,7 +110,7 @@ module StorageTables
           return attachable[:blob] if attachable[:blob]
           return StorageTables::Blob.find_by_checksum!(attachable[:checksum]) if attachable[:checksum]
 
-          StorageTables::Blob.create_and_upload!(**attachable.except(:filename))
+          StorageTables::Blob.create_and_upload!(**attachable.except(:filename, :attachment_attributes))
         end
       end
     end
