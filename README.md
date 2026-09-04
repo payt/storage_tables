@@ -31,9 +31,17 @@ invoice.save!
 invoice.document_storage_attachment.template_name # => "gds801"
 ```
 
-Anything the class has not permitted is dropped rather than rejected, which is also what keeps the
-hash away from the columns StorageTables sets itself (`record`, `blob`, `blob_key`, `filename`).
-String and symbol keys both work.
+Anything the class has not permitted is dropped rather than rejected. String and symbol keys both
+work.
+
+The columns StorageTables derives itself — `record`, `record_id`, `blob`, `blob_key`, `checksum`
+and `filename` — can never be set this way. They are stripped from the allow list on assignment,
+so listing one has no effect:
+
+```ruby
+self.permitted_attachment_attributes = [:template_name, :filename]
+permitted_attachment_attributes # => [:template_name]
+```
 
 It works through `attach` as well, and applies to an attachment that is already persisted, so
 re-assigning the same blob with a changed value updates the column. The key is stripped before the

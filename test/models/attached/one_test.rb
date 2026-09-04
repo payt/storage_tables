@@ -170,6 +170,22 @@ module StorageTables
       assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
     end
 
+    test "attachment_attributes cannot set a reserved column even when the attachment permits it" do
+      original = StorageTables::UserAvatarAttachment.permitted_attachment_attributes
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = [:description, :filename, :record_id]
+      other = User.create!(name: "Someone Else")
+      @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
+                       attachment_attributes: { description: "A town", filename: "hacked.jpg",
+                                                record_id: other.id } }
+      @user.save!
+
+      assert_equal "A town", @user.avatar_storage_attachment.description
+      assert_equal "town.jpg", @user.avatar_storage_attachment.filename.to_s
+      assert_equal @user.id, @user.avatar_storage_attachment.record_id
+    ensure
+      StorageTables::UserAvatarAttachment.permitted_attachment_attributes = original
+    end
+
     test "attachment_attributes accepts string keys" do
       @user.avatar = { io: StringIO.new("STUFF"), content_type: "image/jpeg", filename: "town.jpg",
                        attachment_attributes: { "description" => "A town" } }
