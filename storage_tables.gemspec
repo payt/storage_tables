@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary     = "Summary of StorageTables."
   spec.description = "Description of StorageTables."
   spec.license     = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.2")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.4.0")
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "aws-sdk-s3", "~> 1.48"
-  spec.add_dependency "rails", ">= 7.2.2", "< 8.2.0"
+  spec.add_dependency "rails", ">= 7.2.2", "< 8.3.0"
   spec.metadata["rubygems_mfa_required"] = "true"
 end

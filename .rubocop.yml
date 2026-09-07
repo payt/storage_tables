@@ -6,8 +6,8 @@ plugins:
   - rubocop-packaging
 
 AllCops:
-  TargetRubyVersion: 3.2
-  TargetRailsVersion: 8.1
+  TargetRubyVersion: 3.4
+  TargetRailsVersion: 8.2
   NewCops: enable
   Exclude:
     - db/**/*
@@ -37,6 +37,11 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
+
+# The test dummy models are fixtures for the test suite, not autoloaded production constants.
+Style/OneClassPerFile:
+  Exclude:
+    - test/**/*
 
 ########### METRICS ###############
 
@@ -79,3 +84,8 @@ Rails/DynamicFindBy:
   Whitelist:
     - find_by_checksum
     - find_by_checksum!
+
+# The test suite bootstrap warns the developer on stdout, the Rails logger is not set up there.
+Rails/Output:
+  Exclude:
+    - test/**/*
