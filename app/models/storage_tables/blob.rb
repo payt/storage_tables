@@ -121,7 +121,7 @@ module StorageTables
 
       def where_checksum(input)
         if input.is_a?(Array)
-          where(primary_key => input.map { checksum_to_primary(_1) })
+          where(primary_key => input.map { checksum_to_primary(it) })
         else
           where(partition_key: input[0], checksum: input[1..].chomp("=="))
         end

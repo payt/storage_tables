@@ -80,9 +80,9 @@ module StorageTables
     # short-lived URL for private files. For private files you can provide the +disposition+ (+:inline+ or
     # +:attachment+), +filename+, and +content_type+ that you wish the file to be served with on request. Additionally,
     # you can also provide the amount of seconds the URL will be valid for, specified in +expires_in+.
-    def url(checksum, **options)
+    def url(checksum, **)
       instrument(:url, checksum:) do |payload|
-        payload[:url] = generate_url(checksum, **options)
+        payload[:url] = generate_url(checksum, **)
       end
     end
 
