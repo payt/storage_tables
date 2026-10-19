@@ -60,6 +60,24 @@ module StorageTables
       assert_equal "Invalid checksum: invalid", error.message
     end
 
+    test "checksums differing only in letter case are not equal" do
+      assert_not_equal Checksum.new("a" * 86), Checksum.new("A" * 86)
+    end
+
+    test "equals a string with the same checksum" do
+      checksum = Checksum.from_string("Hello world!")
+
+      assert_equal checksum, checksum.to_s
+    end
+
+    test "does not equal a string with a different checksum" do
+      assert_not_equal Checksum.from_string("Hello world!"), Checksum.from_string("Goodbye!").to_s
+    end
+
+    test "does not equal a non checksum object" do
+      assert_not_equal Checksum.from_string("Hello world!"), 42
+    end
+
     test "io must be rewindable" do
       error = assert_raises(ArgumentError) { Checksum.from_io("Hello world!") }
 

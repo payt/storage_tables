@@ -73,8 +73,11 @@ module StorageTables
       checksum.tr("/+", "_-")
     end
 
+    # Base64 digests are case-sensitive, so the comparison is too.
+    # Accepts another Checksum or a checksum String.
     def <=>(other)
-      sanitized.downcase <=> other.sanitized.downcase
+      other = other.to_s if other.is_a?(self.class)
+      to_s <=> other if other.is_a?(String)
     end
 
     def partition_key
