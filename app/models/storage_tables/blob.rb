@@ -113,6 +113,14 @@ module StorageTables
         find_by_checksum(checksum)
       end
 
+      def compute_checksum_in_chunks(io)
+        StorageTables.deprecator.warn(
+          "[StorageTables] #compute_checksum_in_chunks is deprecated. " \
+          "Use StorageTables::Checksum.from_io instead."
+        )
+        Checksum.from_io(io).to_s
+      end
+
       def find_by_checksum(checksum)
         Checksum.wrap(checksum) do |wrapped|
           find_by(partition_key: wrapped.partition_key, checksum: wrapped.partition_checksum)

@@ -78,6 +78,26 @@ module StorageTables
       assert_not_equal Checksum.from_string("Hello world!"), 42
     end
 
+    test "valid? with a checksum string" do
+      assert Checksum.valid?(Checksum.from_string("Hello world!").to_s)
+    end
+
+    test "valid? with a checksum string without padding" do
+      assert Checksum.valid?("0" * 86)
+    end
+
+    test "valid? with a Checksum" do
+      assert Checksum.valid?(Checksum.from_string("Hello world!"))
+    end
+
+    test "valid? with an invalid string" do
+      assert_not Checksum.valid?("#{"_" * 86}==")
+    end
+
+    test "valid? with nil" do
+      assert_not Checksum.valid?(nil)
+    end
+
     test "io must be rewindable" do
       error = assert_raises(ArgumentError) { Checksum.from_io("Hello world!") }
 

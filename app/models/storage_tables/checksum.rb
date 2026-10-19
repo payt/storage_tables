@@ -17,6 +17,13 @@ module StorageTables
         yield(new(checksum))
       end
 
+      # Returns true when the input can be turned into a Checksum, without raising on invalid input.
+      def valid?(input)
+        new(input).valid?
+      rescue ArgumentError
+        false
+      end
+
       def from_path(path)
         checksum = OpenSSL::Digest.new("SHA3-512").file(path).base64digest
 

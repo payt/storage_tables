@@ -339,5 +339,17 @@ module StorageTables
         Blob.existing_blob(Checksum.from_string("non-existing-checksum"))
       end
     end
+
+    ## StorageTables::Blob.compute_checksum_in_chunks()
+
+    test "compute_checksum_in_chunks is deprecated and returns the checksum string" do
+      io = StringIO.new("Hello world!")
+
+      checksum = assert_deprecated("StorageTables", StorageTables.deprecator) do
+        Blob.compute_checksum_in_chunks(io)
+      end
+
+      assert_equal Checksum.from_string("Hello world!").to_s, checksum
+    end
   end
 end
