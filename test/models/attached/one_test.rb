@@ -48,14 +48,15 @@ module StorageTables
     end
 
     test "when assigning a empty blob it cannot save" do
-      @user.avatar = Blob.new(byte_size: 0, checksum: Digest::MD5.base64digest(""))
+      checksum = Checksum.new("0" * 86)
+      @user.avatar = Blob.new(byte_size: 0, checksum: checksum)
       @user.avatar.filename = "racecar.jpg"
 
       error = assert_raises(StorageTables::ActiveRecordError) do
         @user.save!
       end
 
-      assert_equal "No file exists with checksum 1B2M2Y8AsgTpgAmY7PhCfg==, try uploading the file first. " \
+      assert_equal "No file exists with checksum #{checksum}, try uploading the file first. " \
                    "Use the `attach` or `attachment=` method to upload the file.",
                    error.message
     end
