@@ -60,14 +60,19 @@ module StorageTables
       end
 
       def path_for(checksum) # :nodoc:
-        File.join root, folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
+        Checksum.wrap(checksum) do |wrapped|
+          File.join(root, folder_for(wrapped.sanitized), wrapped.sanitized)
+        end
       end
 
       def relative_path_for(checksum)
-        File.join folder_for(refactored_checksum(checksum)), refactored_checksum(checksum)
+        Checksum.wrap(checksum) do |wrapped|
+          File.join folder_for(wrapped.sanitized), wrapped.sanitized
+        end
       end
 
       def upload(checksum, io, **)
+        checksum = Checksum.new(checksum)
         # Prevent uploading the same file twice
         return if exist?(checksum) && file_match?(checksum)
 
@@ -134,7 +139,7 @@ module StorageTables
       end
 
       def file_match?(checksum)
-        OpenSSL::Digest.new("SHA3-512").file(path_for(checksum)).base64digest == checksum
+        Checksum.from_path(path_for(checksum)) == checksum
       end
 
       def url_options
